@@ -16,14 +16,14 @@ const items = [
   { to: "/profile", icon: User, label: "My Profile", desc: "Account & stats" },
   { to: "/history", icon: History, label: "Scan History", desc: "Everything you've scanned" },
   { to: "/favorites", icon: Heart, label: "Favorites", desc: "Your saved scans" },
-  { to: "/chat", icon: MessageSquare, label: "AI Chat", desc: "Talk to VisionNova" },
+  { to: "/chat", icon: MessageSquare, label: "AI Chat", desc: "Talk to Nova Vision" },
   { to: "/appearance", icon: Moon, label: "Appearance", desc: "Theme & display" },
   { to: "/languages", icon: Globe, label: "Languages", desc: "App language" },
   { to: "/notifications", icon: Bell, label: "Notifications", desc: "Manage alerts" },
   { to: "/community", icon: Users, label: "Community", desc: "Connect with users" },
   { to: "/faq", icon: HelpCircle, label: "FAQ", desc: "Common questions" },
   { to: "/contact", icon: Mail, label: "Contact Support", desc: "We're here to help" },
-  { to: "/about", icon: Info, label: "About", desc: "What is VisionNova AI" },
+  { to: "/about", icon: Info, label: "About", desc: "What is Nova Vision AI" },
   { to: "/privacy", icon: Shield, label: "Privacy Policy", desc: "How we handle data" },
   { to: "/terms", icon: FileText, label: "Terms of Service", desc: "Rules of the road" },
 ] as { to: string; icon: typeof Home; label: string; desc: string }[];
@@ -56,7 +56,7 @@ export function AppSidebar({ open, onClose }: { open: boolean; onClose: () => vo
                   <Sparkles className="size-5 text-primary-foreground" />
                 </div>
                 <div>
-                  <div className="font-semibold tracking-tight">VisionNova AI</div>
+                  <div className="font-semibold tracking-tight">Nova Vision AI</div>
                   <div className="text-xs text-muted-foreground truncate max-w-[180px]">
                     {user?.email ?? "Signed in"}
                   </div>
@@ -108,7 +108,7 @@ export function AppSidebar({ open, onClose }: { open: boolean; onClose: () => vo
       <AlertDialog open={confirmLogout} onOpenChange={setConfirmLogout}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Log out of VisionNova AI?</AlertDialogTitle>
+            <AlertDialogTitle>Log out of Nova Vision AI?</AlertDialogTitle>
             <AlertDialogDescription>
               You'll need to sign in again to access your scans and chats.
             </AlertDialogDescription>

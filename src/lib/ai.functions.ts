@@ -6,7 +6,7 @@ const GATEWAY = "https://ai.gateway.lovable.dev/v1/chat/completions";
 const MODEL = "google/gemini-3-flash-preview";
 
 function systemForScanType(scanType: "general" | "food" | "plant") {
-  const base = `You are VisionNova AI, a friendly expert visual assistant. Analyze the image and respond ONLY with valid JSON matching this exact shape:
+  const base = `You are Nova Vision AI, a friendly expert visual assistant. Analyze the image and respond ONLY with valid JSON matching this exact shape:
 {
   "title": "short name of the main subject (max 6 words)",
   "category": "one of: food | plant | product | ingredient | object | animal | document | unknown",
@@ -119,7 +119,7 @@ export const chatMessage = createServerFn({ method: "POST" })
     const sys = {
       role: "system" as const,
       content:
-        "You are VisionNova AI, a friendly, knowledgeable assistant for food, plants, health, and everyday objects. Format with markdown headings, bullet points, and short paragraphs. Never give medical diagnoses; include safety caveats when relevant. Be concise and practical.",
+        "You are Nova Vision AI, a friendly, knowledgeable assistant for food, plants, health, and everyday objects. Format with markdown headings, bullet points, and short paragraphs. Never give medical diagnoses; include safety caveats when relevant. Be concise and practical.",
     };
     const msgs = data.messages.map((m) =>
       m.imageUrl

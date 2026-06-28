@@ -17,7 +17,7 @@ function AppearancePage() {
   const { theme, setTheme } = useTheme();
   return (
     <PageShell>
-      <PageHeader title="Appearance" icon={<Moon className="size-5 text-primary" />} subtitle="Personalize how VisionNova looks" />
+      <PageHeader title="Appearance" icon={<Moon className="size-5 text-primary" />} subtitle="Personalize how Nova Vision looks" />
       <div className="space-y-2">
         {OPTIONS.map((o) => {
           const Icon = o.icon;

@@ -120,7 +120,7 @@ export function ScanResult({
       )}
 
       <p className="text-[11px] text-muted-foreground text-center px-4">
-        VisionNova AI provides educational information only — not medical or professional advice.
+        Nova Vision AI provides educational information only — not medical or professional advice.
       </p>
     </motion.div>
   );

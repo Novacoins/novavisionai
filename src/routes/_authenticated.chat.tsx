@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
-import { MessageSquare, Send, Paperclip, Camera, Mic, Copy, RefreshCw, Loader2, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { MessageSquare, Send, Paperclip, Camera, Mic, Copy, RefreshCw, Loader2, X, FileText, FilePlus, Construction } from "lucide-react";
 import ReactMarkdown from "react-markdown";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { PageHeader, PageShell } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -24,6 +25,7 @@ function ChatPage() {
   const [busy, setBusy] = useState(false);
   const [attached, setAttached] = useState<string | null>(null);
   const [conversationId, setConversationId] = useState<string | null>(null);
+  const [comingSoon, setComingSoon] = useState<null | { title: string; icon: typeof FileText }>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const camRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -92,7 +94,7 @@ function ChatPage() {
   return (
     <div className="flex flex-col h-[calc(100dvh-3.5rem-5rem)]">
       <div className="px-4 pt-3">
-        <PageHeader title="AI Chat" icon={<MessageSquare className="size-5 text-primary" />} subtitle="Ask VisionNova anything" />
+        <PageHeader title="AI Chat" icon={<MessageSquare className="size-5 text-primary" />} subtitle="Ask Nova Vision anything" />
       </div>
 
       <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 space-y-3 pb-2">
@@ -143,8 +145,10 @@ function ChatPage() {
         )}
         <div className="flex items-end gap-2">
           <div className="flex gap-1">
-            <button onClick={() => fileRef.current?.click()} className="p-2 rounded-lg hover:bg-accent" aria-label="Attach"><Paperclip className="size-4" /></button>
+            <button onClick={() => fileRef.current?.click()} className="p-2 rounded-lg hover:bg-accent" aria-label="Attach image"><Paperclip className="size-4" /></button>
             <button onClick={() => camRef.current?.click()} className="p-2 rounded-lg hover:bg-accent" aria-label="Camera"><Camera className="size-4" /></button>
+            <button onClick={() => setComingSoon({ title: "Attach File", icon: FilePlus })} className="p-2 rounded-lg hover:bg-accent" aria-label="Attach file"><FilePlus className="size-4" /></button>
+            <button onClick={() => setComingSoon({ title: "Document", icon: FileText })} className="p-2 rounded-lg hover:bg-accent" aria-label="Document"><FileText className="size-4" /></button>
             <button onClick={startVoice} className="p-2 rounded-lg hover:bg-accent" aria-label="Voice"><Mic className="size-4" /></button>
             <input ref={fileRef} type="file" hidden accept="image/*" onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])} />
             <input ref={camRef} type="file" hidden accept="image/*" capture="environment" onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])} />
@@ -153,7 +157,7 @@ function ChatPage() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } }}
-            placeholder="Message VisionNova…"
+            placeholder="Message Nova Vision…"
             rows={1}
             className="resize-none min-h-10 max-h-32"
           />
@@ -162,6 +166,33 @@ function ChatPage() {
           </Button>
         </div>
       </div>
+
+      <Dialog open={!!comingSoon} onOpenChange={(o) => !o && setComingSoon(null)}>
+        <DialogContent className="glass-card backdrop-blur-2xl border-border max-w-sm">
+          <AnimatePresence>
+            {comingSoon && (
+              <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }}>
+                <div className="flex flex-col items-center text-center py-2">
+                  <motion.div
+                    initial={{ rotate: -20, scale: 0.6 }}
+                    animate={{ rotate: 0, scale: 1 }}
+                    transition={{ type: "spring", stiffness: 200 }}
+                    className="size-16 rounded-3xl hero-gradient grid place-items-center glow mb-4"
+                  >
+                    <Construction className="size-8 text-primary-foreground" />
+                  </motion.div>
+                  <DialogHeader>
+                    <DialogTitle className="text-center text-lg">🚧 {comingSoon.title} — Coming Soon</DialogTitle>
+                    <DialogDescription className="text-center mt-2">
+                      This feature is currently under development and will be available in a future update. Thank you for your patience.
+                    </DialogDescription>
+                  </DialogHeader>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

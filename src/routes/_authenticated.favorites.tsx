@@ -37,7 +37,7 @@ function FavoritesPage() {
     toast.success("Removed from favorites");
   }
   async function share(r: Row) {
-    const text = `${r.title} — VisionNova AI`;
+    const text = `${r.title} — Nova Vision AI`;
     if (navigator.share) { try { await navigator.share({ text, title: r.title }); } catch { /* */ } }
     else { await navigator.clipboard.writeText(text); toast.success("Copied"); }
   }

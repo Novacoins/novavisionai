@@ -69,7 +69,7 @@ function HistoryPage() {
     toast.success("Scan deleted");
   }
   async function share(r: ScanRow) {
-    const text = `${r.title} — VisionNova AI`;
+    const text = `${r.title} — Nova Vision AI`;
     if (navigator.share) { try { await navigator.share({ title: r.title, text }); } catch { /* */ } }
     else { await navigator.clipboard.writeText(text); toast.success("Copied"); }
   }
