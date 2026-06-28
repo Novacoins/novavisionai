@@ -111,7 +111,7 @@ const en = {
     delete: "Delete",
     error: "Something went wrong",
   },
-} as const;
+};
 
 type Dict = typeof en;
 
