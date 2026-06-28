@@ -25,6 +25,7 @@ function ChatPage() {
   const [busy, setBusy] = useState(false);
   const [attached, setAttached] = useState<string | null>(null);
   const [conversationId, setConversationId] = useState<string | null>(null);
+  const [comingSoon, setComingSoon] = useState<null | { title: string; icon: typeof FileText }>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const camRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
