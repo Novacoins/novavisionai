@@ -33,7 +33,7 @@ export async function saveScan(args: {
       scan_type: args.scanType,
       confidence: args.result.confidence,
       safety: args.result.safety,
-      ai_result: args.result as unknown as Record<string, unknown>,
+      ai_result: args.result as never,
       image_path: args.image?.path ?? null,
       thumbnail_url: args.image?.signedUrl ?? null,
     })
