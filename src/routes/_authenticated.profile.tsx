@@ -97,14 +97,14 @@ function ProfilePage() {
             <input type="file" accept="image/*" hidden onChange={(e) => e.target.files?.[0] && uploadAvatar(e.target.files[0])} />
           </label>
         </div>
-        <h2 className="mt-3 text-lg font-bold">{profile.display_name || "Add your name"}</h2>
+        <h2 className="mt-3 text-lg font-bold">{profile.display_name || t("profile.addName")}</h2>
         <p className="text-xs text-muted-foreground">@{profile.username || user?.email?.split("@")[0]}</p>
 
         <div className="grid grid-cols-3 gap-2 mt-4">
           {[
-            { icon: ScanLine, label: "Scans", value: stats.total },
-            { icon: Heart, label: "Favorites", value: stats.favorites },
-            { icon: Folder, label: "Collections", value: stats.collections },
+            { icon: ScanLine, label: t("profile.scans"), value: stats.total },
+            { icon: Heart, label: t("profile.favorites"), value: stats.favorites },
+            { icon: Folder, label: t("profile.collections"), value: stats.collections },
           ].map((s) => (
             <div key={s.label} className="rounded-xl bg-muted p-3">
               <s.icon className="size-4 text-primary mx-auto" />
