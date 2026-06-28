@@ -9,61 +9,441 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated.index'
+import { Route as AuthenticatedTermsRouteImport } from './routes/_authenticated.terms'
+import { Route as AuthenticatedScanRouteImport } from './routes/_authenticated.scan'
+import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated.profile'
+import { Route as AuthenticatedPrivacyRouteImport } from './routes/_authenticated.privacy'
+import { Route as AuthenticatedPlantScannerRouteImport } from './routes/_authenticated.plant-scanner'
+import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated.notifications'
+import { Route as AuthenticatedMealPlannerRouteImport } from './routes/_authenticated.meal-planner'
+import { Route as AuthenticatedLanguagesRouteImport } from './routes/_authenticated.languages'
+import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated.history'
+import { Route as AuthenticatedFavoritesRouteImport } from './routes/_authenticated.favorites'
+import { Route as AuthenticatedFaqRouteImport } from './routes/_authenticated.faq'
+import { Route as AuthenticatedContactRouteImport } from './routes/_authenticated.contact'
+import { Route as AuthenticatedCommunityRouteImport } from './routes/_authenticated.community'
+import { Route as AuthenticatedChatRouteImport } from './routes/_authenticated.chat'
+import { Route as AuthenticatedAppearanceRouteImport } from './routes/_authenticated.appearance'
+import { Route as AuthenticatedAboutRouteImport } from './routes/_authenticated.about'
 
-const IndexRoute = IndexRouteImport.update({
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedTermsRoute = AuthenticatedTermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedScanRoute = AuthenticatedScanRouteImport.update({
+  id: '/scan',
+  path: '/scan',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedPrivacyRoute = AuthenticatedPrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedPlantScannerRoute =
+  AuthenticatedPlantScannerRouteImport.update({
+    id: '/plant-scanner',
+    path: '/plant-scanner',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedNotificationsRoute =
+  AuthenticatedNotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedMealPlannerRoute =
+  AuthenticatedMealPlannerRouteImport.update({
+    id: '/meal-planner',
+    path: '/meal-planner',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedLanguagesRoute = AuthenticatedLanguagesRouteImport.update({
+  id: '/languages',
+  path: '/languages',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedHistoryRoute = AuthenticatedHistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedFavoritesRoute = AuthenticatedFavoritesRouteImport.update({
+  id: '/favorites',
+  path: '/favorites',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedFaqRoute = AuthenticatedFaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedContactRoute = AuthenticatedContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedCommunityRoute = AuthenticatedCommunityRouteImport.update({
+  id: '/community',
+  path: '/community',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedChatRoute = AuthenticatedChatRouteImport.update({
+  id: '/chat',
+  path: '/chat',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedAppearanceRoute = AuthenticatedAppearanceRouteImport.update({
+  id: '/appearance',
+  path: '/appearance',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedAboutRoute = AuthenticatedAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof AuthenticatedIndexRoute
+  '/auth': typeof AuthRoute
+  '/about': typeof AuthenticatedAboutRoute
+  '/appearance': typeof AuthenticatedAppearanceRoute
+  '/chat': typeof AuthenticatedChatRoute
+  '/community': typeof AuthenticatedCommunityRoute
+  '/contact': typeof AuthenticatedContactRoute
+  '/faq': typeof AuthenticatedFaqRoute
+  '/favorites': typeof AuthenticatedFavoritesRoute
+  '/history': typeof AuthenticatedHistoryRoute
+  '/languages': typeof AuthenticatedLanguagesRoute
+  '/meal-planner': typeof AuthenticatedMealPlannerRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
+  '/plant-scanner': typeof AuthenticatedPlantScannerRoute
+  '/privacy': typeof AuthenticatedPrivacyRoute
+  '/profile': typeof AuthenticatedProfileRoute
+  '/scan': typeof AuthenticatedScanRoute
+  '/terms': typeof AuthenticatedTermsRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/about': typeof AuthenticatedAboutRoute
+  '/appearance': typeof AuthenticatedAppearanceRoute
+  '/chat': typeof AuthenticatedChatRoute
+  '/community': typeof AuthenticatedCommunityRoute
+  '/contact': typeof AuthenticatedContactRoute
+  '/faq': typeof AuthenticatedFaqRoute
+  '/favorites': typeof AuthenticatedFavoritesRoute
+  '/history': typeof AuthenticatedHistoryRoute
+  '/languages': typeof AuthenticatedLanguagesRoute
+  '/meal-planner': typeof AuthenticatedMealPlannerRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
+  '/plant-scanner': typeof AuthenticatedPlantScannerRoute
+  '/privacy': typeof AuthenticatedPrivacyRoute
+  '/profile': typeof AuthenticatedProfileRoute
+  '/scan': typeof AuthenticatedScanRoute
+  '/terms': typeof AuthenticatedTermsRoute
+  '/': typeof AuthenticatedIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/_authenticated/about': typeof AuthenticatedAboutRoute
+  '/_authenticated/appearance': typeof AuthenticatedAppearanceRoute
+  '/_authenticated/chat': typeof AuthenticatedChatRoute
+  '/_authenticated/community': typeof AuthenticatedCommunityRoute
+  '/_authenticated/contact': typeof AuthenticatedContactRoute
+  '/_authenticated/faq': typeof AuthenticatedFaqRoute
+  '/_authenticated/favorites': typeof AuthenticatedFavoritesRoute
+  '/_authenticated/history': typeof AuthenticatedHistoryRoute
+  '/_authenticated/languages': typeof AuthenticatedLanguagesRoute
+  '/_authenticated/meal-planner': typeof AuthenticatedMealPlannerRoute
+  '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
+  '/_authenticated/plant-scanner': typeof AuthenticatedPlantScannerRoute
+  '/_authenticated/privacy': typeof AuthenticatedPrivacyRoute
+  '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/scan': typeof AuthenticatedScanRoute
+  '/_authenticated/terms': typeof AuthenticatedTermsRoute
+  '/_authenticated/': typeof AuthenticatedIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/about'
+    | '/appearance'
+    | '/chat'
+    | '/community'
+    | '/contact'
+    | '/faq'
+    | '/favorites'
+    | '/history'
+    | '/languages'
+    | '/meal-planner'
+    | '/notifications'
+    | '/plant-scanner'
+    | '/privacy'
+    | '/profile'
+    | '/scan'
+    | '/terms'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/auth'
+    | '/about'
+    | '/appearance'
+    | '/chat'
+    | '/community'
+    | '/contact'
+    | '/faq'
+    | '/favorites'
+    | '/history'
+    | '/languages'
+    | '/meal-planner'
+    | '/notifications'
+    | '/plant-scanner'
+    | '/privacy'
+    | '/profile'
+    | '/scan'
+    | '/terms'
+    | '/'
+  id:
+    | '__root__'
+    | '/_authenticated'
+    | '/auth'
+    | '/_authenticated/about'
+    | '/_authenticated/appearance'
+    | '/_authenticated/chat'
+    | '/_authenticated/community'
+    | '/_authenticated/contact'
+    | '/_authenticated/faq'
+    | '/_authenticated/favorites'
+    | '/_authenticated/history'
+    | '/_authenticated/languages'
+    | '/_authenticated/meal-planner'
+    | '/_authenticated/notifications'
+    | '/_authenticated/plant-scanner'
+    | '/_authenticated/privacy'
+    | '/_authenticated/profile'
+    | '/_authenticated/scan'
+    | '/_authenticated/terms'
+    | '/_authenticated/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  AuthRoute: typeof AuthRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/': {
+      id: '/_authenticated/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/terms': {
+      id: '/_authenticated/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof AuthenticatedTermsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/scan': {
+      id: '/_authenticated/scan'
+      path: '/scan'
+      fullPath: '/scan'
+      preLoaderRoute: typeof AuthenticatedScanRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/profile': {
+      id: '/_authenticated/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/privacy': {
+      id: '/_authenticated/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof AuthenticatedPrivacyRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/plant-scanner': {
+      id: '/_authenticated/plant-scanner'
+      path: '/plant-scanner'
+      fullPath: '/plant-scanner'
+      preLoaderRoute: typeof AuthenticatedPlantScannerRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/notifications': {
+      id: '/_authenticated/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof AuthenticatedNotificationsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/meal-planner': {
+      id: '/_authenticated/meal-planner'
+      path: '/meal-planner'
+      fullPath: '/meal-planner'
+      preLoaderRoute: typeof AuthenticatedMealPlannerRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/languages': {
+      id: '/_authenticated/languages'
+      path: '/languages'
+      fullPath: '/languages'
+      preLoaderRoute: typeof AuthenticatedLanguagesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/history': {
+      id: '/_authenticated/history'
+      path: '/history'
+      fullPath: '/history'
+      preLoaderRoute: typeof AuthenticatedHistoryRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/favorites': {
+      id: '/_authenticated/favorites'
+      path: '/favorites'
+      fullPath: '/favorites'
+      preLoaderRoute: typeof AuthenticatedFavoritesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/faq': {
+      id: '/_authenticated/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof AuthenticatedFaqRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/contact': {
+      id: '/_authenticated/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof AuthenticatedContactRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/community': {
+      id: '/_authenticated/community'
+      path: '/community'
+      fullPath: '/community'
+      preLoaderRoute: typeof AuthenticatedCommunityRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/chat': {
+      id: '/_authenticated/chat'
+      path: '/chat'
+      fullPath: '/chat'
+      preLoaderRoute: typeof AuthenticatedChatRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/appearance': {
+      id: '/_authenticated/appearance'
+      path: '/appearance'
+      fullPath: '/appearance'
+      preLoaderRoute: typeof AuthenticatedAppearanceRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/about': {
+      id: '/_authenticated/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AuthenticatedAboutRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
   }
 }
 
+interface AuthenticatedRouteChildren {
+  AuthenticatedAboutRoute: typeof AuthenticatedAboutRoute
+  AuthenticatedAppearanceRoute: typeof AuthenticatedAppearanceRoute
+  AuthenticatedChatRoute: typeof AuthenticatedChatRoute
+  AuthenticatedCommunityRoute: typeof AuthenticatedCommunityRoute
+  AuthenticatedContactRoute: typeof AuthenticatedContactRoute
+  AuthenticatedFaqRoute: typeof AuthenticatedFaqRoute
+  AuthenticatedFavoritesRoute: typeof AuthenticatedFavoritesRoute
+  AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
+  AuthenticatedLanguagesRoute: typeof AuthenticatedLanguagesRoute
+  AuthenticatedMealPlannerRoute: typeof AuthenticatedMealPlannerRoute
+  AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
+  AuthenticatedPlantScannerRoute: typeof AuthenticatedPlantScannerRoute
+  AuthenticatedPrivacyRoute: typeof AuthenticatedPrivacyRoute
+  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedScanRoute: typeof AuthenticatedScanRoute
+  AuthenticatedTermsRoute: typeof AuthenticatedTermsRoute
+  AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedAboutRoute: AuthenticatedAboutRoute,
+  AuthenticatedAppearanceRoute: AuthenticatedAppearanceRoute,
+  AuthenticatedChatRoute: AuthenticatedChatRoute,
+  AuthenticatedCommunityRoute: AuthenticatedCommunityRoute,
+  AuthenticatedContactRoute: AuthenticatedContactRoute,
+  AuthenticatedFaqRoute: AuthenticatedFaqRoute,
+  AuthenticatedFavoritesRoute: AuthenticatedFavoritesRoute,
+  AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
+  AuthenticatedLanguagesRoute: AuthenticatedLanguagesRoute,
+  AuthenticatedMealPlannerRoute: AuthenticatedMealPlannerRoute,
+  AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
+  AuthenticatedPlantScannerRoute: AuthenticatedPlantScannerRoute,
+  AuthenticatedPrivacyRoute: AuthenticatedPrivacyRoute,
+  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedScanRoute: AuthenticatedScanRoute,
+  AuthenticatedTermsRoute: AuthenticatedTermsRoute,
+  AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  AuthRoute: AuthRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
