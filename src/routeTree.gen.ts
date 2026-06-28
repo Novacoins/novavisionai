@@ -21,6 +21,7 @@ import { Route as AuthenticatedLanguagesRouteImport } from './routes/_authentica
 import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated.history'
 import { Route as AuthenticatedFavoritesRouteImport } from './routes/_authenticated.favorites'
 import { Route as AuthenticatedFaqRouteImport } from './routes/_authenticated.faq'
+import { Route as AuthenticatedContactRouteImport } from './routes/_authenticated.contact'
 import { Route as AuthenticatedCommunityRouteImport } from './routes/_authenticated.community'
 import { Route as AuthenticatedChatRouteImport } from './routes/_authenticated.chat'
 import { Route as AuthenticatedAppearanceRouteImport } from './routes/_authenticated.appearance'
@@ -87,6 +88,11 @@ const AuthenticatedFaqRoute = AuthenticatedFaqRouteImport.update({
   path: '/faq',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedContactRoute = AuthenticatedContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedCommunityRoute = AuthenticatedCommunityRouteImport.update({
   id: '/community',
   path: '/community',
@@ -109,6 +115,7 @@ export interface FileRoutesByFullPath {
   '/appearance': typeof AuthenticatedAppearanceRoute
   '/chat': typeof AuthenticatedChatRoute
   '/community': typeof AuthenticatedCommunityRoute
+  '/contact': typeof AuthenticatedContactRoute
   '/faq': typeof AuthenticatedFaqRoute
   '/favorites': typeof AuthenticatedFavoritesRoute
   '/history': typeof AuthenticatedHistoryRoute
@@ -124,6 +131,7 @@ export interface FileRoutesByTo {
   '/appearance': typeof AuthenticatedAppearanceRoute
   '/chat': typeof AuthenticatedChatRoute
   '/community': typeof AuthenticatedCommunityRoute
+  '/contact': typeof AuthenticatedContactRoute
   '/faq': typeof AuthenticatedFaqRoute
   '/favorites': typeof AuthenticatedFavoritesRoute
   '/history': typeof AuthenticatedHistoryRoute
@@ -142,6 +150,7 @@ export interface FileRoutesById {
   '/_authenticated/appearance': typeof AuthenticatedAppearanceRoute
   '/_authenticated/chat': typeof AuthenticatedChatRoute
   '/_authenticated/community': typeof AuthenticatedCommunityRoute
+  '/_authenticated/contact': typeof AuthenticatedContactRoute
   '/_authenticated/faq': typeof AuthenticatedFaqRoute
   '/_authenticated/favorites': typeof AuthenticatedFavoritesRoute
   '/_authenticated/history': typeof AuthenticatedHistoryRoute
@@ -161,6 +170,7 @@ export interface FileRouteTypes {
     | '/appearance'
     | '/chat'
     | '/community'
+    | '/contact'
     | '/faq'
     | '/favorites'
     | '/history'
@@ -176,6 +186,7 @@ export interface FileRouteTypes {
     | '/appearance'
     | '/chat'
     | '/community'
+    | '/contact'
     | '/faq'
     | '/favorites'
     | '/history'
@@ -193,6 +204,7 @@ export interface FileRouteTypes {
     | '/_authenticated/appearance'
     | '/_authenticated/chat'
     | '/_authenticated/community'
+    | '/_authenticated/contact'
     | '/_authenticated/faq'
     | '/_authenticated/favorites'
     | '/_authenticated/history'
@@ -296,6 +308,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedFaqRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/contact': {
+      id: '/_authenticated/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof AuthenticatedContactRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/community': {
       id: '/_authenticated/community'
       path: '/community'
@@ -324,6 +343,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAppearanceRoute: typeof AuthenticatedAppearanceRoute
   AuthenticatedChatRoute: typeof AuthenticatedChatRoute
   AuthenticatedCommunityRoute: typeof AuthenticatedCommunityRoute
+  AuthenticatedContactRoute: typeof AuthenticatedContactRoute
   AuthenticatedFaqRoute: typeof AuthenticatedFaqRoute
   AuthenticatedFavoritesRoute: typeof AuthenticatedFavoritesRoute
   AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
@@ -340,6 +360,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAppearanceRoute: AuthenticatedAppearanceRoute,
   AuthenticatedChatRoute: AuthenticatedChatRoute,
   AuthenticatedCommunityRoute: AuthenticatedCommunityRoute,
+  AuthenticatedContactRoute: AuthenticatedContactRoute,
   AuthenticatedFaqRoute: AuthenticatedFaqRoute,
   AuthenticatedFavoritesRoute: AuthenticatedFavoritesRoute,
   AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
