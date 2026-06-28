@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated.index'
 import { Route as AuthenticatedScanRouteImport } from './routes/_authenticated.scan'
 import { Route as AuthenticatedPlantScannerRouteImport } from './routes/_authenticated.plant-scanner'
+import { Route as AuthenticatedMealPlannerRouteImport } from './routes/_authenticated.meal-planner'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -40,15 +41,23 @@ const AuthenticatedPlantScannerRoute =
     path: '/plant-scanner',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedMealPlannerRoute =
+  AuthenticatedMealPlannerRouteImport.update({
+    id: '/meal-planner',
+    path: '/meal-planner',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/auth': typeof AuthRoute
+  '/meal-planner': typeof AuthenticatedMealPlannerRoute
   '/plant-scanner': typeof AuthenticatedPlantScannerRoute
   '/scan': typeof AuthenticatedScanRoute
 }
 export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
+  '/meal-planner': typeof AuthenticatedMealPlannerRoute
   '/plant-scanner': typeof AuthenticatedPlantScannerRoute
   '/scan': typeof AuthenticatedScanRoute
   '/': typeof AuthenticatedIndexRoute
@@ -57,19 +66,21 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/meal-planner': typeof AuthenticatedMealPlannerRoute
   '/_authenticated/plant-scanner': typeof AuthenticatedPlantScannerRoute
   '/_authenticated/scan': typeof AuthenticatedScanRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/plant-scanner' | '/scan'
+  fullPaths: '/' | '/auth' | '/meal-planner' | '/plant-scanner' | '/scan'
   fileRoutesByTo: FileRoutesByTo
-  to: '/auth' | '/plant-scanner' | '/scan' | '/'
+  to: '/auth' | '/meal-planner' | '/plant-scanner' | '/scan' | '/'
   id:
     | '__root__'
     | '/_authenticated'
     | '/auth'
+    | '/_authenticated/meal-planner'
     | '/_authenticated/plant-scanner'
     | '/_authenticated/scan'
     | '/_authenticated/'
@@ -117,16 +128,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPlantScannerRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/meal-planner': {
+      id: '/_authenticated/meal-planner'
+      path: '/meal-planner'
+      fullPath: '/meal-planner'
+      preLoaderRoute: typeof AuthenticatedMealPlannerRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedMealPlannerRoute: typeof AuthenticatedMealPlannerRoute
   AuthenticatedPlantScannerRoute: typeof AuthenticatedPlantScannerRoute
   AuthenticatedScanRoute: typeof AuthenticatedScanRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedMealPlannerRoute: AuthenticatedMealPlannerRoute,
   AuthenticatedPlantScannerRoute: AuthenticatedPlantScannerRoute,
   AuthenticatedScanRoute: AuthenticatedScanRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
