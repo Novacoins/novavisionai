@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { Camera, Save, User as UserIcon, Mail, MapPin, Calendar, ScanLine, Heart, Folder } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { AutoCarousel } from "@/components/AutoCarousel";
 
 export const Route = createFileRoute("/_authenticated/profile")({
   component: ProfilePage,
@@ -17,6 +19,7 @@ export const Route = createFileRoute("/_authenticated/profile")({
 
 function ProfilePage() {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [profile, setProfile] = useState({
@@ -60,7 +63,7 @@ function ProfilePage() {
     const { error } = await supabase.from("profiles").update(profile).eq("id", user.id);
     setSaving(false);
     if (error) toast.error(error.message);
-    else toast.success("Profile saved");
+    else toast.success(t("profile.saved"));
   }
 
   async function uploadAvatar(file: File) {
@@ -72,7 +75,7 @@ function ProfilePage() {
     if (data?.signedUrl) {
       setProfile((p) => ({ ...p, avatar_url: data.signedUrl }));
       await supabase.from("profiles").update({ avatar_url: data.signedUrl }).eq("id", user.id);
-      toast.success("Photo updated");
+      toast.success(t("profile.photoUpdated"));
     }
   }
 
@@ -94,14 +97,14 @@ function ProfilePage() {
             <input type="file" accept="image/*" hidden onChange={(e) => e.target.files?.[0] && uploadAvatar(e.target.files[0])} />
           </label>
         </div>
-        <h2 className="mt-3 text-lg font-bold">{profile.display_name || "Add your name"}</h2>
+        <h2 className="mt-3 text-lg font-bold">{profile.display_name || t("profile.addName")}</h2>
         <p className="text-xs text-muted-foreground">@{profile.username || user?.email?.split("@")[0]}</p>
 
         <div className="grid grid-cols-3 gap-2 mt-4">
           {[
-            { icon: ScanLine, label: "Scans", value: stats.total },
-            { icon: Heart, label: "Favorites", value: stats.favorites },
-            { icon: Folder, label: "Collections", value: stats.collections },
+            { icon: ScanLine, label: t("profile.scans"), value: stats.total },
+            { icon: Heart, label: t("profile.favorites"), value: stats.favorites },
+            { icon: Folder, label: t("profile.collections"), value: stats.collections },
           ].map((s) => (
             <div key={s.label} className="rounded-xl bg-muted p-3">
               <s.icon className="size-4 text-primary mx-auto" />
@@ -114,19 +117,19 @@ function ProfilePage() {
 
       <div className="glass-card p-4 space-y-3 text-sm">
         <div className="flex items-center gap-2 text-muted-foreground"><Mail className="size-4" /> {user?.email}</div>
-        {joined && <div className="flex items-center gap-2 text-muted-foreground"><Calendar className="size-4" /> Joined {new Date(joined).toLocaleDateString()}</div>}
+        {joined && <div className="flex items-center gap-2 text-muted-foreground"><Calendar className="size-4" /> {t("profile.joined")} {new Date(joined).toLocaleDateString()}</div>}
         {profile.country && <div className="flex items-center gap-2 text-muted-foreground"><MapPin className="size-4" /> {profile.country}</div>}
       </div>
 
       <div className="glass-card p-4 space-y-3">
-        <h3 className="text-sm font-semibold">Edit profile</h3>
-        <div><Label className="text-xs">Display name</Label><Input value={profile.display_name} onChange={(e) => setProfile({ ...profile, display_name: e.target.value })} /></div>
-        <div><Label className="text-xs">Username</Label><Input value={profile.username} onChange={(e) => setProfile({ ...profile, username: e.target.value })} /></div>
-        <div><Label className="text-xs">Country</Label><Input value={profile.country} onChange={(e) => setProfile({ ...profile, country: e.target.value })} /></div>
+        <h3 className="text-sm font-semibold">{t("profile.edit")}</h3>
+        <div><Label className="text-xs">{t("profile.displayName")}</Label><Input value={profile.display_name} onChange={(e) => setProfile({ ...profile, display_name: e.target.value })} /></div>
+        <div><Label className="text-xs">{t("profile.username")}</Label><Input value={profile.username} onChange={(e) => setProfile({ ...profile, username: e.target.value })} /></div>
+        <div><Label className="text-xs">{t("profile.country")}</Label><Input value={profile.country} onChange={(e) => setProfile({ ...profile, country: e.target.value })} /></div>
         <div>
-          <Label className="text-xs">Dietary goal</Label>
+          <Label className="text-xs">{t("profile.dietaryGoal")}</Label>
           <Select value={profile.dietary_goal} onValueChange={(v) => setProfile({ ...profile, dietary_goal: v })}>
-            <SelectTrigger><SelectValue placeholder="Select goal" /></SelectTrigger>
+            <SelectTrigger><SelectValue placeholder={t("profile.selectGoal")} /></SelectTrigger>
             <SelectContent>
               {["stay healthy", "lose weight", "gain weight", "build muscle", "more energy"].map((g) => (
                 <SelectItem key={g} value={g} className="capitalize">{g}</SelectItem>
@@ -135,9 +138,9 @@ function ProfilePage() {
           </Select>
         </div>
         <div>
-          <Label className="text-xs">Diet preference</Label>
+          <Label className="text-xs">{t("profile.dietPreference")}</Label>
           <Select value={profile.diet_preference} onValueChange={(v) => setProfile({ ...profile, diet_preference: v })}>
-            <SelectTrigger><SelectValue placeholder="Select diet" /></SelectTrigger>
+            <SelectTrigger><SelectValue placeholder={t("profile.selectDiet")} /></SelectTrigger>
             <SelectContent>
               {["balanced", "vegetarian", "vegan", "keto", "low carb", "mediterranean"].map((d) => (
                 <SelectItem key={d} value={d} className="capitalize">{d}</SelectItem>
@@ -146,9 +149,13 @@ function ProfilePage() {
           </Select>
         </div>
         <Button onClick={save} disabled={saving} className="w-full hero-gradient text-primary-foreground font-semibold">
-          <Save className="size-4 mr-2" /> {saving ? "Saving…" : "Save changes"}
+          <Save className="size-4 mr-2" /> {saving ? t("profile.saving") : t("profile.save")}
         </Button>
       </div>
+
+      <section className="pt-2">
+        <AutoCarousel />
+      </section>
     </div>
   );
 }

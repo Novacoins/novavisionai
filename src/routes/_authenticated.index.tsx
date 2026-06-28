@@ -1,11 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { Camera, Leaf, Utensils, Upload, Sparkles, ChevronRight, ScanLine } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { dailyTip, generateMealPlan } from "@/lib/ai.functions";
 import { Skeleton } from "@/components/ui/skeleton";
+import { AutoCarousel } from "@/components/AutoCarousel";
 
 export const Route = createFileRoute("/_authenticated/")({
   component: HomePage,
@@ -21,6 +23,7 @@ type RecentScan = {
 
 function HomePage() {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [tip, setTip] = useState<string | null>(null);
   const [meals, setMeals] = useState<{ meal_type: string; name: string; calories: number }[] | null>(null);
   const [recent, setRecent] = useState<RecentScan[] | null>(null);
@@ -44,14 +47,14 @@ function HomePage() {
 
   const greetingName = user?.user_metadata?.display_name || user?.email?.split("@")[0] || "there";
   const hour = new Date().getHours();
-  const greeting = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
+  const greeting = hour < 12 ? t("home.morning") : hour < 18 ? t("home.afternoon") : t("home.evening");
 
   return (
     <div className="px-4 pt-3 pb-4 space-y-5 max-w-md mx-auto">
       <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
         <p className="text-sm text-muted-foreground">{greeting},</p>
         <h1 className="text-2xl font-bold tracking-tight">{greetingName} 👋</h1>
-        <p className="text-sm text-muted-foreground mt-1">Ready to scan something new?</p>
+        <p className="text-sm text-muted-foreground mt-1">{t("home.ready")}</p>
       </motion.section>
 
       <Link to="/scan" className="block">
@@ -63,10 +66,10 @@ function HomePage() {
           <div className="relative flex items-center justify-between">
             <div>
               <div className="flex items-center gap-2 text-xs uppercase tracking-wider opacity-90">
-                <Sparkles className="size-3.5" /> Scan Anything
+                <Sparkles className="size-3.5" /> {t("home.scanAnything")}
               </div>
-              <h2 className="text-2xl font-bold mt-1">Tap to scan</h2>
-              <p className="text-sm opacity-90 mt-1">Food, plants, products, objects…</p>
+              <h2 className="text-2xl font-bold mt-1">{t("home.tapToScan")}</h2>
+              <p className="text-sm opacity-90 mt-1">{t("home.tapToScanDesc")}</p>
             </div>
             <div className="size-16 rounded-2xl bg-white/15 backdrop-blur grid place-items-center">
               <Camera className="size-8" />
@@ -77,10 +80,10 @@ function HomePage() {
 
       <section className="grid grid-cols-4 gap-2">
         {[
-          { to: "/scan", label: "Food", icon: Utensils },
-          { to: "/plant-scanner", label: "Plant", icon: Leaf },
-          { to: "/scan", label: "Upload", icon: Upload },
-          { to: "/meal-planner", label: "Meals", icon: ScanLine },
+          { to: "/scan", label: t("home.food"), icon: Utensils },
+          { to: "/plant-scanner", label: t("home.plant"), icon: Leaf },
+          { to: "/scan", label: t("home.upload"), icon: Upload },
+          { to: "/meal-planner", label: t("home.mealsShort"), icon: ScanLine },
         ].map(({ to, label, icon: Icon }) => (
           <Link key={label} to={to} className="glass-card p-3 flex flex-col items-center gap-1.5 active:scale-95 transition">
             <span className="size-10 rounded-xl bg-primary/15 text-primary grid place-items-center"><Icon className="size-5" /></span>
@@ -92,7 +95,7 @@ function HomePage() {
       <section className="glass-card p-4">
         <div className="flex items-center gap-2 mb-2">
           <Sparkles className="size-4 text-primary" />
-          <h3 className="text-sm font-semibold">Tip of the day</h3>
+          <h3 className="text-sm font-semibold">{t("home.tipOfDay")}</h3>
         </div>
         {tip ? (
           <p className="text-sm text-muted-foreground leading-relaxed">{tip}</p>
@@ -103,9 +106,9 @@ function HomePage() {
 
       <section>
         <div className="flex items-center justify-between mb-2 px-1">
-          <h3 className="text-sm font-semibold">Today's meal preview</h3>
+          <h3 className="text-sm font-semibold">{t("home.todayMeal")}</h3>
           <Link to="/meal-planner" className="text-xs text-primary flex items-center gap-0.5">
-            See all <ChevronRight className="size-3" />
+            {t("home.seeAll")} <ChevronRight className="size-3" />
           </Link>
         </div>
         <div className="space-y-2">
@@ -115,7 +118,7 @@ function HomePage() {
             </>
           ) : meals.length === 0 ? (
             <Link to="/meal-planner" className="glass-card p-4 block text-sm text-muted-foreground text-center">
-              Generate your first meal plan →
+              {t("home.generateFirst")}
             </Link>
           ) : (
             meals.map((m) => (
@@ -136,9 +139,9 @@ function HomePage() {
 
       <section>
         <div className="flex items-center justify-between mb-2 px-1">
-          <h3 className="text-sm font-semibold">Recently scanned</h3>
+          <h3 className="text-sm font-semibold">{t("home.recentScans")}</h3>
           <Link to="/history" className="text-xs text-primary flex items-center gap-0.5">
-            See all <ChevronRight className="size-3" />
+            {t("home.seeAll")} <ChevronRight className="size-3" />
           </Link>
         </div>
         {recent === null ? (
@@ -148,8 +151,8 @@ function HomePage() {
         ) : recent.length === 0 ? (
           <Link to="/scan" className="glass-card p-6 block text-center">
             <Camera className="size-8 mx-auto text-primary mb-2" />
-            <div className="text-sm font-medium">No scans yet</div>
-            <div className="text-xs text-muted-foreground mt-1">Tap to start your first scan</div>
+            <div className="text-sm font-medium">{t("home.noScans")}</div>
+            <div className="text-xs text-muted-foreground mt-1">{t("home.noScansDesc")}</div>
           </Link>
         ) : (
           <div className="grid grid-cols-3 gap-2">
@@ -167,6 +170,14 @@ function HomePage() {
             ))}
           </div>
         )}
+      </section>
+
+      <section className="pt-2">
+        <div className="flex items-center gap-2 mb-2 px-1">
+          <Sparkles className="size-4 text-primary" />
+          <h3 className="text-sm font-semibold">{t("home.discover")}</h3>
+        </div>
+        <AutoCarousel />
       </section>
     </div>
   );
