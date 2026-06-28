@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
-import { MessageSquare, Send, Paperclip, Camera, Mic, Copy, RefreshCw, Loader2, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { MessageSquare, Send, Paperclip, Camera, Mic, Copy, RefreshCw, Loader2, X, FileText, FilePlus, Construction } from "lucide-react";
 import ReactMarkdown from "react-markdown";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { PageHeader, PageShell } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
