@@ -166,6 +166,33 @@ function ChatPage() {
           </Button>
         </div>
       </div>
+
+      <Dialog open={!!comingSoon} onOpenChange={(o) => !o && setComingSoon(null)}>
+        <DialogContent className="glass-card backdrop-blur-2xl border-border max-w-sm">
+          <AnimatePresence>
+            {comingSoon && (
+              <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }}>
+                <div className="flex flex-col items-center text-center py-2">
+                  <motion.div
+                    initial={{ rotate: -20, scale: 0.6 }}
+                    animate={{ rotate: 0, scale: 1 }}
+                    transition={{ type: "spring", stiffness: 200 }}
+                    className="size-16 rounded-3xl hero-gradient grid place-items-center glow mb-4"
+                  >
+                    <Construction className="size-8 text-primary-foreground" />
+                  </motion.div>
+                  <DialogHeader>
+                    <DialogTitle className="text-center text-lg">🚧 {comingSoon.title} — Coming Soon</DialogTitle>
+                    <DialogDescription className="text-center mt-2">
+                      This feature is currently under development and will be available in a future update. Thank you for your patience.
+                    </DialogDescription>
+                  </DialogHeader>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
