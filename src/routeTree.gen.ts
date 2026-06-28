@@ -17,6 +17,7 @@ import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedPlantScannerRouteImport } from './routes/_authenticated.plant-scanner'
 import { Route as AuthenticatedMealPlannerRouteImport } from './routes/_authenticated.meal-planner'
 import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated.history'
+import { Route as AuthenticatedFavoritesRouteImport } from './routes/_authenticated.favorites'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -59,10 +60,16 @@ const AuthenticatedHistoryRoute = AuthenticatedHistoryRouteImport.update({
   path: '/history',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedFavoritesRoute = AuthenticatedFavoritesRouteImport.update({
+  id: '/favorites',
+  path: '/favorites',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/auth': typeof AuthRoute
+  '/favorites': typeof AuthenticatedFavoritesRoute
   '/history': typeof AuthenticatedHistoryRoute
   '/meal-planner': typeof AuthenticatedMealPlannerRoute
   '/plant-scanner': typeof AuthenticatedPlantScannerRoute
@@ -71,6 +78,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
+  '/favorites': typeof AuthenticatedFavoritesRoute
   '/history': typeof AuthenticatedHistoryRoute
   '/meal-planner': typeof AuthenticatedMealPlannerRoute
   '/plant-scanner': typeof AuthenticatedPlantScannerRoute
@@ -82,6 +90,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/favorites': typeof AuthenticatedFavoritesRoute
   '/_authenticated/history': typeof AuthenticatedHistoryRoute
   '/_authenticated/meal-planner': typeof AuthenticatedMealPlannerRoute
   '/_authenticated/plant-scanner': typeof AuthenticatedPlantScannerRoute
@@ -94,6 +103,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/favorites'
     | '/history'
     | '/meal-planner'
     | '/plant-scanner'
@@ -102,6 +112,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/auth'
+    | '/favorites'
     | '/history'
     | '/meal-planner'
     | '/plant-scanner'
@@ -112,6 +123,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_authenticated'
     | '/auth'
+    | '/_authenticated/favorites'
     | '/_authenticated/history'
     | '/_authenticated/meal-planner'
     | '/_authenticated/plant-scanner'
@@ -183,10 +195,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedHistoryRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/favorites': {
+      id: '/_authenticated/favorites'
+      path: '/favorites'
+      fullPath: '/favorites'
+      preLoaderRoute: typeof AuthenticatedFavoritesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedFavoritesRoute: typeof AuthenticatedFavoritesRoute
   AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
   AuthenticatedMealPlannerRoute: typeof AuthenticatedMealPlannerRoute
   AuthenticatedPlantScannerRoute: typeof AuthenticatedPlantScannerRoute
@@ -196,6 +216,7 @@ interface AuthenticatedRouteChildren {
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedFavoritesRoute: AuthenticatedFavoritesRoute,
   AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
   AuthenticatedMealPlannerRoute: AuthenticatedMealPlannerRoute,
   AuthenticatedPlantScannerRoute: AuthenticatedPlantScannerRoute,
