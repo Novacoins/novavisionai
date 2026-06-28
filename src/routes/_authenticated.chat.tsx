@@ -92,7 +92,7 @@ function ChatPage() {
   return (
     <div className="flex flex-col h-[calc(100dvh-3.5rem-5rem)]">
       <div className="px-4 pt-3">
-        <PageHeader title="AI Chat" icon={<MessageSquare className="size-5 text-primary" />} subtitle="Ask VisionNova anything" />
+        <PageHeader title="AI Chat" icon={<MessageSquare className="size-5 text-primary" />} subtitle="Ask Nova Vision anything" />
       </div>
 
       <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 space-y-3 pb-2">
@@ -153,7 +153,7 @@ function ChatPage() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } }}
-            placeholder="Message VisionNova…"
+            placeholder="Message Nova Vision…"
             rows={1}
             className="resize-none min-h-10 max-h-32"
           />

@@ -31,7 +31,7 @@ export function AppLayout({ children, title }: { children: ReactNode; title?: st
           <div className="size-7 rounded-lg hero-gradient grid place-items-center glow">
             <Sparkles className="size-4 text-primary-foreground" />
           </div>
-          <span className="font-semibold tracking-tight">{title ?? "VisionNova AI"}</span>
+          <span className="font-semibold tracking-tight">{title ?? "Nova Vision AI"}</span>
         </div>
         <Link to="/scan" className="p-2 -mr-2 rounded-lg hover:bg-accent transition-colors" aria-label="Quick scan">
           <ScanLine className="size-5 text-primary" />

@@ -9,7 +9,7 @@ export const Route = createFileRoute("/_authenticated/faq")({
 
 const QA = [
   ["How do I scan an object?", "Open Scan and point your camera at the object, or tap Upload Image to choose from your gallery."],
-  ["Can I scan plants?", "Yes — VisionNova AI identifies plants, lists toxicity and edibility, and provides care tips."],
+  ["Can I scan plants?", "Yes — Nova Vision AI identifies plants, lists toxicity and edibility, and provides care tips."],
   ["Can I scan food?", "Yes — the AI recognizes meals and ingredients and offers nutrition information and meal ideas."],
   ["Can I scan documents?", "Yes — upload a clear photo of any document and ask the AI to summarize or extract text."],
   ["Is my data secure?", "Yes — your account and scans are protected with secure authentication and storage."],

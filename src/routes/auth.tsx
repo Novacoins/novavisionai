@@ -11,8 +11,8 @@ import { Input } from "@/components/ui/input";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Sign in — VisionNova AI" },
-      { name: "description", content: "Sign in or create an account to use VisionNova AI." },
+      { title: "Sign in — Nova Vision AI" },
+      { name: "description", content: "Sign in or create an account to use Nova Vision AI." },
     ],
   }),
   component: AuthPage,
@@ -45,7 +45,7 @@ function AuthPage() {
           },
         });
         if (error) throw error;
-        toast.success("Welcome to VisionNova AI!");
+        toast.success("Welcome to Nova Vision AI!");
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
@@ -70,7 +70,7 @@ function AuthPage() {
           <div className="size-14 rounded-2xl hero-gradient grid place-items-center glow mb-3">
             <Sparkles className="size-7 text-primary-foreground" />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight">VisionNova AI</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Nova Vision AI</h1>
           <p className="text-sm text-muted-foreground mt-1">
             Your AI vision assistant for food, plants & everyday life
           </p>

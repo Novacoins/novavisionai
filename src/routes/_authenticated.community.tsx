@@ -9,7 +9,7 @@ export const Route = createFileRoute("/_authenticated/community")({
 function CommunityPage() {
   return (
     <PageShell>
-      <PageHeader title="Community" icon={<Users className="size-5 text-primary" />} subtitle="Welcome to the VisionNova AI Community" />
+      <PageHeader title="Community" icon={<Users className="size-5 text-primary" />} subtitle="Welcome to the Nova Vision AI Community" />
       <div className="glass-card p-5 text-center">
         <div className="size-16 rounded-2xl hero-gradient grid place-items-center mx-auto glow mb-3">
           <Users className="size-7 text-primary-foreground" />

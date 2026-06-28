@@ -56,7 +56,7 @@ function ScanPage() {
 
   async function share() {
     if (!result) return;
-    const text = `${result.title}\n\n${result.summary}\n\nVia VisionNova AI`;
+    const text = `${result.title}\n\n${result.summary}\n\nVia Nova Vision AI`;
     if (navigator.share) {
       try { await navigator.share({ title: result.title, text }); } catch { /* dismissed */ }
     } else {

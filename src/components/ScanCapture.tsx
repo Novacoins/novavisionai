@@ -103,7 +103,7 @@ export function ScanCapture({
             <div className="absolute inset-0 grid place-items-center bg-black/50 backdrop-blur-sm">
               <div className="text-center text-white">
                 <Loader2 className="size-8 animate-spin mx-auto mb-2" />
-                <p className="text-sm">Analyzing with VisionNova AI…</p>
+                <p className="text-sm">Analyzing with Nova Vision AI…</p>
               </div>
             </div>
           )}

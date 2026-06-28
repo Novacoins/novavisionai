@@ -75,7 +75,7 @@ function ContactPage() {
             </div>
             <DialogTitle className="text-center">Message received</DialogTitle>
             <DialogDescription className="text-center">
-              Thank you for contacting VisionNova AI. Your message has been received successfully. Our support team will review it and reply to your email as soon as possible.
+              Thank you for contacting Nova Vision AI. Your message has been received successfully. Our support team will review it and reply to your email as soon as possible.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="sm:justify-center">
