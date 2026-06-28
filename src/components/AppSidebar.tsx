@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import {
   Home, User, History, Heart, MessageSquare, Globe, Moon, Bell, Users, HelpCircle,
   Mail, Info, Shield, FileText, LogOut, X, Sparkles,
@@ -12,24 +13,25 @@ import {
 } from "@/components/ui/alert-dialog";
 
 const items = [
-  { to: "/", icon: Home, label: "Home", desc: "Back to dashboard" },
-  { to: "/profile", icon: User, label: "My Profile", desc: "Account & stats" },
-  { to: "/history", icon: History, label: "Scan History", desc: "Everything you've scanned" },
-  { to: "/favorites", icon: Heart, label: "Favorites", desc: "Your saved scans" },
-  { to: "/chat", icon: MessageSquare, label: "AI Chat", desc: "Talk to Nova Vision" },
-  { to: "/appearance", icon: Moon, label: "Appearance", desc: "Theme & display" },
-  { to: "/languages", icon: Globe, label: "Languages", desc: "App language" },
-  { to: "/notifications", icon: Bell, label: "Notifications", desc: "Manage alerts" },
-  { to: "/community", icon: Users, label: "Community", desc: "Connect with users" },
-  { to: "/faq", icon: HelpCircle, label: "FAQ", desc: "Common questions" },
-  { to: "/contact", icon: Mail, label: "Contact Support", desc: "We're here to help" },
-  { to: "/about", icon: Info, label: "About", desc: "What is Nova Vision AI" },
-  { to: "/privacy", icon: Shield, label: "Privacy Policy", desc: "How we handle data" },
-  { to: "/terms", icon: FileText, label: "Terms of Service", desc: "Rules of the road" },
-] as { to: string; icon: typeof Home; label: string; desc: string }[];
+  { to: "/", icon: Home, key: "home" },
+  { to: "/profile", icon: User, key: "myProfile" },
+  { to: "/history", icon: History, key: "history" },
+  { to: "/favorites", icon: Heart, key: "favorites" },
+  { to: "/chat", icon: MessageSquare, key: "chat" },
+  { to: "/appearance", icon: Moon, key: "appearance" },
+  { to: "/languages", icon: Globe, key: "languages" },
+  { to: "/notifications", icon: Bell, key: "notifications" },
+  { to: "/community", icon: Users, key: "community" },
+  { to: "/faq", icon: HelpCircle, key: "faq" },
+  { to: "/contact", icon: Mail, key: "contact" },
+  { to: "/about", icon: Info, key: "about" },
+  { to: "/privacy", icon: Shield, key: "privacy" },
+  { to: "/terms", icon: FileText, key: "terms" },
+] as const;
 
 export function AppSidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { user, signOut } = useAuth();
+  const { t } = useTranslation();
   const [confirmLogout, setConfirmLogout] = useState(false);
 
   return (
@@ -56,13 +58,13 @@ export function AppSidebar({ open, onClose }: { open: boolean; onClose: () => vo
                   <Sparkles className="size-5 text-primary-foreground" />
                 </div>
                 <div>
-                  <div className="font-semibold tracking-tight">Nova Vision AI</div>
+                  <div className="font-semibold tracking-tight">{t("brand")}</div>
                   <div className="text-xs text-muted-foreground truncate max-w-[180px]">
-                    {user?.email ?? "Signed in"}
+                    {user?.email ?? t("sidebar.signedIn")}
                   </div>
                 </div>
               </div>
-              <button onClick={onClose} className="p-2 rounded-lg hover:bg-accent" aria-label="Close menu">
+              <button onClick={onClose} className="p-2 rounded-lg hover:bg-accent" aria-label={t("sidebar.closeMenu")}>
                 <X className="size-5" />
               </button>
             </div>
@@ -81,8 +83,8 @@ export function AppSidebar({ open, onClose }: { open: boolean; onClose: () => vo
                       <Icon className="size-5" />
                     </span>
                     <span className="flex-1 min-w-0">
-                      <span className="block text-sm font-medium">{it.label}</span>
-                      <span className="block text-xs text-muted-foreground truncate">{it.desc}</span>
+                      <span className="block text-sm font-medium">{t(`sidebar.${it.key}`)}</span>
+                      <span className="block text-xs text-muted-foreground truncate">{t(`sidebar.${it.key}Desc`)}</span>
                     </span>
                   </Link>
                 );
@@ -97,7 +99,7 @@ export function AppSidebar({ open, onClose }: { open: boolean; onClose: () => vo
                 <span className="size-10 rounded-lg bg-destructive/10 grid place-items-center">
                   <LogOut className="size-5" />
                 </span>
-                <span className="text-sm font-medium">Log out</span>
+                <span className="text-sm font-medium">{t("sidebar.logout")}</span>
               </button>
               <div className="px-3 pt-2 text-[10px] text-muted-foreground">v9.7.1 · Powered by Lovable AI</div>
             </div>
@@ -108,13 +110,11 @@ export function AppSidebar({ open, onClose }: { open: boolean; onClose: () => vo
       <AlertDialog open={confirmLogout} onOpenChange={setConfirmLogout}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Log out of Nova Vision AI?</AlertDialogTitle>
-            <AlertDialogDescription>
-              You'll need to sign in again to access your scans and chats.
-            </AlertDialogDescription>
+            <AlertDialogTitle>{t("sidebar.logoutTitle")}</AlertDialogTitle>
+            <AlertDialogDescription>{t("sidebar.logoutDesc")}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("sidebar.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={async () => {
                 await signOut();
@@ -122,7 +122,7 @@ export function AppSidebar({ open, onClose }: { open: boolean; onClose: () => vo
                 onClose();
               }}
             >
-              Log out
+              {t("sidebar.logout")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
