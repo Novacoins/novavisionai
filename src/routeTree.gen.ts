@@ -15,6 +15,7 @@ import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated.
 import { Route as AuthenticatedScanRouteImport } from './routes/_authenticated.scan'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated.profile'
 import { Route as AuthenticatedPlantScannerRouteImport } from './routes/_authenticated.plant-scanner'
+import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated.notifications'
 import { Route as AuthenticatedMealPlannerRouteImport } from './routes/_authenticated.meal-planner'
 import { Route as AuthenticatedLanguagesRouteImport } from './routes/_authenticated.languages'
 import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated.history'
@@ -50,6 +51,12 @@ const AuthenticatedPlantScannerRoute =
   AuthenticatedPlantScannerRouteImport.update({
     id: '/plant-scanner',
     path: '/plant-scanner',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedNotificationsRoute =
+  AuthenticatedNotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedMealPlannerRoute =
@@ -93,6 +100,7 @@ export interface FileRoutesByFullPath {
   '/history': typeof AuthenticatedHistoryRoute
   '/languages': typeof AuthenticatedLanguagesRoute
   '/meal-planner': typeof AuthenticatedMealPlannerRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
   '/plant-scanner': typeof AuthenticatedPlantScannerRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/scan': typeof AuthenticatedScanRoute
@@ -105,6 +113,7 @@ export interface FileRoutesByTo {
   '/history': typeof AuthenticatedHistoryRoute
   '/languages': typeof AuthenticatedLanguagesRoute
   '/meal-planner': typeof AuthenticatedMealPlannerRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
   '/plant-scanner': typeof AuthenticatedPlantScannerRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/scan': typeof AuthenticatedScanRoute
@@ -120,6 +129,7 @@ export interface FileRoutesById {
   '/_authenticated/history': typeof AuthenticatedHistoryRoute
   '/_authenticated/languages': typeof AuthenticatedLanguagesRoute
   '/_authenticated/meal-planner': typeof AuthenticatedMealPlannerRoute
+  '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/plant-scanner': typeof AuthenticatedPlantScannerRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/scan': typeof AuthenticatedScanRoute
@@ -136,6 +146,7 @@ export interface FileRouteTypes {
     | '/history'
     | '/languages'
     | '/meal-planner'
+    | '/notifications'
     | '/plant-scanner'
     | '/profile'
     | '/scan'
@@ -148,6 +159,7 @@ export interface FileRouteTypes {
     | '/history'
     | '/languages'
     | '/meal-planner'
+    | '/notifications'
     | '/plant-scanner'
     | '/profile'
     | '/scan'
@@ -162,6 +174,7 @@ export interface FileRouteTypes {
     | '/_authenticated/history'
     | '/_authenticated/languages'
     | '/_authenticated/meal-planner'
+    | '/_authenticated/notifications'
     | '/_authenticated/plant-scanner'
     | '/_authenticated/profile'
     | '/_authenticated/scan'
@@ -217,6 +230,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPlantScannerRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/notifications': {
+      id: '/_authenticated/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof AuthenticatedNotificationsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/meal-planner': {
       id: '/_authenticated/meal-planner'
       path: '/meal-planner'
@@ -269,6 +289,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
   AuthenticatedLanguagesRoute: typeof AuthenticatedLanguagesRoute
   AuthenticatedMealPlannerRoute: typeof AuthenticatedMealPlannerRoute
+  AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedPlantScannerRoute: typeof AuthenticatedPlantScannerRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedScanRoute: typeof AuthenticatedScanRoute
@@ -282,6 +303,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
   AuthenticatedLanguagesRoute: AuthenticatedLanguagesRoute,
   AuthenticatedMealPlannerRoute: AuthenticatedMealPlannerRoute,
+  AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedPlantScannerRoute: AuthenticatedPlantScannerRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedScanRoute: AuthenticatedScanRoute,
