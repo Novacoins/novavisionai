@@ -16,6 +16,7 @@ import { Route as AuthenticatedScanRouteImport } from './routes/_authenticated.s
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated.profile'
 import { Route as AuthenticatedPlantScannerRouteImport } from './routes/_authenticated.plant-scanner'
 import { Route as AuthenticatedMealPlannerRouteImport } from './routes/_authenticated.meal-planner'
+import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated.history'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -53,10 +54,16 @@ const AuthenticatedMealPlannerRoute =
     path: '/meal-planner',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedHistoryRoute = AuthenticatedHistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/auth': typeof AuthRoute
+  '/history': typeof AuthenticatedHistoryRoute
   '/meal-planner': typeof AuthenticatedMealPlannerRoute
   '/plant-scanner': typeof AuthenticatedPlantScannerRoute
   '/profile': typeof AuthenticatedProfileRoute
@@ -64,6 +71,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
+  '/history': typeof AuthenticatedHistoryRoute
   '/meal-planner': typeof AuthenticatedMealPlannerRoute
   '/plant-scanner': typeof AuthenticatedPlantScannerRoute
   '/profile': typeof AuthenticatedProfileRoute
@@ -74,6 +82,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/history': typeof AuthenticatedHistoryRoute
   '/_authenticated/meal-planner': typeof AuthenticatedMealPlannerRoute
   '/_authenticated/plant-scanner': typeof AuthenticatedPlantScannerRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
@@ -85,16 +94,25 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/history'
     | '/meal-planner'
     | '/plant-scanner'
     | '/profile'
     | '/scan'
   fileRoutesByTo: FileRoutesByTo
-  to: '/auth' | '/meal-planner' | '/plant-scanner' | '/profile' | '/scan' | '/'
+  to:
+    | '/auth'
+    | '/history'
+    | '/meal-planner'
+    | '/plant-scanner'
+    | '/profile'
+    | '/scan'
+    | '/'
   id:
     | '__root__'
     | '/_authenticated'
     | '/auth'
+    | '/_authenticated/history'
     | '/_authenticated/meal-planner'
     | '/_authenticated/plant-scanner'
     | '/_authenticated/profile'
@@ -158,10 +176,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMealPlannerRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/history': {
+      id: '/_authenticated/history'
+      path: '/history'
+      fullPath: '/history'
+      preLoaderRoute: typeof AuthenticatedHistoryRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
   AuthenticatedMealPlannerRoute: typeof AuthenticatedMealPlannerRoute
   AuthenticatedPlantScannerRoute: typeof AuthenticatedPlantScannerRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
@@ -170,6 +196,7 @@ interface AuthenticatedRouteChildren {
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
   AuthenticatedMealPlannerRoute: AuthenticatedMealPlannerRoute,
   AuthenticatedPlantScannerRoute: AuthenticatedPlantScannerRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
