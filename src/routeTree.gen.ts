@@ -16,6 +16,7 @@ import { Route as AuthenticatedScanRouteImport } from './routes/_authenticated.s
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated.profile'
 import { Route as AuthenticatedPlantScannerRouteImport } from './routes/_authenticated.plant-scanner'
 import { Route as AuthenticatedMealPlannerRouteImport } from './routes/_authenticated.meal-planner'
+import { Route as AuthenticatedLanguagesRouteImport } from './routes/_authenticated.languages'
 import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated.history'
 import { Route as AuthenticatedFavoritesRouteImport } from './routes/_authenticated.favorites'
 import { Route as AuthenticatedChatRouteImport } from './routes/_authenticated.chat'
@@ -56,6 +57,11 @@ const AuthenticatedMealPlannerRoute =
     path: '/meal-planner',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedLanguagesRoute = AuthenticatedLanguagesRouteImport.update({
+  id: '/languages',
+  path: '/languages',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedHistoryRoute = AuthenticatedHistoryRouteImport.update({
   id: '/history',
   path: '/history',
@@ -78,6 +84,7 @@ export interface FileRoutesByFullPath {
   '/chat': typeof AuthenticatedChatRoute
   '/favorites': typeof AuthenticatedFavoritesRoute
   '/history': typeof AuthenticatedHistoryRoute
+  '/languages': typeof AuthenticatedLanguagesRoute
   '/meal-planner': typeof AuthenticatedMealPlannerRoute
   '/plant-scanner': typeof AuthenticatedPlantScannerRoute
   '/profile': typeof AuthenticatedProfileRoute
@@ -88,6 +95,7 @@ export interface FileRoutesByTo {
   '/chat': typeof AuthenticatedChatRoute
   '/favorites': typeof AuthenticatedFavoritesRoute
   '/history': typeof AuthenticatedHistoryRoute
+  '/languages': typeof AuthenticatedLanguagesRoute
   '/meal-planner': typeof AuthenticatedMealPlannerRoute
   '/plant-scanner': typeof AuthenticatedPlantScannerRoute
   '/profile': typeof AuthenticatedProfileRoute
@@ -101,6 +109,7 @@ export interface FileRoutesById {
   '/_authenticated/chat': typeof AuthenticatedChatRoute
   '/_authenticated/favorites': typeof AuthenticatedFavoritesRoute
   '/_authenticated/history': typeof AuthenticatedHistoryRoute
+  '/_authenticated/languages': typeof AuthenticatedLanguagesRoute
   '/_authenticated/meal-planner': typeof AuthenticatedMealPlannerRoute
   '/_authenticated/plant-scanner': typeof AuthenticatedPlantScannerRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
@@ -115,6 +124,7 @@ export interface FileRouteTypes {
     | '/chat'
     | '/favorites'
     | '/history'
+    | '/languages'
     | '/meal-planner'
     | '/plant-scanner'
     | '/profile'
@@ -125,6 +135,7 @@ export interface FileRouteTypes {
     | '/chat'
     | '/favorites'
     | '/history'
+    | '/languages'
     | '/meal-planner'
     | '/plant-scanner'
     | '/profile'
@@ -137,6 +148,7 @@ export interface FileRouteTypes {
     | '/_authenticated/chat'
     | '/_authenticated/favorites'
     | '/_authenticated/history'
+    | '/_authenticated/languages'
     | '/_authenticated/meal-planner'
     | '/_authenticated/plant-scanner'
     | '/_authenticated/profile'
@@ -200,6 +212,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMealPlannerRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/languages': {
+      id: '/_authenticated/languages'
+      path: '/languages'
+      fullPath: '/languages'
+      preLoaderRoute: typeof AuthenticatedLanguagesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/history': {
       id: '/_authenticated/history'
       path: '/history'
@@ -228,6 +247,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedChatRoute: typeof AuthenticatedChatRoute
   AuthenticatedFavoritesRoute: typeof AuthenticatedFavoritesRoute
   AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
+  AuthenticatedLanguagesRoute: typeof AuthenticatedLanguagesRoute
   AuthenticatedMealPlannerRoute: typeof AuthenticatedMealPlannerRoute
   AuthenticatedPlantScannerRoute: typeof AuthenticatedPlantScannerRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
@@ -239,6 +259,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedChatRoute: AuthenticatedChatRoute,
   AuthenticatedFavoritesRoute: AuthenticatedFavoritesRoute,
   AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
+  AuthenticatedLanguagesRoute: AuthenticatedLanguagesRoute,
   AuthenticatedMealPlannerRoute: AuthenticatedMealPlannerRoute,
   AuthenticatedPlantScannerRoute: AuthenticatedPlantScannerRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
