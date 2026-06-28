@@ -20,6 +20,7 @@ import { Route as AuthenticatedMealPlannerRouteImport } from './routes/_authenti
 import { Route as AuthenticatedLanguagesRouteImport } from './routes/_authenticated.languages'
 import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated.history'
 import { Route as AuthenticatedFavoritesRouteImport } from './routes/_authenticated.favorites'
+import { Route as AuthenticatedFaqRouteImport } from './routes/_authenticated.faq'
 import { Route as AuthenticatedCommunityRouteImport } from './routes/_authenticated.community'
 import { Route as AuthenticatedChatRouteImport } from './routes/_authenticated.chat'
 import { Route as AuthenticatedAppearanceRouteImport } from './routes/_authenticated.appearance'
@@ -81,6 +82,11 @@ const AuthenticatedFavoritesRoute = AuthenticatedFavoritesRouteImport.update({
   path: '/favorites',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedFaqRoute = AuthenticatedFaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedCommunityRoute = AuthenticatedCommunityRouteImport.update({
   id: '/community',
   path: '/community',
@@ -103,6 +109,7 @@ export interface FileRoutesByFullPath {
   '/appearance': typeof AuthenticatedAppearanceRoute
   '/chat': typeof AuthenticatedChatRoute
   '/community': typeof AuthenticatedCommunityRoute
+  '/faq': typeof AuthenticatedFaqRoute
   '/favorites': typeof AuthenticatedFavoritesRoute
   '/history': typeof AuthenticatedHistoryRoute
   '/languages': typeof AuthenticatedLanguagesRoute
@@ -117,6 +124,7 @@ export interface FileRoutesByTo {
   '/appearance': typeof AuthenticatedAppearanceRoute
   '/chat': typeof AuthenticatedChatRoute
   '/community': typeof AuthenticatedCommunityRoute
+  '/faq': typeof AuthenticatedFaqRoute
   '/favorites': typeof AuthenticatedFavoritesRoute
   '/history': typeof AuthenticatedHistoryRoute
   '/languages': typeof AuthenticatedLanguagesRoute
@@ -134,6 +142,7 @@ export interface FileRoutesById {
   '/_authenticated/appearance': typeof AuthenticatedAppearanceRoute
   '/_authenticated/chat': typeof AuthenticatedChatRoute
   '/_authenticated/community': typeof AuthenticatedCommunityRoute
+  '/_authenticated/faq': typeof AuthenticatedFaqRoute
   '/_authenticated/favorites': typeof AuthenticatedFavoritesRoute
   '/_authenticated/history': typeof AuthenticatedHistoryRoute
   '/_authenticated/languages': typeof AuthenticatedLanguagesRoute
@@ -152,6 +161,7 @@ export interface FileRouteTypes {
     | '/appearance'
     | '/chat'
     | '/community'
+    | '/faq'
     | '/favorites'
     | '/history'
     | '/languages'
@@ -166,6 +176,7 @@ export interface FileRouteTypes {
     | '/appearance'
     | '/chat'
     | '/community'
+    | '/faq'
     | '/favorites'
     | '/history'
     | '/languages'
@@ -182,6 +193,7 @@ export interface FileRouteTypes {
     | '/_authenticated/appearance'
     | '/_authenticated/chat'
     | '/_authenticated/community'
+    | '/_authenticated/faq'
     | '/_authenticated/favorites'
     | '/_authenticated/history'
     | '/_authenticated/languages'
@@ -277,6 +289,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedFavoritesRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/faq': {
+      id: '/_authenticated/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof AuthenticatedFaqRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/community': {
       id: '/_authenticated/community'
       path: '/community'
@@ -305,6 +324,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAppearanceRoute: typeof AuthenticatedAppearanceRoute
   AuthenticatedChatRoute: typeof AuthenticatedChatRoute
   AuthenticatedCommunityRoute: typeof AuthenticatedCommunityRoute
+  AuthenticatedFaqRoute: typeof AuthenticatedFaqRoute
   AuthenticatedFavoritesRoute: typeof AuthenticatedFavoritesRoute
   AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
   AuthenticatedLanguagesRoute: typeof AuthenticatedLanguagesRoute
@@ -320,6 +340,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAppearanceRoute: AuthenticatedAppearanceRoute,
   AuthenticatedChatRoute: AuthenticatedChatRoute,
   AuthenticatedCommunityRoute: AuthenticatedCommunityRoute,
+  AuthenticatedFaqRoute: AuthenticatedFaqRoute,
   AuthenticatedFavoritesRoute: AuthenticatedFavoritesRoute,
   AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
   AuthenticatedLanguagesRoute: AuthenticatedLanguagesRoute,
