@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated.index'
 import { Route as AuthenticatedScanRouteImport } from './routes/_authenticated.scan'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated.profile'
+import { Route as AuthenticatedPrivacyRouteImport } from './routes/_authenticated.privacy'
 import { Route as AuthenticatedPlantScannerRouteImport } from './routes/_authenticated.plant-scanner'
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated.notifications'
 import { Route as AuthenticatedMealPlannerRouteImport } from './routes/_authenticated.meal-planner'
@@ -49,6 +50,11 @@ const AuthenticatedScanRoute = AuthenticatedScanRouteImport.update({
 const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedPrivacyRoute = AuthenticatedPrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedPlantScannerRoute =
@@ -130,6 +136,7 @@ export interface FileRoutesByFullPath {
   '/meal-planner': typeof AuthenticatedMealPlannerRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/plant-scanner': typeof AuthenticatedPlantScannerRoute
+  '/privacy': typeof AuthenticatedPrivacyRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/scan': typeof AuthenticatedScanRoute
 }
@@ -147,6 +154,7 @@ export interface FileRoutesByTo {
   '/meal-planner': typeof AuthenticatedMealPlannerRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/plant-scanner': typeof AuthenticatedPlantScannerRoute
+  '/privacy': typeof AuthenticatedPrivacyRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/scan': typeof AuthenticatedScanRoute
   '/': typeof AuthenticatedIndexRoute
@@ -167,6 +175,7 @@ export interface FileRoutesById {
   '/_authenticated/meal-planner': typeof AuthenticatedMealPlannerRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/plant-scanner': typeof AuthenticatedPlantScannerRoute
+  '/_authenticated/privacy': typeof AuthenticatedPrivacyRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/scan': typeof AuthenticatedScanRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
@@ -188,6 +197,7 @@ export interface FileRouteTypes {
     | '/meal-planner'
     | '/notifications'
     | '/plant-scanner'
+    | '/privacy'
     | '/profile'
     | '/scan'
   fileRoutesByTo: FileRoutesByTo
@@ -205,6 +215,7 @@ export interface FileRouteTypes {
     | '/meal-planner'
     | '/notifications'
     | '/plant-scanner'
+    | '/privacy'
     | '/profile'
     | '/scan'
     | '/'
@@ -224,6 +235,7 @@ export interface FileRouteTypes {
     | '/_authenticated/meal-planner'
     | '/_authenticated/notifications'
     | '/_authenticated/plant-scanner'
+    | '/_authenticated/privacy'
     | '/_authenticated/profile'
     | '/_authenticated/scan'
     | '/_authenticated/'
@@ -269,6 +281,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof AuthenticatedProfileRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/privacy': {
+      id: '/_authenticated/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof AuthenticatedPrivacyRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/plant-scanner': {
@@ -371,6 +390,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedMealPlannerRoute: typeof AuthenticatedMealPlannerRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedPlantScannerRoute: typeof AuthenticatedPlantScannerRoute
+  AuthenticatedPrivacyRoute: typeof AuthenticatedPrivacyRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedScanRoute: typeof AuthenticatedScanRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
@@ -389,6 +409,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedMealPlannerRoute: AuthenticatedMealPlannerRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedPlantScannerRoute: AuthenticatedPlantScannerRoute,
+  AuthenticatedPrivacyRoute: AuthenticatedPrivacyRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedScanRoute: AuthenticatedScanRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
