@@ -145,8 +145,10 @@ function ChatPage() {
         )}
         <div className="flex items-end gap-2">
           <div className="flex gap-1">
-            <button onClick={() => fileRef.current?.click()} className="p-2 rounded-lg hover:bg-accent" aria-label="Attach"><Paperclip className="size-4" /></button>
+            <button onClick={() => fileRef.current?.click()} className="p-2 rounded-lg hover:bg-accent" aria-label="Attach image"><Paperclip className="size-4" /></button>
             <button onClick={() => camRef.current?.click()} className="p-2 rounded-lg hover:bg-accent" aria-label="Camera"><Camera className="size-4" /></button>
+            <button onClick={() => setComingSoon({ title: "Attach File", icon: FilePlus })} className="p-2 rounded-lg hover:bg-accent" aria-label="Attach file"><FilePlus className="size-4" /></button>
+            <button onClick={() => setComingSoon({ title: "Document", icon: FileText })} className="p-2 rounded-lg hover:bg-accent" aria-label="Document"><FileText className="size-4" /></button>
             <button onClick={startVoice} className="p-2 rounded-lg hover:bg-accent" aria-label="Voice"><Mic className="size-4" /></button>
             <input ref={fileRef} type="file" hidden accept="image/*" onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])} />
             <input ref={camRef} type="file" hidden accept="image/*" capture="environment" onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])} />
