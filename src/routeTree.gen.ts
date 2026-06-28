@@ -25,6 +25,7 @@ import { Route as AuthenticatedContactRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedCommunityRouteImport } from './routes/_authenticated.community'
 import { Route as AuthenticatedChatRouteImport } from './routes/_authenticated.chat'
 import { Route as AuthenticatedAppearanceRouteImport } from './routes/_authenticated.appearance'
+import { Route as AuthenticatedAboutRouteImport } from './routes/_authenticated.about'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -108,10 +109,16 @@ const AuthenticatedAppearanceRoute = AuthenticatedAppearanceRouteImport.update({
   path: '/appearance',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedAboutRoute = AuthenticatedAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/auth': typeof AuthRoute
+  '/about': typeof AuthenticatedAboutRoute
   '/appearance': typeof AuthenticatedAppearanceRoute
   '/chat': typeof AuthenticatedChatRoute
   '/community': typeof AuthenticatedCommunityRoute
@@ -128,6 +135,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
+  '/about': typeof AuthenticatedAboutRoute
   '/appearance': typeof AuthenticatedAppearanceRoute
   '/chat': typeof AuthenticatedChatRoute
   '/community': typeof AuthenticatedCommunityRoute
@@ -147,6 +155,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/about': typeof AuthenticatedAboutRoute
   '/_authenticated/appearance': typeof AuthenticatedAppearanceRoute
   '/_authenticated/chat': typeof AuthenticatedChatRoute
   '/_authenticated/community': typeof AuthenticatedCommunityRoute
@@ -167,6 +176,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/about'
     | '/appearance'
     | '/chat'
     | '/community'
@@ -183,6 +193,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/auth'
+    | '/about'
     | '/appearance'
     | '/chat'
     | '/community'
@@ -201,6 +212,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_authenticated'
     | '/auth'
+    | '/_authenticated/about'
     | '/_authenticated/appearance'
     | '/_authenticated/chat'
     | '/_authenticated/community'
@@ -336,10 +348,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppearanceRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/about': {
+      id: '/_authenticated/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AuthenticatedAboutRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedAboutRoute: typeof AuthenticatedAboutRoute
   AuthenticatedAppearanceRoute: typeof AuthenticatedAppearanceRoute
   AuthenticatedChatRoute: typeof AuthenticatedChatRoute
   AuthenticatedCommunityRoute: typeof AuthenticatedCommunityRoute
@@ -357,6 +377,7 @@ interface AuthenticatedRouteChildren {
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedAboutRoute: AuthenticatedAboutRoute,
   AuthenticatedAppearanceRoute: AuthenticatedAppearanceRoute,
   AuthenticatedChatRoute: AuthenticatedChatRoute,
   AuthenticatedCommunityRoute: AuthenticatedCommunityRoute,
