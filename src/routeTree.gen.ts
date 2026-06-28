@@ -13,6 +13,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated.index'
 import { Route as AuthenticatedScanRouteImport } from './routes/_authenticated.scan'
+import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated.profile'
 import { Route as AuthenticatedPlantScannerRouteImport } from './routes/_authenticated.plant-scanner'
 import { Route as AuthenticatedMealPlannerRouteImport } from './routes/_authenticated.meal-planner'
 
@@ -35,6 +36,11 @@ const AuthenticatedScanRoute = AuthenticatedScanRouteImport.update({
   path: '/scan',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedPlantScannerRoute =
   AuthenticatedPlantScannerRouteImport.update({
     id: '/plant-scanner',
@@ -53,12 +59,14 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/meal-planner': typeof AuthenticatedMealPlannerRoute
   '/plant-scanner': typeof AuthenticatedPlantScannerRoute
+  '/profile': typeof AuthenticatedProfileRoute
   '/scan': typeof AuthenticatedScanRoute
 }
 export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/meal-planner': typeof AuthenticatedMealPlannerRoute
   '/plant-scanner': typeof AuthenticatedPlantScannerRoute
+  '/profile': typeof AuthenticatedProfileRoute
   '/scan': typeof AuthenticatedScanRoute
   '/': typeof AuthenticatedIndexRoute
 }
@@ -68,20 +76,28 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_authenticated/meal-planner': typeof AuthenticatedMealPlannerRoute
   '/_authenticated/plant-scanner': typeof AuthenticatedPlantScannerRoute
+  '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/scan': typeof AuthenticatedScanRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/meal-planner' | '/plant-scanner' | '/scan'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/meal-planner'
+    | '/plant-scanner'
+    | '/profile'
+    | '/scan'
   fileRoutesByTo: FileRoutesByTo
-  to: '/auth' | '/meal-planner' | '/plant-scanner' | '/scan' | '/'
+  to: '/auth' | '/meal-planner' | '/plant-scanner' | '/profile' | '/scan' | '/'
   id:
     | '__root__'
     | '/_authenticated'
     | '/auth'
     | '/_authenticated/meal-planner'
     | '/_authenticated/plant-scanner'
+    | '/_authenticated/profile'
     | '/_authenticated/scan'
     | '/_authenticated/'
   fileRoutesById: FileRoutesById
@@ -121,6 +137,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedScanRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/profile': {
+      id: '/_authenticated/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/plant-scanner': {
       id: '/_authenticated/plant-scanner'
       path: '/plant-scanner'
@@ -141,6 +164,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteChildren {
   AuthenticatedMealPlannerRoute: typeof AuthenticatedMealPlannerRoute
   AuthenticatedPlantScannerRoute: typeof AuthenticatedPlantScannerRoute
+  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedScanRoute: typeof AuthenticatedScanRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
 }
@@ -148,6 +172,7 @@ interface AuthenticatedRouteChildren {
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedMealPlannerRoute: AuthenticatedMealPlannerRoute,
   AuthenticatedPlantScannerRoute: AuthenticatedPlantScannerRoute,
+  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedScanRoute: AuthenticatedScanRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
 }
