@@ -79,9 +79,10 @@ function ChatPage() {
   }
 
   function startVoice() {
-    const SR = (window as unknown as { webkitSpeechRecognition?: new () => SpeechRecognition; SpeechRecognition?: new () => SpeechRecognition }).webkitSpeechRecognition ?? (window as unknown as { SpeechRecognition?: new () => SpeechRecognition }).SpeechRecognition;
+    const SR = (window as unknown as { webkitSpeechRecognition?: new () => unknown; SpeechRecognition?: new () => unknown }).webkitSpeechRecognition
+      ?? (window as unknown as { SpeechRecognition?: new () => unknown }).SpeechRecognition;
     if (!SR) return toast.error("Voice input not supported on this device");
-    const rec = new SR();
+    const rec = new SR() as { lang: string; onresult: (e: { results: { 0: { 0: { transcript: string } } }[] }) => void; onerror: () => void; start: () => void };
     rec.lang = "en-US";
     rec.onresult = (e) => setInput((p) => (p ? p + " " : "") + (e.results[0][0]?.transcript ?? ""));
     rec.onerror = () => toast.error("Voice input failed");
