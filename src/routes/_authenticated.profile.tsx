@@ -117,19 +117,19 @@ function ProfilePage() {
 
       <div className="glass-card p-4 space-y-3 text-sm">
         <div className="flex items-center gap-2 text-muted-foreground"><Mail className="size-4" /> {user?.email}</div>
-        {joined && <div className="flex items-center gap-2 text-muted-foreground"><Calendar className="size-4" /> Joined {new Date(joined).toLocaleDateString()}</div>}
+        {joined && <div className="flex items-center gap-2 text-muted-foreground"><Calendar className="size-4" /> {t("profile.joined")} {new Date(joined).toLocaleDateString()}</div>}
         {profile.country && <div className="flex items-center gap-2 text-muted-foreground"><MapPin className="size-4" /> {profile.country}</div>}
       </div>
 
       <div className="glass-card p-4 space-y-3">
-        <h3 className="text-sm font-semibold">Edit profile</h3>
-        <div><Label className="text-xs">Display name</Label><Input value={profile.display_name} onChange={(e) => setProfile({ ...profile, display_name: e.target.value })} /></div>
-        <div><Label className="text-xs">Username</Label><Input value={profile.username} onChange={(e) => setProfile({ ...profile, username: e.target.value })} /></div>
-        <div><Label className="text-xs">Country</Label><Input value={profile.country} onChange={(e) => setProfile({ ...profile, country: e.target.value })} /></div>
+        <h3 className="text-sm font-semibold">{t("profile.edit")}</h3>
+        <div><Label className="text-xs">{t("profile.displayName")}</Label><Input value={profile.display_name} onChange={(e) => setProfile({ ...profile, display_name: e.target.value })} /></div>
+        <div><Label className="text-xs">{t("profile.username")}</Label><Input value={profile.username} onChange={(e) => setProfile({ ...profile, username: e.target.value })} /></div>
+        <div><Label className="text-xs">{t("profile.country")}</Label><Input value={profile.country} onChange={(e) => setProfile({ ...profile, country: e.target.value })} /></div>
         <div>
-          <Label className="text-xs">Dietary goal</Label>
+          <Label className="text-xs">{t("profile.dietaryGoal")}</Label>
           <Select value={profile.dietary_goal} onValueChange={(v) => setProfile({ ...profile, dietary_goal: v })}>
-            <SelectTrigger><SelectValue placeholder="Select goal" /></SelectTrigger>
+            <SelectTrigger><SelectValue placeholder={t("profile.selectGoal")} /></SelectTrigger>
             <SelectContent>
               {["stay healthy", "lose weight", "gain weight", "build muscle", "more energy"].map((g) => (
                 <SelectItem key={g} value={g} className="capitalize">{g}</SelectItem>
@@ -138,9 +138,9 @@ function ProfilePage() {
           </Select>
         </div>
         <div>
-          <Label className="text-xs">Diet preference</Label>
+          <Label className="text-xs">{t("profile.dietPreference")}</Label>
           <Select value={profile.diet_preference} onValueChange={(v) => setProfile({ ...profile, diet_preference: v })}>
-            <SelectTrigger><SelectValue placeholder="Select diet" /></SelectTrigger>
+            <SelectTrigger><SelectValue placeholder={t("profile.selectDiet")} /></SelectTrigger>
             <SelectContent>
               {["balanced", "vegetarian", "vegan", "keto", "low carb", "mediterranean"].map((d) => (
                 <SelectItem key={d} value={d} className="capitalize">{d}</SelectItem>
@@ -149,9 +149,13 @@ function ProfilePage() {
           </Select>
         </div>
         <Button onClick={save} disabled={saving} className="w-full hero-gradient text-primary-foreground font-semibold">
-          <Save className="size-4 mr-2" /> {saving ? "Saving…" : "Save changes"}
+          <Save className="size-4 mr-2" /> {saving ? t("profile.saving") : t("profile.save")}
         </Button>
       </div>
+
+      <section className="pt-2">
+        <AutoCarousel />
+      </section>
     </div>
   );
 }
