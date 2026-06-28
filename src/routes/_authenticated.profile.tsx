@@ -75,7 +75,7 @@ function ProfilePage() {
     if (data?.signedUrl) {
       setProfile((p) => ({ ...p, avatar_url: data.signedUrl }));
       await supabase.from("profiles").update({ avatar_url: data.signedUrl }).eq("id", user.id);
-      toast.success("Photo updated");
+      toast.success(t("profile.photoUpdated"));
     }
   }
 
