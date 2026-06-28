@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated.index'
+import { Route as AuthenticatedTermsRouteImport } from './routes/_authenticated.terms'
 import { Route as AuthenticatedScanRouteImport } from './routes/_authenticated.scan'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated.profile'
 import { Route as AuthenticatedPrivacyRouteImport } from './routes/_authenticated.privacy'
@@ -40,6 +41,11 @@ const AuthenticatedRoute = AuthenticatedRouteImport.update({
 const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedTermsRoute = AuthenticatedTermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedScanRoute = AuthenticatedScanRouteImport.update({
@@ -139,6 +145,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof AuthenticatedPrivacyRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/scan': typeof AuthenticatedScanRoute
+  '/terms': typeof AuthenticatedTermsRoute
 }
 export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
@@ -157,6 +164,7 @@ export interface FileRoutesByTo {
   '/privacy': typeof AuthenticatedPrivacyRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/scan': typeof AuthenticatedScanRoute
+  '/terms': typeof AuthenticatedTermsRoute
   '/': typeof AuthenticatedIndexRoute
 }
 export interface FileRoutesById {
@@ -178,6 +186,7 @@ export interface FileRoutesById {
   '/_authenticated/privacy': typeof AuthenticatedPrivacyRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/scan': typeof AuthenticatedScanRoute
+  '/_authenticated/terms': typeof AuthenticatedTermsRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
 }
 export interface FileRouteTypes {
@@ -200,6 +209,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/profile'
     | '/scan'
+    | '/terms'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/auth'
@@ -218,6 +228,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/profile'
     | '/scan'
+    | '/terms'
     | '/'
   id:
     | '__root__'
@@ -238,6 +249,7 @@ export interface FileRouteTypes {
     | '/_authenticated/privacy'
     | '/_authenticated/profile'
     | '/_authenticated/scan'
+    | '/_authenticated/terms'
     | '/_authenticated/'
   fileRoutesById: FileRoutesById
 }
@@ -267,6 +279,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/terms': {
+      id: '/_authenticated/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof AuthenticatedTermsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/scan': {
@@ -393,6 +412,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedPrivacyRoute: typeof AuthenticatedPrivacyRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedScanRoute: typeof AuthenticatedScanRoute
+  AuthenticatedTermsRoute: typeof AuthenticatedTermsRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
 }
 
@@ -412,6 +432,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedPrivacyRoute: AuthenticatedPrivacyRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedScanRoute: AuthenticatedScanRoute,
+  AuthenticatedTermsRoute: AuthenticatedTermsRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
 }
 
