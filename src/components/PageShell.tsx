@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 import { motion } from "framer-motion";
+import { useRouterState } from "@tanstack/react-router";
+import { BackButton } from "./BackButton";
 
 export function PageHeader({ title, icon, subtitle }: { title: string; icon?: ReactNode; subtitle?: string }) {
   return (
@@ -13,13 +15,16 @@ export function PageHeader({ title, icon, subtitle }: { title: string; icon?: Re
   );
 }
 
-export function PageShell({ children }: { children: ReactNode }) {
+export function PageShell({ children, showBack = true }: { children: ReactNode; showBack?: boolean }) {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isHome = pathname === "/";
   return (
     <motion.div
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       className="px-4 pt-3 pb-6 max-w-md mx-auto"
     >
+      {showBack && !isHome && <BackButton />}
       {children}
     </motion.div>
   );

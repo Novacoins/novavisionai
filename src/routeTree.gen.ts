@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated.index'
+import { Route as AuthenticatedWorkspaceRouteImport } from './routes/_authenticated.workspace'
+import { Route as AuthenticatedToolsRouteImport } from './routes/_authenticated.tools'
 import { Route as AuthenticatedTermsRouteImport } from './routes/_authenticated.terms'
 import { Route as AuthenticatedScanRouteImport } from './routes/_authenticated.scan'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated.profile'
@@ -20,13 +22,17 @@ import { Route as AuthenticatedPlantScannerRouteImport } from './routes/_authent
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated.notifications'
 import { Route as AuthenticatedMealPlannerRouteImport } from './routes/_authenticated.meal-planner'
 import { Route as AuthenticatedLanguagesRouteImport } from './routes/_authenticated.languages'
+import { Route as AuthenticatedImageStudioRouteImport } from './routes/_authenticated.image-studio'
 import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated.history'
 import { Route as AuthenticatedFavoritesRouteImport } from './routes/_authenticated.favorites'
 import { Route as AuthenticatedFaqRouteImport } from './routes/_authenticated.faq'
+import { Route as AuthenticatedDailyFeedRouteImport } from './routes/_authenticated.daily-feed'
 import { Route as AuthenticatedContactRouteImport } from './routes/_authenticated.contact'
 import { Route as AuthenticatedCommunityRouteImport } from './routes/_authenticated.community'
 import { Route as AuthenticatedChatRouteImport } from './routes/_authenticated.chat'
 import { Route as AuthenticatedAppearanceRouteImport } from './routes/_authenticated.appearance'
+import { Route as AuthenticatedAiMemoryRouteImport } from './routes/_authenticated.ai-memory'
+import { Route as AuthenticatedAcademyRouteImport } from './routes/_authenticated.academy'
 import { Route as AuthenticatedAboutRouteImport } from './routes/_authenticated.about'
 
 const AuthRoute = AuthRouteImport.update({
@@ -41,6 +47,16 @@ const AuthenticatedRoute = AuthenticatedRouteImport.update({
 const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedWorkspaceRoute = AuthenticatedWorkspaceRouteImport.update({
+  id: '/workspace',
+  path: '/workspace',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedToolsRoute = AuthenticatedToolsRouteImport.update({
+  id: '/tools',
+  path: '/tools',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedTermsRoute = AuthenticatedTermsRouteImport.update({
@@ -86,6 +102,12 @@ const AuthenticatedLanguagesRoute = AuthenticatedLanguagesRouteImport.update({
   path: '/languages',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedImageStudioRoute =
+  AuthenticatedImageStudioRouteImport.update({
+    id: '/image-studio',
+    path: '/image-studio',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedHistoryRoute = AuthenticatedHistoryRouteImport.update({
   id: '/history',
   path: '/history',
@@ -99,6 +121,11 @@ const AuthenticatedFavoritesRoute = AuthenticatedFavoritesRouteImport.update({
 const AuthenticatedFaqRoute = AuthenticatedFaqRouteImport.update({
   id: '/faq',
   path: '/faq',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedDailyFeedRoute = AuthenticatedDailyFeedRouteImport.update({
+  id: '/daily-feed',
+  path: '/daily-feed',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedContactRoute = AuthenticatedContactRouteImport.update({
@@ -121,6 +148,16 @@ const AuthenticatedAppearanceRoute = AuthenticatedAppearanceRouteImport.update({
   path: '/appearance',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedAiMemoryRoute = AuthenticatedAiMemoryRouteImport.update({
+  id: '/ai-memory',
+  path: '/ai-memory',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedAcademyRoute = AuthenticatedAcademyRouteImport.update({
+  id: '/academy',
+  path: '/academy',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedAboutRoute = AuthenticatedAboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -131,13 +168,17 @@ export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/auth': typeof AuthRoute
   '/about': typeof AuthenticatedAboutRoute
+  '/academy': typeof AuthenticatedAcademyRoute
+  '/ai-memory': typeof AuthenticatedAiMemoryRoute
   '/appearance': typeof AuthenticatedAppearanceRoute
   '/chat': typeof AuthenticatedChatRoute
   '/community': typeof AuthenticatedCommunityRoute
   '/contact': typeof AuthenticatedContactRoute
+  '/daily-feed': typeof AuthenticatedDailyFeedRoute
   '/faq': typeof AuthenticatedFaqRoute
   '/favorites': typeof AuthenticatedFavoritesRoute
   '/history': typeof AuthenticatedHistoryRoute
+  '/image-studio': typeof AuthenticatedImageStudioRoute
   '/languages': typeof AuthenticatedLanguagesRoute
   '/meal-planner': typeof AuthenticatedMealPlannerRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
@@ -146,17 +187,23 @@ export interface FileRoutesByFullPath {
   '/profile': typeof AuthenticatedProfileRoute
   '/scan': typeof AuthenticatedScanRoute
   '/terms': typeof AuthenticatedTermsRoute
+  '/tools': typeof AuthenticatedToolsRoute
+  '/workspace': typeof AuthenticatedWorkspaceRoute
 }
 export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/about': typeof AuthenticatedAboutRoute
+  '/academy': typeof AuthenticatedAcademyRoute
+  '/ai-memory': typeof AuthenticatedAiMemoryRoute
   '/appearance': typeof AuthenticatedAppearanceRoute
   '/chat': typeof AuthenticatedChatRoute
   '/community': typeof AuthenticatedCommunityRoute
   '/contact': typeof AuthenticatedContactRoute
+  '/daily-feed': typeof AuthenticatedDailyFeedRoute
   '/faq': typeof AuthenticatedFaqRoute
   '/favorites': typeof AuthenticatedFavoritesRoute
   '/history': typeof AuthenticatedHistoryRoute
+  '/image-studio': typeof AuthenticatedImageStudioRoute
   '/languages': typeof AuthenticatedLanguagesRoute
   '/meal-planner': typeof AuthenticatedMealPlannerRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
@@ -165,6 +212,8 @@ export interface FileRoutesByTo {
   '/profile': typeof AuthenticatedProfileRoute
   '/scan': typeof AuthenticatedScanRoute
   '/terms': typeof AuthenticatedTermsRoute
+  '/tools': typeof AuthenticatedToolsRoute
+  '/workspace': typeof AuthenticatedWorkspaceRoute
   '/': typeof AuthenticatedIndexRoute
 }
 export interface FileRoutesById {
@@ -172,13 +221,17 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/auth': typeof AuthRoute
   '/_authenticated/about': typeof AuthenticatedAboutRoute
+  '/_authenticated/academy': typeof AuthenticatedAcademyRoute
+  '/_authenticated/ai-memory': typeof AuthenticatedAiMemoryRoute
   '/_authenticated/appearance': typeof AuthenticatedAppearanceRoute
   '/_authenticated/chat': typeof AuthenticatedChatRoute
   '/_authenticated/community': typeof AuthenticatedCommunityRoute
   '/_authenticated/contact': typeof AuthenticatedContactRoute
+  '/_authenticated/daily-feed': typeof AuthenticatedDailyFeedRoute
   '/_authenticated/faq': typeof AuthenticatedFaqRoute
   '/_authenticated/favorites': typeof AuthenticatedFavoritesRoute
   '/_authenticated/history': typeof AuthenticatedHistoryRoute
+  '/_authenticated/image-studio': typeof AuthenticatedImageStudioRoute
   '/_authenticated/languages': typeof AuthenticatedLanguagesRoute
   '/_authenticated/meal-planner': typeof AuthenticatedMealPlannerRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
@@ -187,6 +240,8 @@ export interface FileRoutesById {
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/scan': typeof AuthenticatedScanRoute
   '/_authenticated/terms': typeof AuthenticatedTermsRoute
+  '/_authenticated/tools': typeof AuthenticatedToolsRoute
+  '/_authenticated/workspace': typeof AuthenticatedWorkspaceRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
 }
 export interface FileRouteTypes {
@@ -195,13 +250,17 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/about'
+    | '/academy'
+    | '/ai-memory'
     | '/appearance'
     | '/chat'
     | '/community'
     | '/contact'
+    | '/daily-feed'
     | '/faq'
     | '/favorites'
     | '/history'
+    | '/image-studio'
     | '/languages'
     | '/meal-planner'
     | '/notifications'
@@ -210,17 +269,23 @@ export interface FileRouteTypes {
     | '/profile'
     | '/scan'
     | '/terms'
+    | '/tools'
+    | '/workspace'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/auth'
     | '/about'
+    | '/academy'
+    | '/ai-memory'
     | '/appearance'
     | '/chat'
     | '/community'
     | '/contact'
+    | '/daily-feed'
     | '/faq'
     | '/favorites'
     | '/history'
+    | '/image-studio'
     | '/languages'
     | '/meal-planner'
     | '/notifications'
@@ -229,19 +294,25 @@ export interface FileRouteTypes {
     | '/profile'
     | '/scan'
     | '/terms'
+    | '/tools'
+    | '/workspace'
     | '/'
   id:
     | '__root__'
     | '/_authenticated'
     | '/auth'
     | '/_authenticated/about'
+    | '/_authenticated/academy'
+    | '/_authenticated/ai-memory'
     | '/_authenticated/appearance'
     | '/_authenticated/chat'
     | '/_authenticated/community'
     | '/_authenticated/contact'
+    | '/_authenticated/daily-feed'
     | '/_authenticated/faq'
     | '/_authenticated/favorites'
     | '/_authenticated/history'
+    | '/_authenticated/image-studio'
     | '/_authenticated/languages'
     | '/_authenticated/meal-planner'
     | '/_authenticated/notifications'
@@ -250,6 +321,8 @@ export interface FileRouteTypes {
     | '/_authenticated/profile'
     | '/_authenticated/scan'
     | '/_authenticated/terms'
+    | '/_authenticated/tools'
+    | '/_authenticated/workspace'
     | '/_authenticated/'
   fileRoutesById: FileRoutesById
 }
@@ -279,6 +352,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/workspace': {
+      id: '/_authenticated/workspace'
+      path: '/workspace'
+      fullPath: '/workspace'
+      preLoaderRoute: typeof AuthenticatedWorkspaceRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/tools': {
+      id: '/_authenticated/tools'
+      path: '/tools'
+      fullPath: '/tools'
+      preLoaderRoute: typeof AuthenticatedToolsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/terms': {
@@ -337,6 +424,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLanguagesRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/image-studio': {
+      id: '/_authenticated/image-studio'
+      path: '/image-studio'
+      fullPath: '/image-studio'
+      preLoaderRoute: typeof AuthenticatedImageStudioRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/history': {
       id: '/_authenticated/history'
       path: '/history'
@@ -356,6 +450,13 @@ declare module '@tanstack/react-router' {
       path: '/faq'
       fullPath: '/faq'
       preLoaderRoute: typeof AuthenticatedFaqRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/daily-feed': {
+      id: '/_authenticated/daily-feed'
+      path: '/daily-feed'
+      fullPath: '/daily-feed'
+      preLoaderRoute: typeof AuthenticatedDailyFeedRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/contact': {
@@ -386,6 +487,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppearanceRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/ai-memory': {
+      id: '/_authenticated/ai-memory'
+      path: '/ai-memory'
+      fullPath: '/ai-memory'
+      preLoaderRoute: typeof AuthenticatedAiMemoryRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/academy': {
+      id: '/_authenticated/academy'
+      path: '/academy'
+      fullPath: '/academy'
+      preLoaderRoute: typeof AuthenticatedAcademyRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/about': {
       id: '/_authenticated/about'
       path: '/about'
@@ -398,13 +513,17 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteChildren {
   AuthenticatedAboutRoute: typeof AuthenticatedAboutRoute
+  AuthenticatedAcademyRoute: typeof AuthenticatedAcademyRoute
+  AuthenticatedAiMemoryRoute: typeof AuthenticatedAiMemoryRoute
   AuthenticatedAppearanceRoute: typeof AuthenticatedAppearanceRoute
   AuthenticatedChatRoute: typeof AuthenticatedChatRoute
   AuthenticatedCommunityRoute: typeof AuthenticatedCommunityRoute
   AuthenticatedContactRoute: typeof AuthenticatedContactRoute
+  AuthenticatedDailyFeedRoute: typeof AuthenticatedDailyFeedRoute
   AuthenticatedFaqRoute: typeof AuthenticatedFaqRoute
   AuthenticatedFavoritesRoute: typeof AuthenticatedFavoritesRoute
   AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
+  AuthenticatedImageStudioRoute: typeof AuthenticatedImageStudioRoute
   AuthenticatedLanguagesRoute: typeof AuthenticatedLanguagesRoute
   AuthenticatedMealPlannerRoute: typeof AuthenticatedMealPlannerRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
@@ -413,18 +532,24 @@ interface AuthenticatedRouteChildren {
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedScanRoute: typeof AuthenticatedScanRoute
   AuthenticatedTermsRoute: typeof AuthenticatedTermsRoute
+  AuthenticatedToolsRoute: typeof AuthenticatedToolsRoute
+  AuthenticatedWorkspaceRoute: typeof AuthenticatedWorkspaceRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAboutRoute: AuthenticatedAboutRoute,
+  AuthenticatedAcademyRoute: AuthenticatedAcademyRoute,
+  AuthenticatedAiMemoryRoute: AuthenticatedAiMemoryRoute,
   AuthenticatedAppearanceRoute: AuthenticatedAppearanceRoute,
   AuthenticatedChatRoute: AuthenticatedChatRoute,
   AuthenticatedCommunityRoute: AuthenticatedCommunityRoute,
   AuthenticatedContactRoute: AuthenticatedContactRoute,
+  AuthenticatedDailyFeedRoute: AuthenticatedDailyFeedRoute,
   AuthenticatedFaqRoute: AuthenticatedFaqRoute,
   AuthenticatedFavoritesRoute: AuthenticatedFavoritesRoute,
   AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
+  AuthenticatedImageStudioRoute: AuthenticatedImageStudioRoute,
   AuthenticatedLanguagesRoute: AuthenticatedLanguagesRoute,
   AuthenticatedMealPlannerRoute: AuthenticatedMealPlannerRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
@@ -433,6 +558,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedScanRoute: AuthenticatedScanRoute,
   AuthenticatedTermsRoute: AuthenticatedTermsRoute,
+  AuthenticatedToolsRoute: AuthenticatedToolsRoute,
+  AuthenticatedWorkspaceRoute: AuthenticatedWorkspaceRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
 }
 
