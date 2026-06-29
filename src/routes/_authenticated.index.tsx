@@ -1,13 +1,14 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { Camera, Leaf, Utensils, Upload, Sparkles, ChevronRight, ScanLine } from "lucide-react";
+import { Camera, Leaf, Utensils, Upload, Sparkles, ChevronRight, ScanLine, Search } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { dailyTip, generateMealPlan } from "@/lib/ai.functions";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AutoCarousel } from "@/components/AutoCarousel";
+import { CinematicSky } from "@/components/CinematicSky";
 
 export const Route = createFileRoute("/_authenticated/")({
   component: HomePage,
