@@ -4,14 +4,19 @@ import Autoplay from "embla-carousel-autoplay";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-import img1 from "@/assets/carousel/carousel-1.png.asset.json";
-import img2 from "@/assets/carousel/carousel-2.png.asset.json";
 import img3 from "@/assets/carousel/carousel-3.png.asset.json";
 import img4 from "@/assets/carousel/carousel-4.jpg.asset.json";
 import img5 from "@/assets/carousel/carousel-5.png.asset.json";
 import img6 from "@/assets/carousel/carousel-6.png.asset.json";
 
-const SLIDES = [img1.url, img2.url, img3.url, img4.url, img5.url, img6.url];
+const SLIDES = [
+  "https://i.postimg.cc/sXSVWhMz/IMG-20260629-202818-2.jpg",
+  "https://i.postimg.cc/02jBHqCK/7addc46af04e63e7a92a1e8cc3a224cb.jpg",
+  img3.url,
+  img4.url,
+  img5.url,
+  img6.url,
+];
 
 export function AutoCarousel({ className }: { className?: string }) {
   const autoplay = useRef(Autoplay({ delay: 2800, stopOnInteraction: false, stopOnMouseEnter: true }));
