@@ -196,12 +196,20 @@ Respond ONLY with valid JSON:
 
 export const dailyTip = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .handler(async () => {
+  .inputValidator((data: unknown) => {
+    const d = (data ?? {}) as { topic?: unknown };
+    return { topic: typeof d.topic === "string" ? d.topic : undefined };
+  })
+  .handler(async ({ data }) => {
+    const userPrompt = data.topic ?? "Tip of the day, please.";
+    const sys = data.topic
+      ? "You give short (max 220 chars) helpful insights. Plain text, no markdown, vary the content each call."
+      : "Give ONE concise (max 220 chars) practical nutrition or wellness tip. Plain text, no markdown.";
     const text = await callGateway({
       model: MODEL,
       messages: [
-        { role: "system", content: "Give ONE concise (max 220 chars) practical nutrition or wellness tip. Plain text, no markdown." },
-        { role: "user", content: "Tip of the day, please." },
+        { role: "system", content: sys },
+        { role: "user", content: userPrompt },
       ],
     });
     return { tip: text.trim() };
