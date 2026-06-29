@@ -36,18 +36,43 @@ function ContactPage() {
   async function send(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
-    const { error } = await supabase.from("support_tickets").insert({
-      user_id: user?.id ?? null,
-      name: form.name,
-      email: form.email,
-      phone: form.phone || null,
-      subject: form.subject,
-      message: form.message,
-    });
-    setBusy(false);
-    if (error) return toast.error(error.message);
-    setSuccess(true);
-    reset();
+    try {
+      // Send email via Web3Forms → delivered to oniyetaofiqishola11@gmail.com
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: "b3825961-2c7a-4517-802e-e355bdf5557a",
+          subject: `[Nova Vision AI] ${form.subject}`,
+          from_name: "Nova Vision AI Contact Form",
+          name: form.name,
+          email: form.email,
+          phone: form.phone || "Not provided",
+          message: form.message,
+          replyto: form.email,
+          botcheck: "",
+        }),
+      });
+      const data = await res.json();
+      if (!data.success) throw new Error(data.message || "Failed to send message");
+
+      // Best-effort log to support_tickets (don't block success on RLS/db errors)
+      await supabase.from("support_tickets").insert({
+        user_id: user?.id ?? null,
+        name: form.name,
+        email: form.email,
+        phone: form.phone || null,
+        subject: form.subject,
+        message: form.message,
+      });
+
+      setSuccess(true);
+      reset();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to send message");
+    } finally {
+      setBusy(false);
+    }
   }
 
   return (
