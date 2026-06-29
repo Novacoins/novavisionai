@@ -49,10 +49,47 @@ function HomePage() {
   const greetingName = user?.user_metadata?.display_name || user?.email?.split("@")[0] || "there";
   const hour = new Date().getHours();
   const greeting = hour < 12 ? t("home.morning") : hour < 18 ? t("home.afternoon") : t("home.evening");
+  const navigate = useNavigate();
+  const [search, setSearch] = useState("");
 
   return (
-    <div className="px-4 pt-3 pb-4 space-y-5 max-w-md mx-auto">
-      <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+    <div className="relative">
+      <CinematicSky className="fixed inset-0 -z-10" />
+      <div className="relative px-4 pt-3 pb-4 space-y-5 max-w-md mx-auto">
+        <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+          <p className="text-sm text-muted-foreground">{greeting},</p>
+          <h1 className="text-2xl font-bold tracking-tight">{greetingName} 👋</h1>
+          <p className="text-sm text-muted-foreground mt-1">{t("home.ready")}</p>
+        </motion.section>
+
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (search.trim()) navigate({ to: "/history", search: { q: search } as never });
+          }}
+          className="relative"
+        >
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search scans, tools, prompts…"
+            className="w-full h-12 pl-11 pr-4 rounded-2xl glass-card text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[color:var(--sky)]/60 transition-all"
+          />
+        </form>
+      </div>
+    </div>
+  );
+}
+
+function HomePageInner() {
+  const { user } = useAuth();
+  const { t } = useTranslation();
+  const [tip, setTip] = useState<string | null>(null);
+  const [meals, setMeals] = useState<{ meal_type: string; name: string; calories: number }[] | null>(null);
+  const [recent, setRecent] = useState<RecentScan[] | null>(null);
+  void user; void tip; void meals; void recent;
+  return null;
         <p className="text-sm text-muted-foreground">{greeting},</p>
         <h1 className="text-2xl font-bold tracking-tight">{greetingName} 👋</h1>
         <p className="text-sm text-muted-foreground mt-1">{t("home.ready")}</p>
