@@ -84,7 +84,7 @@ function HomePage() {
         <Link to="/scan" className="block">
           <motion.div
             whileTap={{ scale: 0.98 }}
-            className="relative overflow-hidden rounded-3xl p-6 hero-gradient text-primary-foreground shadow-2xl glow"
+            className="relative overflow-hidden rounded-3xl p-6 hero-gradient text-primary-foreground premium-glow-green"
           >
             <div className="absolute -right-10 -top-10 size-44 rounded-full bg-white/10 blur-2xl" />
             <div className="relative flex items-center justify-between">
@@ -123,7 +123,7 @@ function HomePage() {
           ))}
         </section>
 
-        <section className="glass-card p-4">
+        <section className="glass-card p-4 premium-glow-sky">
           <div className="flex items-center gap-2 mb-2">
             <Sparkles className="size-4 text-primary" />
             <h3 className="text-sm font-semibold">{t("home.tipOfDay")}</h3>
