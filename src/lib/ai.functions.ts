@@ -27,7 +27,7 @@ For plants, include in "details": common name, scientific name, edibility, toxic
   return base;
 }
 
-async function callGateway(body: object): Promise<string> {
+async function callGateway(body: object, attempt = 0): Promise<string> {
   const key = process.env.LOVABLE_API_KEY;
   if (!key) throw new Error("AI service is not configured.");
   const res = await fetch(GATEWAY, {
@@ -36,6 +36,12 @@ async function callGateway(body: object): Promise<string> {
     body: JSON.stringify(body),
   });
   if (!res.ok) {
+    // Retry transient failures (rate limit / upstream) with exponential backoff
+    if ((res.status === 429 || res.status >= 500) && attempt < 3) {
+      const delay = 600 * Math.pow(2, attempt) + Math.random() * 300;
+      await new Promise((r) => setTimeout(r, delay));
+      return callGateway(body, attempt + 1);
+    }
     if (res.status === 429) throw new Error("AI is busy right now. Please try again in a moment.");
     if (res.status === 402) throw new Error("AI credits exhausted. Add credits in Lovable Cloud → Workspace billing.");
     const txt = await res.text().catch(() => "");
