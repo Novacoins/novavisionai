@@ -95,9 +95,15 @@ export function AppSidebar({ open, onClose }: { open: boolean; onClose: () => vo
                   </div>
                 </div>
               </div>
-              <button onClick={onClose} className="p-2 rounded-lg hover:bg-accent" aria-label={t("sidebar.closeMenu")}>
-                <X className="size-5" />
+              <button
+                onClick={onClose}
+                className="relative p-2 rounded-full text-[#63D8FF] hover:bg-[#63D8FF]/10 transition-colors"
+                aria-label={t("sidebar.closeMenu")}
+                style={{ animation: "float-breath 3.4s ease-in-out infinite" }}
+              >
+                <X className="size-5 drop-shadow-[0_0_8px_rgba(99,216,255,0.85)]" />
               </button>
+
             </div>
 
             <nav className="flex-1 overflow-y-auto p-3 space-y-5">
@@ -121,29 +127,32 @@ export function AppSidebar({ open, onClose }: { open: boolean; onClose: () => vo
                             to={it.to as "/"}
                             onClick={onClose}
                             className={cn(
-                              "relative flex items-center gap-3 p-2.5 rounded-2xl transition-all group overflow-hidden",
+                              "relative flex items-center gap-3 p-2.5 rounded-full transition-all group overflow-hidden",
                               active
-                                ? "bg-[oklch(0.78_0.13_235_/_0.14)] border border-[oklch(0.78_0.13_235_/_0.35)] sky-glow"
+                                ? "bg-[#0F9D58] hover:bg-[#16A765] active:bg-[#0B8043] text-white shadow-[0_10px_28px_-12px_rgba(15,157,88,0.7),0_0_18px_-4px_rgba(15,157,88,0.55)]"
                                 : "hover:bg-white/5 border border-transparent",
                             )}
                           >
-                            {active && (
-                              <span className="absolute left-0 top-1/2 -translate-y-1/2 h-7 w-1 rounded-r-full bg-[color:var(--sky)]" />
-                            )}
                             <span className={cn(
-                              "size-10 rounded-xl grid place-items-center text-white shrink-0 shadow-md bg-gradient-to-br",
-                              it.color,
+                              "size-10 rounded-xl grid place-items-center shrink-0 shadow-md transition-all",
+                              active
+                                ? "bg-white/20 text-white"
+                                : cn("text-white bg-gradient-to-br", it.color),
                             )}>
                               <Icon className="size-5" />
                             </span>
                             <span className="flex-1 min-w-0">
                               <span className={cn(
                                 "block text-sm font-semibold truncate",
-                                active && "text-[color:var(--sky-soft)]",
+                                active && "text-white",
                               )}>{it.label}</span>
-                              <span className="block text-[11px] text-muted-foreground truncate">{it.desc}</span>
+                              <span className={cn(
+                                "block text-[11px] truncate",
+                                active ? "text-white/85" : "text-muted-foreground",
+                              )}>{it.desc}</span>
                             </span>
                           </Link>
+
                         </motion.div>
                       );
                     })}

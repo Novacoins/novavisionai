@@ -8,7 +8,7 @@ import { useAuth } from "@/lib/auth-context";
 import { dailyTip, generateMealPlan } from "@/lib/ai.functions";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AutoCarousel } from "@/components/AutoCarousel";
-import { CinematicSky } from "@/components/CinematicSky";
+import { SkyDay } from "@/components/SkyDay";
 
 export const Route = createFileRoute("/_authenticated/")({
   component: HomePage,
@@ -55,9 +55,10 @@ function HomePage() {
   const greeting = hour < 12 ? t("home.morning") : hour < 18 ? t("home.afternoon") : t("home.evening");
 
   return (
-    <div className="relative min-h-[100dvh]">
-      <CinematicSky className="fixed inset-0 -z-10" />
+    <div className="sky-day relative min-h-[100dvh]">
+      <SkyDay className="fixed inset-0 -z-10" />
       <div className="relative px-4 pt-3 pb-4 space-y-5 max-w-md mx-auto">
+
         <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
           <p className="text-sm text-muted-foreground">{greeting},</p>
           <h1 className="text-2xl font-bold tracking-tight">{greetingName} 👋</h1>
@@ -83,7 +84,7 @@ function HomePage() {
         <Link to="/scan" className="block">
           <motion.div
             whileTap={{ scale: 0.98 }}
-            className="relative overflow-hidden rounded-3xl p-6 hero-gradient text-primary-foreground shadow-2xl glow"
+            className="relative overflow-hidden rounded-3xl p-6 hero-gradient text-primary-foreground premium-glow-green"
           >
             <div className="absolute -right-10 -top-10 size-44 rounded-full bg-white/10 blur-2xl" />
             <div className="relative flex items-center justify-between">
@@ -122,7 +123,7 @@ function HomePage() {
           ))}
         </section>
 
-        <section className="glass-card p-4">
+        <section className="glass-card p-4 premium-glow-sky">
           <div className="flex items-center gap-2 mb-2">
             <Sparkles className="size-4 text-primary" />
             <h3 className="text-sm font-semibold">{t("home.tipOfDay")}</h3>

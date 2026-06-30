@@ -22,12 +22,24 @@ export function AppLayout({ children, title }: { children: ReactNode; title?: st
   const { t } = useTranslation();
   const { language } = useLanguage();
 
+  const isHome = pathname === "/";
+
   return (
     <div className="min-h-[100dvh] flex flex-col">
-      <header className="sticky top-0 z-30 flex items-center justify-between px-4 h-14 backdrop-blur-xl bg-background/70 border-b border-border">
+      <header
+        className={cn(
+          "sticky top-0 z-30 flex items-center justify-between px-4 h-14 backdrop-blur-xl border-b transition-colors",
+          isHome
+            ? "bg-white/40 border-white/50 text-slate-800"
+            : "bg-background/70 border-border",
+        )}
+      >
         <button
           onClick={() => setSidebarOpen(true)}
-          className="p-2 -ml-2 rounded-lg hover:bg-accent transition-colors"
+          className={cn(
+            "p-2 -ml-2 rounded-lg transition-colors",
+            isHome ? "hover:bg-white/40" : "hover:bg-accent",
+          )}
           aria-label={t("sidebar.openMenu")}
         >
           <Menu className="size-5" />
@@ -38,10 +50,18 @@ export function AppLayout({ children, title }: { children: ReactNode; title?: st
           </div>
           <span className="font-semibold tracking-tight">{title ?? t("brand")}</span>
         </div>
-        <Link to="/scan" className="p-2 -mr-2 rounded-lg hover:bg-accent transition-colors" aria-label={t("sidebar.quickScan")}>
-          <ScanLine className="size-5 text-primary" />
+        <Link
+          to="/scan"
+          className={cn(
+            "p-2 -mr-2 rounded-lg transition-colors",
+            isHome ? "hover:bg-white/40 text-emerald-600" : "hover:bg-accent text-primary",
+          )}
+          aria-label={t("sidebar.quickScan")}
+        >
+          <ScanLine className="size-5" />
         </Link>
       </header>
+
 
       <main className="flex-1 pb-24">
         <AnimatePresence mode="wait">
@@ -57,7 +77,10 @@ export function AppLayout({ children, title }: { children: ReactNode; title?: st
         </AnimatePresence>
       </main>
 
-      <nav className="fixed bottom-0 inset-x-0 z-30 px-3 pb-[max(env(safe-area-inset-bottom),0.5rem)] pt-2 bg-background/80 backdrop-blur-xl border-t border-border">
+      <nav className={cn(
+        "fixed bottom-0 inset-x-0 z-30 px-3 pb-[max(env(safe-area-inset-bottom),0.5rem)] pt-2 backdrop-blur-xl border-t transition-colors",
+        isHome ? "bg-white/55 border-white/60" : "bg-background/80 border-border",
+      )}>
         <ul className="grid grid-cols-5 gap-1 max-w-md mx-auto">
           {tabs.map((tab) => {
             const active = tab.exact ? pathname === tab.to : pathname.startsWith(tab.to);
