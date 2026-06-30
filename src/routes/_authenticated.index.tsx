@@ -98,9 +98,16 @@ function HomePage() {
         <Link to="/scan" className="block">
           <motion.div
             whileTap={{ scale: 0.98 }}
+            animate={{ y: [0, -4, 0] }}
+            transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
             className="relative overflow-hidden rounded-3xl p-6 hero-gradient text-primary-foreground premium-glow-green"
           >
             <div className="absolute -right-10 -top-10 size-44 rounded-full bg-white/10 blur-2xl" />
+            <motion.div
+              className="absolute -left-10 -bottom-10 size-40 rounded-full bg-[#63D8FF]/25 blur-3xl"
+              animate={{ opacity: [0.4, 0.7, 0.4] }}
+              transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+            />
             <div className="relative flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-2 text-xs uppercase tracking-wider opacity-90">
@@ -109,9 +116,13 @@ function HomePage() {
                 <h2 className="text-2xl font-bold mt-1">{t("home.tapToScan")}</h2>
                 <p className="text-sm opacity-90 mt-1">{t("home.tapToScanDesc")}</p>
               </div>
-              <div className="size-16 rounded-2xl bg-white/15 backdrop-blur grid place-items-center">
+              <motion.div
+                animate={{ scale: [1, 1.06, 1] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                className="size-16 rounded-2xl bg-white/20 backdrop-blur grid place-items-center shadow-[0_0_30px_rgba(255,255,255,0.25)]"
+              >
                 <Camera className="size-8" />
-              </div>
+              </motion.div>
             </div>
           </motion.div>
         </Link>
