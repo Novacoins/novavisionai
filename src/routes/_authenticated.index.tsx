@@ -90,8 +90,8 @@ function HomePage() {
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search scans, tools, prompts…"
-            className="w-full h-12 pl-11 pr-4 rounded-2xl glass-card text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[color:var(--sky)]/60 transition-all"
+            placeholder={PLACEHOLDERS[phIndex]}
+            className="w-full h-12 pl-11 pr-4 rounded-full glass-card text-sm placeholder:text-muted-foreground placeholder:transition-all focus:outline-none focus:ring-2 focus:ring-[color:var(--sky)]/60 transition-all shadow-[0_8px_24px_-12px_rgba(15,82,122,0.25)]"
           />
         </form>
 
