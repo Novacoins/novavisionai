@@ -30,21 +30,33 @@ type ScanRow = {
   created_at: string;
 };
 
+type ChatRow = { id: string; title: string; updated_at: string };
+
 function HistoryPage() {
   const { user } = useAuth();
   const [rows, setRows] = useState<ScanRow[] | null>(null);
+  const [chats, setChats] = useState<ChatRow[] | null>(null);
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
   const [toDelete, setToDelete] = useState<string | null>(null);
+  const [chatToDelete, setChatToDelete] = useState<string | null>(null);
 
   async function load() {
     if (!user) return;
-    const { data } = await supabase
-      .from("scans")
-      .select("id,title,category,confidence,safety,thumbnail_url,is_favorite,created_at")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: false });
-    setRows((data ?? []) as ScanRow[]);
+    const [{ data: scans }, { data: convos }] = await Promise.all([
+      supabase
+        .from("scans")
+        .select("id,title,category,confidence,safety,thumbnail_url,is_favorite,created_at")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false }),
+      supabase
+        .from("chat_conversations")
+        .select("id,title,updated_at")
+        .eq("user_id", user.id)
+        .order("updated_at", { ascending: false }),
+    ]);
+    setRows((scans ?? []) as ScanRow[]);
+    setChats((convos ?? []) as ChatRow[]);
   }
   useEffect(() => { load(); }, [user]);
 
