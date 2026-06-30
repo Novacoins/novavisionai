@@ -22,6 +22,14 @@ type RecentScan = {
   created_at: string;
 };
 
+const PLACEHOLDERS = [
+  "Search anything…",
+  "Ask Nova AI…",
+  "Identify an object…",
+  "Generate ideas…",
+  "Analyze an image…",
+];
+
 function HomePage() {
   const { user } = useAuth();
   const { t } = useTranslation();
@@ -30,6 +38,12 @@ function HomePage() {
   const [meals, setMeals] = useState<{ meal_type: string; name: string; calories: number }[] | null>(null);
   const [recent, setRecent] = useState<RecentScan[] | null>(null);
   const [search, setSearch] = useState("");
+  const [phIndex, setPhIndex] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => setPhIndex((i) => (i + 1) % PLACEHOLDERS.length), 2600);
+    return () => clearInterval(id);
+  }, []);
 
   useEffect(() => {
     dailyTip({ data: undefined as never })
