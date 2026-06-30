@@ -45,7 +45,7 @@ export function SkyDay({ className = "" }: { className?: string }) {
       className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`}
       style={{
         background:
-          "linear-gradient(180deg, #E9FAFF 0%, #E9FAFF 50%, #D8F4FF 100%)",
+          "linear-gradient(180deg, #F8FDFF 0%, #EEF9FF 50%, #DFF5FF 100%)",
       }}
     >
       {/* Ambient light rays */}
