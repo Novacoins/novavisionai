@@ -143,6 +143,44 @@
   0%, 100% { box-shadow: 0 0 0 0 oklch(0.78 0.13 235 / 0.0); }
   50%      { box-shadow: 0 0 18px 2px oklch(0.78 0.13 235 / 0.45); }
 }
+@keyframes ray-shift {
+  0%, 100% { transform: translateX(-50%) rotate(0deg); opacity: 0.55; }
+  50%      { transform: translateX(-50%) rotate(6deg); opacity: 0.75; }
+}
+@keyframes float-breath {
+  0%, 100% { transform: translateY(0); box-shadow: 0 0 0 0 rgba(99, 216, 255, 0); }
+  50%      { transform: translateY(-2px); box-shadow: 0 0 22px 4px rgba(99, 216, 255, 0.55); }
+}
+
+/* Sky-day scope: premium light theme used on the Home screen only.
+   Overrides tokens so existing glass-card / muted-foreground utilities stay legible. */
+.sky-day {
+  --foreground: oklch(0.22 0.04 250);
+  --card-foreground: oklch(0.22 0.04 250);
+  --muted-foreground: oklch(0.42 0.04 250);
+  --border: oklch(0.20 0.05 250 / 12%);
+  --glass: rgba(255, 255, 255, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.75);
+  --primary: oklch(0.55 0.16 155);
+  --primary-foreground: oklch(0.99 0 0);
+  --accent: oklch(0.55 0.16 155 / 14%);
+  --accent-foreground: oklch(0.32 0.14 155);
+  color: var(--foreground);
+}
+.sky-day .glass-card {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(22px) saturate(160%);
+  box-shadow:
+    0 10px 30px -18px rgba(15, 82, 122, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+.sky-day .premium-glow-green {
+  box-shadow: 0 18px 50px -22px rgba(15, 157, 88, 0.55), 0 0 30px -10px rgba(15, 157, 88, 0.35);
+}
+.sky-day .premium-glow-sky {
+  box-shadow: 0 18px 50px -22px rgba(56, 189, 248, 0.6), 0 0 30px -10px rgba(56, 189, 248, 0.4);
+}
 
 @layer base {
   * { border-color: var(--color-border); }
