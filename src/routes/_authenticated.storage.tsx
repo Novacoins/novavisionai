@@ -23,7 +23,6 @@ type Item = {
   thumbnail_url: string | null;
   image_url: string | null;
   created_at: string;
-  file_size?: number | null;
 };
 
 const CATEGORIES = ["all", "food", "plant", "product", "object", "document", "ingredient", "animal", "unknown"];
@@ -87,7 +86,7 @@ function StoragePage() {
     if (!user) return;
     supabase
       .from("scans")
-      .select("id,title,category,thumbnail_url,image_url,created_at,file_size")
+      .select("id,title,category,thumbnail_url,image_url,created_at")
       .order("created_at", { ascending: false })
       .then(({ data }) => setItems((data ?? []) as Item[]));
   };
