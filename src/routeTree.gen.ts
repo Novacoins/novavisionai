@@ -15,6 +15,7 @@ import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated.
 import { Route as AuthenticatedWorkspaceRouteImport } from './routes/_authenticated.workspace'
 import { Route as AuthenticatedToolsRouteImport } from './routes/_authenticated.tools'
 import { Route as AuthenticatedTermsRouteImport } from './routes/_authenticated.terms'
+import { Route as AuthenticatedStorageRouteImport } from './routes/_authenticated.storage'
 import { Route as AuthenticatedScanRouteImport } from './routes/_authenticated.scan'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated.profile'
 import { Route as AuthenticatedPrivacyRouteImport } from './routes/_authenticated.privacy'
@@ -32,6 +33,7 @@ import { Route as AuthenticatedCommunityRouteImport } from './routes/_authentica
 import { Route as AuthenticatedChatRouteImport } from './routes/_authenticated.chat'
 import { Route as AuthenticatedAppearanceRouteImport } from './routes/_authenticated.appearance'
 import { Route as AuthenticatedAiMemoryRouteImport } from './routes/_authenticated.ai-memory'
+import { Route as AuthenticatedAccentColorRouteImport } from './routes/_authenticated.accent-color'
 import { Route as AuthenticatedAcademyRouteImport } from './routes/_authenticated.academy'
 import { Route as AuthenticatedAboutRouteImport } from './routes/_authenticated.about'
 
@@ -62,6 +64,11 @@ const AuthenticatedToolsRoute = AuthenticatedToolsRouteImport.update({
 const AuthenticatedTermsRoute = AuthenticatedTermsRouteImport.update({
   id: '/terms',
   path: '/terms',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedStorageRoute = AuthenticatedStorageRouteImport.update({
+  id: '/storage',
+  path: '/storage',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedScanRoute = AuthenticatedScanRouteImport.update({
@@ -153,6 +160,12 @@ const AuthenticatedAiMemoryRoute = AuthenticatedAiMemoryRouteImport.update({
   path: '/ai-memory',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedAccentColorRoute =
+  AuthenticatedAccentColorRouteImport.update({
+    id: '/accent-color',
+    path: '/accent-color',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAcademyRoute = AuthenticatedAcademyRouteImport.update({
   id: '/academy',
   path: '/academy',
@@ -169,6 +182,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/about': typeof AuthenticatedAboutRoute
   '/academy': typeof AuthenticatedAcademyRoute
+  '/accent-color': typeof AuthenticatedAccentColorRoute
   '/ai-memory': typeof AuthenticatedAiMemoryRoute
   '/appearance': typeof AuthenticatedAppearanceRoute
   '/chat': typeof AuthenticatedChatRoute
@@ -186,6 +200,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof AuthenticatedPrivacyRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/scan': typeof AuthenticatedScanRoute
+  '/storage': typeof AuthenticatedStorageRoute
   '/terms': typeof AuthenticatedTermsRoute
   '/tools': typeof AuthenticatedToolsRoute
   '/workspace': typeof AuthenticatedWorkspaceRoute
@@ -194,6 +209,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/about': typeof AuthenticatedAboutRoute
   '/academy': typeof AuthenticatedAcademyRoute
+  '/accent-color': typeof AuthenticatedAccentColorRoute
   '/ai-memory': typeof AuthenticatedAiMemoryRoute
   '/appearance': typeof AuthenticatedAppearanceRoute
   '/chat': typeof AuthenticatedChatRoute
@@ -211,6 +227,7 @@ export interface FileRoutesByTo {
   '/privacy': typeof AuthenticatedPrivacyRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/scan': typeof AuthenticatedScanRoute
+  '/storage': typeof AuthenticatedStorageRoute
   '/terms': typeof AuthenticatedTermsRoute
   '/tools': typeof AuthenticatedToolsRoute
   '/workspace': typeof AuthenticatedWorkspaceRoute
@@ -222,6 +239,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_authenticated/about': typeof AuthenticatedAboutRoute
   '/_authenticated/academy': typeof AuthenticatedAcademyRoute
+  '/_authenticated/accent-color': typeof AuthenticatedAccentColorRoute
   '/_authenticated/ai-memory': typeof AuthenticatedAiMemoryRoute
   '/_authenticated/appearance': typeof AuthenticatedAppearanceRoute
   '/_authenticated/chat': typeof AuthenticatedChatRoute
@@ -239,6 +257,7 @@ export interface FileRoutesById {
   '/_authenticated/privacy': typeof AuthenticatedPrivacyRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/scan': typeof AuthenticatedScanRoute
+  '/_authenticated/storage': typeof AuthenticatedStorageRoute
   '/_authenticated/terms': typeof AuthenticatedTermsRoute
   '/_authenticated/tools': typeof AuthenticatedToolsRoute
   '/_authenticated/workspace': typeof AuthenticatedWorkspaceRoute
@@ -251,6 +270,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/about'
     | '/academy'
+    | '/accent-color'
     | '/ai-memory'
     | '/appearance'
     | '/chat'
@@ -268,6 +288,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/profile'
     | '/scan'
+    | '/storage'
     | '/terms'
     | '/tools'
     | '/workspace'
@@ -276,6 +297,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/about'
     | '/academy'
+    | '/accent-color'
     | '/ai-memory'
     | '/appearance'
     | '/chat'
@@ -293,6 +315,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/profile'
     | '/scan'
+    | '/storage'
     | '/terms'
     | '/tools'
     | '/workspace'
@@ -303,6 +326,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_authenticated/about'
     | '/_authenticated/academy'
+    | '/_authenticated/accent-color'
     | '/_authenticated/ai-memory'
     | '/_authenticated/appearance'
     | '/_authenticated/chat'
@@ -320,6 +344,7 @@ export interface FileRouteTypes {
     | '/_authenticated/privacy'
     | '/_authenticated/profile'
     | '/_authenticated/scan'
+    | '/_authenticated/storage'
     | '/_authenticated/terms'
     | '/_authenticated/tools'
     | '/_authenticated/workspace'
@@ -373,6 +398,13 @@ declare module '@tanstack/react-router' {
       path: '/terms'
       fullPath: '/terms'
       preLoaderRoute: typeof AuthenticatedTermsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/storage': {
+      id: '/_authenticated/storage'
+      path: '/storage'
+      fullPath: '/storage'
+      preLoaderRoute: typeof AuthenticatedStorageRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/scan': {
@@ -494,6 +526,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAiMemoryRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/accent-color': {
+      id: '/_authenticated/accent-color'
+      path: '/accent-color'
+      fullPath: '/accent-color'
+      preLoaderRoute: typeof AuthenticatedAccentColorRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/academy': {
       id: '/_authenticated/academy'
       path: '/academy'
@@ -514,6 +553,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteChildren {
   AuthenticatedAboutRoute: typeof AuthenticatedAboutRoute
   AuthenticatedAcademyRoute: typeof AuthenticatedAcademyRoute
+  AuthenticatedAccentColorRoute: typeof AuthenticatedAccentColorRoute
   AuthenticatedAiMemoryRoute: typeof AuthenticatedAiMemoryRoute
   AuthenticatedAppearanceRoute: typeof AuthenticatedAppearanceRoute
   AuthenticatedChatRoute: typeof AuthenticatedChatRoute
@@ -531,6 +571,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedPrivacyRoute: typeof AuthenticatedPrivacyRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedScanRoute: typeof AuthenticatedScanRoute
+  AuthenticatedStorageRoute: typeof AuthenticatedStorageRoute
   AuthenticatedTermsRoute: typeof AuthenticatedTermsRoute
   AuthenticatedToolsRoute: typeof AuthenticatedToolsRoute
   AuthenticatedWorkspaceRoute: typeof AuthenticatedWorkspaceRoute
@@ -540,6 +581,7 @@ interface AuthenticatedRouteChildren {
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAboutRoute: AuthenticatedAboutRoute,
   AuthenticatedAcademyRoute: AuthenticatedAcademyRoute,
+  AuthenticatedAccentColorRoute: AuthenticatedAccentColorRoute,
   AuthenticatedAiMemoryRoute: AuthenticatedAiMemoryRoute,
   AuthenticatedAppearanceRoute: AuthenticatedAppearanceRoute,
   AuthenticatedChatRoute: AuthenticatedChatRoute,
@@ -557,6 +599,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedPrivacyRoute: AuthenticatedPrivacyRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedScanRoute: AuthenticatedScanRoute,
+  AuthenticatedStorageRoute: AuthenticatedStorageRoute,
   AuthenticatedTermsRoute: AuthenticatedTermsRoute,
   AuthenticatedToolsRoute: AuthenticatedToolsRoute,
   AuthenticatedWorkspaceRoute: AuthenticatedWorkspaceRoute,
@@ -574,13 +617,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
