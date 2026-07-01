@@ -21,7 +21,7 @@ type Item = {
   title: string;
   category: string;
   thumbnail_url: string | null;
-  image_url: string | null;
+  image_path: string | null;
   created_at: string;
 };
 
@@ -86,7 +86,7 @@ function StoragePage() {
     if (!user) return;
     supabase
       .from("scans")
-      .select("id,title,category,thumbnail_url,image_url,created_at")
+      .select("id,title,category,thumbnail_url,image_path,created_at")
       .order("created_at", { ascending: false })
       .then(({ data }) => setItems((data ?? []) as Item[]));
   };
@@ -128,7 +128,7 @@ function StoragePage() {
   };
 
   const doDownload = async (item: Item) => {
-    const url = item.image_url || item.thumbnail_url;
+    const url = item.image_path || item.thumbnail_url;
     if (!url) return toast.error("No image available");
     try {
       await addWatermarkAndDownload(url, `nova-vision-${item.id.slice(0, 8)}.jpg`);
@@ -141,7 +141,7 @@ function StoragePage() {
   const doDownloadMany = async () => {
     const chosen = (filtered ?? []).filter((i) => selected.has(i.id));
     for (const it of chosen) {
-      try { await addWatermarkAndDownload(it.image_url || it.thumbnail_url!, `nova-vision-${it.id.slice(0, 8)}.jpg`); } catch { /* skip */ }
+      try { await addWatermarkAndDownload(it.image_path || it.thumbnail_url!, `nova-vision-${it.id.slice(0, 8)}.jpg`); } catch { /* skip */ }
     }
     toast.success(`Downloaded ${chosen.length} images`);
   };
@@ -239,8 +239,8 @@ function StoragePage() {
                     onClick={() => selectMode ? toggleSelect(item.id) : setPreview(item)}
                     className="block w-full aspect-square relative"
                   >
-                    {item.thumbnail_url || item.image_url ? (
-                      <img src={item.thumbnail_url || item.image_url!} alt={item.title} loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
+                    {item.thumbnail_url || item.image_path ? (
+                      <img src={item.thumbnail_url || item.image_path!} alt={item.title} loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
                     ) : (
                       <div className="absolute inset-0 grid place-items-center text-muted-foreground text-xs">No image</div>
                     )}
@@ -283,7 +283,7 @@ function StoragePage() {
             </button>
             <motion.img
               initial={{ scale: 0.9 }} animate={{ scale: 1 }}
-              src={preview.image_url || preview.thumbnail_url!}
+              src={preview.image_path || preview.thumbnail_url!}
               alt={preview.title}
               className="max-w-full max-h-[80vh] rounded-2xl object-contain"
               onClick={(e) => e.stopPropagation()}
