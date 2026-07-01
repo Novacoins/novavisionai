@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import {
   Home, User, History, Heart, MessageSquare, Globe, Moon, Bell, Users, HelpCircle,
   Mail, Info, Shield, FileText, LogOut, X, Sparkles, Brain, Newspaper, Briefcase,
-  Wrench, Image as ImageIcon, GraduationCap,
+  Wrench, Image as ImageIcon, GraduationCap, HardDrive, Palette,
 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { useState } from "react";
@@ -23,6 +23,7 @@ const groups: { title: string; items: Item[] }[] = [
       { to: "/", icon: Home, label: "Home", desc: "Back to dashboard", color: "from-sky-400 to-blue-500" },
       { to: "/profile", icon: User, label: "My Profile", desc: "Account & stats", color: "from-emerald-400 to-teal-500" },
       { to: "/history", icon: History, label: "Scan History", desc: "Everything you've scanned", color: "from-amber-400 to-orange-500" },
+      { to: "/storage", icon: HardDrive, label: "Storage", desc: "All your saved images", color: "from-sky-500 to-cyan-500" },
       { to: "/favorites", icon: Heart, label: "Favorites", desc: "Your saved scans", color: "from-rose-400 to-pink-500" },
     ],
   },
@@ -42,6 +43,7 @@ const groups: { title: string; items: Item[] }[] = [
     title: "Settings",
     items: [
       { to: "/appearance", icon: Moon, label: "Appearance", desc: "Theme & display", color: "from-slate-400 to-slate-600" },
+      { to: "/accent-color", icon: Palette, label: "Accent Color", desc: "Personalize your theme", color: "from-fuchsia-500 to-pink-500" },
       { to: "/languages", icon: Globe, label: "Languages", desc: "App language", color: "from-blue-400 to-indigo-500" },
       { to: "/notifications", icon: Bell, label: "Notifications", desc: "Manage alerts", color: "from-orange-400 to-red-500" },
     ],

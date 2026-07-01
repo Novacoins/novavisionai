@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { Camera, Leaf, Utensils, Upload, Sparkles, ChevronRight, ScanLine, Search } from "lucide-react";
+import { Camera, Leaf, Utensils, Upload, Sparkles, ChevronRight, ScanLine, Search, MessagesSquare } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { dailyTip, generateMealPlan } from "@/lib/ai.functions";
@@ -127,11 +127,38 @@ function HomePage() {
           </motion.div>
         </Link>
 
-        <Link
-          to="/scan"
-          className="flex items-center justify-center gap-2 h-12 rounded-2xl bg-[oklch(0.78_0.13_235_/_0.14)] border border-[oklch(0.78_0.13_235_/_0.35)] text-[color:var(--sky-soft)] font-semibold text-sm sky-glow active:scale-[0.98] transition"
-        >
-          <ScanLine className="size-4" /> Quick Scan
+        <Link to="/chat" className="block">
+          <motion.div
+            whileTap={{ scale: 0.97 }}
+            whileHover={{ y: -2 }}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="relative overflow-hidden rounded-3xl p-5 glass-card flex items-center gap-4 group"
+            style={{ boxShadow: "0 20px 50px -22px var(--primary), 0 0 24px -10px var(--primary)" }}
+          >
+            <motion.div
+              className="absolute -right-8 -top-8 size-32 rounded-full blur-2xl"
+              style={{ background: "color-mix(in oklch, var(--primary) 40%, transparent)" }}
+              animate={{ opacity: [0.4, 0.8, 0.4], scale: [1, 1.1, 1] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            />
+            <motion.div
+              animate={{ rotate: [0, 6, -6, 0] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              className="relative size-14 rounded-2xl grid place-items-center text-primary-foreground shrink-0"
+              style={{ background: "var(--gradient-hero)", boxShadow: "0 0 30px -6px var(--primary)" }}
+            >
+              <MessagesSquare className="size-7" />
+            </motion.div>
+            <div className="relative flex-1 min-w-0">
+              <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest text-primary font-semibold">
+                <Sparkles className="size-3" /> Nova Assistant
+              </div>
+              <div className="text-lg font-bold mt-0.5 leading-tight">Chat with AI</div>
+              <div className="text-xs text-muted-foreground mt-0.5">Ask anything — code, ideas, math, life</div>
+            </div>
+            <ChevronRight className="relative size-5 text-muted-foreground group-hover:translate-x-1 transition-transform" />
+          </motion.div>
         </Link>
 
         <section className="grid grid-cols-4 gap-2">
