@@ -56,15 +56,17 @@ function ContactPage() {
       const data = await res.json();
       if (!data.success) throw new Error(data.message || "Failed to send message");
 
-      // Best-effort log to support_tickets (don't block success on RLS/db errors)
-      await supabase.from("support_tickets").insert({
-        user_id: user?.id ?? null,
-        name: form.name,
-        email: form.email,
-        phone: form.phone || null,
-        subject: form.subject,
-        message: form.message,
-      });
+      // Best-effort log to support_tickets (requires auth; skip for anon users)
+      if (user?.id) {
+        await supabase.from("support_tickets").insert({
+          user_id: user.id,
+          name: form.name,
+          email: form.email,
+          phone: form.phone || null,
+          subject: form.subject,
+          message: form.message,
+        });
+      }
 
       setSuccess(true);
       reset();
