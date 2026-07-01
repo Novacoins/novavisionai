@@ -21,7 +21,6 @@ type Item = {
   title: string;
   category: string;
   thumbnail_url: string | null;
-  thumbnail_url: string | null;
   created_at: string;
 };
 
