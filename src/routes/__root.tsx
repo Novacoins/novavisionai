@@ -12,6 +12,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/lib/auth-context";
 import { ThemeProvider } from "@/lib/theme";
 import { LanguageProvider } from "@/lib/language-context";
+import { AccentColorProvider } from "@/lib/accent-color";
 import "@/lib/i18n";
 
 import appCss from "../styles.css?url";
@@ -122,12 +123,14 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <AuthProvider>
-          <LanguageProvider>
-            <Outlet />
-            <Toaster position="top-center" richColors />
-          </LanguageProvider>
-        </AuthProvider>
+        <AccentColorProvider>
+          <AuthProvider>
+            <LanguageProvider>
+              <Outlet />
+              <Toaster position="top-center" richColors />
+            </LanguageProvider>
+          </AuthProvider>
+        </AccentColorProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );
