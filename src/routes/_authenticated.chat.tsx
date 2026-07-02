@@ -629,11 +629,22 @@ function ChatPage() {
           <SheetHeader className="p-4 border-b border-border">
             <SheetTitle className="flex items-center gap-2"><HistoryIcon className="size-4 text-primary" /> Chat history</SheetTitle>
           </SheetHeader>
-          <div className="p-3 border-b border-border">
-            <Button onClick={newChat} className="w-full hero-gradient text-primary-foreground rounded-xl">
+          <div className="p-3 border-b border-border flex gap-2">
+            <Button onClick={newChat} className="flex-1 hero-gradient text-primary-foreground rounded-xl">
               <Plus className="size-4 mr-1" /> New chat
             </Button>
+            {conversations.length > 0 && (
+              <Button
+                variant="outline"
+                onClick={() => setClearAllOpen(true)}
+                className="rounded-xl text-destructive hover:bg-destructive/10"
+                aria-label="Clear all history"
+              >
+                <Trash2 className="size-4" />
+              </Button>
+            )}
           </div>
+
           <div className="flex-1 overflow-y-auto p-3 space-y-4">
             {conversations.length === 0 && (
               <p className="text-center text-xs text-muted-foreground py-8">No conversations yet.</p>
