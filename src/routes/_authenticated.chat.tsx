@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -18,7 +18,11 @@ import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/chat")({
   component: ChatPage,
+  validateSearch: (s: Record<string, unknown>) => ({
+    c: typeof s.c === "string" ? s.c : undefined,
+  }),
 });
+
 
 type Msg = { role: "user" | "assistant"; content: string; imageUrl?: string; ts: number };
 type Conversation = { id: string; title: string; createdAt: number; updatedAt: number; messages: Msg[] };
