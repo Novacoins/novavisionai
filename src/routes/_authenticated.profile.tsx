@@ -30,7 +30,7 @@ function ProfilePage() {
     diet_preference: "",
     avatar_url: "" as string | null,
   });
-  const [stats, setStats] = useState({ total: 0, favorites: 0, collections: 0 });
+  const [stats, setStats] = useState({ total: 0, favorites: 0, streak: 0 });
   const [joined, setJoined] = useState<string | null>(null);
 
   useEffect(() => {
