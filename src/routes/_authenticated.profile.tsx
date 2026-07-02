@@ -127,7 +127,7 @@ function ProfilePage() {
           {[
             { icon: ScanLine, label: t("profile.scans"), value: stats.total },
             { icon: Heart, label: t("profile.favorites"), value: stats.favorites },
-            { icon: Folder, label: t("profile.collections"), value: stats.collections },
+            { icon: Flame, label: "Streak", value: `${stats.streak} 🔥` },
           ].map((s) => (
             <div key={s.label} className="rounded-xl bg-muted p-3">
               <s.icon className="size-4 text-primary mx-auto" />
