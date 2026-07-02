@@ -52,10 +52,11 @@ function ProfilePage() {
         supabase.from("scans").select("*", { count: "exact", head: true }).eq("user_id", user.id),
         supabase.from("scans").select("*", { count: "exact", head: true }).eq("user_id", user.id).eq("is_favorite", true),
       ]);
-      setStats({ total: total ?? 0, favorites: favorites ?? 0, collections: 0 });
+      setStats({ total: total ?? 0, favorites: favorites ?? 0, streak: computeAndBumpStreak(user.id) });
       setLoading(false);
     })();
   }, [user]);
+
 
   async function save() {
     if (!user) return;
