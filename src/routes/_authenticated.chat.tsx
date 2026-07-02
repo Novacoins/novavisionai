@@ -165,6 +165,8 @@ function AutoTextarea({
 
 function ChatPage() {
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const { c: cParam } = Route.useSearch();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [input, setInput] = useState("");
@@ -173,6 +175,7 @@ function ChatPage() {
   const [comingSoon, setComingSoon] = useState<null | { title: string; icon: typeof FileText }>(null);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [toDelete, setToDelete] = useState<string | null>(null);
+  const [clearAllOpen, setClearAllOpen] = useState(false);
   const [recording, setRecording] = useState(false);
   const [followUps, setFollowUps] = useState<string[]>([]);
   const [highlightInput, setHighlightInput] = useState(false);
@@ -185,8 +188,16 @@ function ChatPage() {
   useEffect(() => {
     const list = loadConversations(user?.id);
     setConversations(list);
-    setActiveId(list[0]?.id ?? null);
   }, [user?.id]);
+
+  // Sync active conversation with URL ?c=<id>. Absence = brand new empty chat.
+  useEffect(() => {
+    if (cParam && conversations.some((c) => c.id === cParam)) {
+      setActiveId(cParam);
+    } else {
+      setActiveId(null);
+    }
+  }, [cParam, conversations]);
 
   const active = useMemo(() => conversations.find((c) => c.id === activeId) ?? null, [conversations, activeId]);
   const messages = active?.messages ?? [];
@@ -216,20 +227,34 @@ function ChatPage() {
     setInput("");
     setAttached(null);
     setHistoryOpen(false);
+    navigate({ to: "/chat", search: {} });
   }
 
   function openConversation(id: string) {
     setActiveId(id);
     setHistoryOpen(false);
+    navigate({ to: "/chat", search: { c: id } });
   }
 
   function deleteConversation(id: string) {
     const next = conversations.filter((c) => c.id !== id);
     persist(next);
-    if (activeId === id) setActiveId(next[0]?.id ?? null);
+    if (activeId === id) {
+      setActiveId(null);
+      navigate({ to: "/chat", search: {} });
+    }
     setToDelete(null);
     toast.success("Conversation deleted");
   }
+
+  function clearAll() {
+    persist([]);
+    setActiveId(null);
+    setClearAllOpen(false);
+    navigate({ to: "/chat", search: {} });
+    toast.success("History cleared");
+  }
+
 
   async function send(customText?: string, retryLast = false) {
     if (!user) return;
