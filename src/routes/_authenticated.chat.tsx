@@ -53,11 +53,14 @@ function loadConversations(userId: string | undefined): Conversation[] {
 function saveConversations(userId: string | undefined, convos: Conversation[]) {
   if (typeof window === "undefined") return;
   try {
-    localStorage.setItem(storageKey(userId), JSON.stringify(convos));
+    // Keep the most recent 50 conversations to stay well under quota
+    const trimmed = [...convos].sort((a, b) => b.updatedAt - a.updatedAt).slice(0, 50);
+    localStorage.setItem(storageKey(userId), JSON.stringify(trimmed));
   } catch {
     /* quota */
   }
 }
+
 
 function groupConversations(convos: Conversation[]) {
   const now = new Date();
