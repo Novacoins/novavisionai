@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { Camera, Save, User as UserIcon, Mail, MapPin, Calendar, ScanLine, Heart, Folder } from "lucide-react";
+import { Camera, Save, User as UserIcon, Mail, MapPin, Calendar, ScanLine, Heart, Flame } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
