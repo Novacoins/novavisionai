@@ -271,14 +271,16 @@ function ChatPage() {
     if (!convo) {
       convo = {
         id: crypto.randomUUID(),
-        title: (text || "Image chat").slice(0, 60),
+        title: (text || "Image chat").slice(0, 40),
         createdAt: now,
         updatedAt: now,
         messages: [],
       };
       convos = [convo, ...convos];
       setActiveId(convo.id);
+      navigate({ to: "/chat", search: { c: convo.id } });
     }
+
 
     let msgs: Msg[];
     if (retryLast) {
