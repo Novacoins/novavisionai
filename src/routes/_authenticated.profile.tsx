@@ -17,6 +17,28 @@ export const Route = createFileRoute("/_authenticated/profile")({
   component: ProfilePage,
 });
 
+function computeAndBumpStreak(userId: string): number {
+  if (typeof window === "undefined") return 0;
+  try {
+    const key = `nova-streak-${userId}`;
+    const raw = localStorage.getItem(key);
+    const today = new Date();
+    const todayStr = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
+    const yest = new Date(today.getTime() - 86400000);
+    const yestStr = `${yest.getFullYear()}-${yest.getMonth()}-${yest.getDate()}`;
+    const parsed = raw ? (JSON.parse(raw) as { count: number; last: string }) : null;
+    let count = 1;
+    if (parsed) {
+      if (parsed.last === todayStr) return parsed.count;
+      if (parsed.last === yestStr) count = parsed.count + 1;
+      else count = 1;
+    }
+    localStorage.setItem(key, JSON.stringify({ count, last: todayStr }));
+    return count;
+  } catch { return 0; }
+}
+
+
 function ProfilePage() {
   const { user } = useAuth();
   const { t } = useTranslation();
