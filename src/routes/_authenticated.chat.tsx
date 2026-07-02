@@ -702,6 +702,20 @@ function ChatPage() {
         </DialogContent>
       </Dialog>
 
+      {/* Clear all confirm */}
+      <Dialog open={clearAllOpen} onOpenChange={setClearAllOpen}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Clear all history?</DialogTitle>
+            <DialogDescription>Every saved conversation will be permanently removed from this device.</DialogDescription>
+          </DialogHeader>
+          <div className="flex gap-2 justify-end mt-2">
+            <Button variant="ghost" onClick={() => setClearAllOpen(false)}>Cancel</Button>
+            <Button variant="destructive" onClick={clearAll}>Clear all</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <style>{`
         @keyframes voice-bar {
           0%, 100% { height: 25%; }
@@ -709,5 +723,6 @@ function ChatPage() {
         }
       `}</style>
     </div>
+
   );
 }
