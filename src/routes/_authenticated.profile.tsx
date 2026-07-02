@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { Camera, Save, User as UserIcon, Mail, MapPin, Calendar, ScanLine, Heart, Folder } from "lucide-react";
+import { Camera, Save, User as UserIcon, Mail, MapPin, Calendar, ScanLine, Heart, Flame } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,6 +17,28 @@ export const Route = createFileRoute("/_authenticated/profile")({
   component: ProfilePage,
 });
 
+function computeAndBumpStreak(userId: string): number {
+  if (typeof window === "undefined") return 0;
+  try {
+    const key = `nova-streak-${userId}`;
+    const raw = localStorage.getItem(key);
+    const today = new Date();
+    const todayStr = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
+    const yest = new Date(today.getTime() - 86400000);
+    const yestStr = `${yest.getFullYear()}-${yest.getMonth()}-${yest.getDate()}`;
+    const parsed = raw ? (JSON.parse(raw) as { count: number; last: string }) : null;
+    let count = 1;
+    if (parsed) {
+      if (parsed.last === todayStr) return parsed.count;
+      if (parsed.last === yestStr) count = parsed.count + 1;
+      else count = 1;
+    }
+    localStorage.setItem(key, JSON.stringify({ count, last: todayStr }));
+    return count;
+  } catch { return 0; }
+}
+
+
 function ProfilePage() {
   const { user } = useAuth();
   const { t } = useTranslation();
@@ -30,7 +52,7 @@ function ProfilePage() {
     diet_preference: "",
     avatar_url: "" as string | null,
   });
-  const [stats, setStats] = useState({ total: 0, favorites: 0, collections: 0 });
+  const [stats, setStats] = useState({ total: 0, favorites: 0, streak: 0 });
   const [joined, setJoined] = useState<string | null>(null);
 
   useEffect(() => {
@@ -52,10 +74,11 @@ function ProfilePage() {
         supabase.from("scans").select("*", { count: "exact", head: true }).eq("user_id", user.id),
         supabase.from("scans").select("*", { count: "exact", head: true }).eq("user_id", user.id).eq("is_favorite", true),
       ]);
-      setStats({ total: total ?? 0, favorites: favorites ?? 0, collections: 0 });
+      setStats({ total: total ?? 0, favorites: favorites ?? 0, streak: computeAndBumpStreak(user.id) });
       setLoading(false);
     })();
   }, [user]);
+
 
   async function save() {
     if (!user) return;
@@ -104,7 +127,7 @@ function ProfilePage() {
           {[
             { icon: ScanLine, label: t("profile.scans"), value: stats.total },
             { icon: Heart, label: t("profile.favorites"), value: stats.favorites },
-            { icon: Folder, label: t("profile.collections"), value: stats.collections },
+            { icon: Flame, label: "Streak", value: `${stats.streak} 🔥` },
           ].map((s) => (
             <div key={s.label} className="rounded-xl bg-muted p-3">
               <s.icon className="size-4 text-primary mx-auto" />

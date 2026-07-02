@@ -1,8 +1,9 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { History, Search, Trash2, Heart, Share2, Camera, MessageSquare } from "lucide-react";
+import { History, Search, Trash2, Heart, Share2, Camera, MessageSquare, Plus } from "lucide-react";
 import { PageHeader, PageShell } from "@/components/PageShell";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -14,6 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/history")({
   component: HistoryPage,
@@ -30,33 +32,64 @@ type ScanRow = {
   created_at: string;
 };
 
-type ChatRow = { id: string; title: string; updated_at: string };
+type ChatMsg = { role: "user" | "assistant"; content: string; ts: number };
+type Conversation = { id: string; title: string; createdAt: number; updatedAt: number; messages: ChatMsg[] };
+
+function chatKey(userId: string | undefined) { return `nova-chats-${userId ?? "anon"}`; }
+
+function loadChats(userId: string | undefined): Conversation[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = localStorage.getItem(chatKey(userId));
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch { return []; }
+}
+
+function saveChats(userId: string | undefined, list: Conversation[]) {
+  try { localStorage.setItem(chatKey(userId), JSON.stringify(list)); } catch { /* quota */ }
+}
+
+function groupChats(list: Conversation[]) {
+  const now = new Date();
+  const startToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  const startYest = startToday - 86400000;
+  const start7 = startToday - 7 * 86400000;
+  const buckets = {
+    Today: [] as Conversation[],
+    Yesterday: [] as Conversation[],
+    "Last 7 Days": [] as Conversation[],
+    Older: [] as Conversation[],
+  };
+  for (const c of list) {
+    if (c.updatedAt >= startToday) buckets.Today.push(c);
+    else if (c.updatedAt >= startYest) buckets.Yesterday.push(c);
+    else if (c.updatedAt >= start7) buckets["Last 7 Days"].push(c);
+    else buckets.Older.push(c);
+  }
+  return buckets;
+}
 
 function HistoryPage() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [rows, setRows] = useState<ScanRow[] | null>(null);
-  const [chats, setChats] = useState<ChatRow[] | null>(null);
+  const [chats, setChats] = useState<Conversation[]>([]);
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
   const [toDelete, setToDelete] = useState<string | null>(null);
   const [chatToDelete, setChatToDelete] = useState<string | null>(null);
+  const [clearAllOpen, setClearAllOpen] = useState(false);
 
   async function load() {
     if (!user) return;
-    const [{ data: scans }, { data: convos }] = await Promise.all([
-      supabase
-        .from("scans")
-        .select("id,title,category,confidence,safety,thumbnail_url,is_favorite,created_at")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false }),
-      supabase
-        .from("chat_conversations")
-        .select("id,title,updated_at")
-        .eq("user_id", user.id)
-        .order("updated_at", { ascending: false }),
-    ]);
+    const { data: scans } = await supabase
+      .from("scans")
+      .select("id,title,category,confidence,safety,thumbnail_url,is_favorite,created_at")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false });
     setRows((scans ?? []) as ScanRow[]);
-    setChats((convos ?? []) as ChatRow[]);
+    setChats(loadChats(user.id).sort((a, b) => b.updatedAt - a.updatedAt));
   }
   useEffect(() => { load(); }, [user]);
 
@@ -87,19 +120,33 @@ function HistoryPage() {
     else { await navigator.clipboard.writeText(text); toast.success("Copied"); }
   }
 
-  async function deleteChat() {
+  const filteredChats = useMemo(
+    () => chats.filter((c) => !query || c.title.toLowerCase().includes(query.toLowerCase())),
+    [chats, query],
+  );
+  const grouped = useMemo(() => groupChats(filteredChats), [filteredChats]);
+  const mostRecentId = chats[0]?.id;
+
+  function openChat(id: string) {
+    navigate({ to: "/chat", search: { c: id } });
+  }
+  function newChat() {
+    navigate({ to: "/chat", search: {} });
+  }
+  function deleteChat() {
     if (!chatToDelete) return;
-    await supabase.from("chat_messages").delete().eq("conversation_id", chatToDelete);
-    await supabase.from("chat_conversations").delete().eq("id", chatToDelete);
-    setChats((cs) => cs?.filter((c) => c.id !== chatToDelete) ?? null);
+    const next = chats.filter((c) => c.id !== chatToDelete);
+    setChats(next);
+    saveChats(user?.id, next);
     setChatToDelete(null);
     toast.success("Conversation deleted");
   }
-
-  const filteredChats = useMemo(
-    () => (chats ?? []).filter((c) => !query || c.title.toLowerCase().includes(query.toLowerCase())),
-    [chats, query],
-  );
+  function clearAllChats() {
+    setChats([]);
+    saveChats(user?.id, []);
+    setClearAllOpen(false);
+    toast.success("History cleared");
+  }
 
   return (
     <PageShell>
@@ -173,34 +220,82 @@ function HistoryPage() {
           )}
         </TabsContent>
 
-        <TabsContent value="chats" className="space-y-2">
-          {chats === null ? (
-            <div className="space-y-2">{[0, 1, 2].map((i) => <Skeleton key={i} className="h-16 rounded-2xl" />)}</div>
-          ) : filteredChats.length === 0 ? (
+        <TabsContent value="chats" className="space-y-3">
+          <div className="flex gap-2">
+            <Button onClick={newChat} className="flex-1 hero-gradient text-primary-foreground rounded-xl">
+              <Plus className="size-4 mr-1" /> New chat
+            </Button>
+            {chats.length > 0 && (
+              <Button
+                variant="outline"
+                onClick={() => setClearAllOpen(true)}
+                className="rounded-xl text-destructive hover:bg-destructive/10"
+              >
+                <Trash2 className="size-4 mr-1" /> Clear all
+              </Button>
+            )}
+          </div>
+
+          {filteredChats.length === 0 ? (
             <div className="glass-card p-8 text-center">
               <MessageSquare className="size-10 mx-auto text-muted-foreground mb-2" />
               <p className="text-sm font-medium">No conversations yet</p>
               <p className="text-xs text-muted-foreground mt-1">Your AI chats will appear here.</p>
             </div>
           ) : (
-            <ul className="space-y-2">
-              {filteredChats.map((c) => (
-                <li key={c.id} className="glass-card p-3 flex items-center gap-3">
-                  <div className="size-12 rounded-xl bg-primary/15 text-primary grid place-items-center shrink-0">
-                    <MessageSquare className="size-5" />
-                  </div>
-                  <Link to="/chat" className="flex-1 min-w-0">
-                    <div className="text-sm font-semibold truncate">{c.title}</div>
-                    <div className="text-[10px] text-muted-foreground mt-0.5">
-                      {new Date(c.updated_at).toLocaleDateString()} · {new Date(c.updated_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+            <div className="space-y-4">
+              {(Object.keys(grouped) as (keyof typeof grouped)[]).map((label) => {
+                const items = grouped[label];
+                if (!items.length) return null;
+                return (
+                  <div key={label}>
+                    <div className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground px-1 mb-2">
+                      {label}
                     </div>
-                  </Link>
-                  <button onClick={() => setChatToDelete(c.id)} className="p-1.5 rounded-lg hover:bg-destructive/10 text-destructive" aria-label="Delete">
-                    <Trash2 className="size-4" />
-                  </button>
-                </li>
-              ))}
-            </ul>
+                    <ul className="space-y-2">
+                      {items.map((c) => {
+                        const last = c.messages[c.messages.length - 1];
+                        const preview = last ? last.content.replace(/[#*`]/g, "").slice(0, 60) : "";
+                        const isActive = c.id === mostRecentId;
+                        return (
+                          <li
+                            key={c.id}
+                            className={cn(
+                              "glass-card p-3 flex items-center gap-3 cursor-pointer transition-colors hover:bg-accent/40",
+                              isActive && "border-l-4 border-l-primary",
+                            )}
+                            onClick={() => openChat(c.id)}
+                          >
+                            <div className="size-12 rounded-xl bg-primary/15 text-primary grid place-items-center shrink-0">
+                              <MessageSquare className="size-5" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="text-sm font-semibold truncate">{c.title}</div>
+                              {preview && <div className="text-[11px] text-muted-foreground truncate mt-0.5">{preview}</div>}
+                            </div>
+                            <div className="text-right shrink-0">
+                              <div className="text-[10px] text-muted-foreground">
+                                {new Date(c.updatedAt).toLocaleDateString()}
+                              </div>
+                              <div className="text-[10px] text-muted-foreground">
+                                {new Date(c.updatedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                              </div>
+                              <button
+                                onClick={(e) => { e.stopPropagation(); setChatToDelete(c.id); }}
+                                className="p-1.5 mt-1 rounded-lg hover:bg-destructive/10 text-destructive"
+                                aria-label="Delete conversation"
+                              >
+                                <Trash2 className="size-4" />
+                              </button>
+                            </div>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                );
+              })}
+            </div>
           )}
         </TabsContent>
       </Tabs>
@@ -222,7 +317,7 @@ function HistoryPage() {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Delete this conversation?</AlertDialogTitle>
-            <AlertDialogDescription>All messages in this chat will be removed.</AlertDialogDescription>
+            <AlertDialogDescription>All messages in this chat will be permanently removed.</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
@@ -230,7 +325,19 @@ function HistoryPage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <AlertDialog open={clearAllOpen} onOpenChange={setClearAllOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Clear all chat history?</AlertDialogTitle>
+            <AlertDialogDescription>Every saved AI conversation will be permanently removed from this device.</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={clearAllChats}>Clear all</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </PageShell>
   );
 }
-

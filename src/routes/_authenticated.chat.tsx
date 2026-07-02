@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -18,7 +18,11 @@ import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/chat")({
   component: ChatPage,
+  validateSearch: (s: Record<string, unknown>) => ({
+    c: typeof s.c === "string" ? s.c : undefined,
+  }),
 });
+
 
 type Msg = { role: "user" | "assistant"; content: string; imageUrl?: string; ts: number };
 type Conversation = { id: string; title: string; createdAt: number; updatedAt: number; messages: Msg[] };
@@ -49,11 +53,14 @@ function loadConversations(userId: string | undefined): Conversation[] {
 function saveConversations(userId: string | undefined, convos: Conversation[]) {
   if (typeof window === "undefined") return;
   try {
-    localStorage.setItem(storageKey(userId), JSON.stringify(convos));
+    // Keep the most recent 50 conversations to stay well under quota
+    const trimmed = [...convos].sort((a, b) => b.updatedAt - a.updatedAt).slice(0, 50);
+    localStorage.setItem(storageKey(userId), JSON.stringify(trimmed));
   } catch {
     /* quota */
   }
 }
+
 
 function groupConversations(convos: Conversation[]) {
   const now = new Date();
@@ -158,6 +165,8 @@ function AutoTextarea({
 
 function ChatPage() {
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const { c: cParam } = Route.useSearch();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [input, setInput] = useState("");
@@ -166,6 +175,7 @@ function ChatPage() {
   const [comingSoon, setComingSoon] = useState<null | { title: string; icon: typeof FileText }>(null);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [toDelete, setToDelete] = useState<string | null>(null);
+  const [clearAllOpen, setClearAllOpen] = useState(false);
   const [recording, setRecording] = useState(false);
   const [followUps, setFollowUps] = useState<string[]>([]);
   const [highlightInput, setHighlightInput] = useState(false);
@@ -178,8 +188,16 @@ function ChatPage() {
   useEffect(() => {
     const list = loadConversations(user?.id);
     setConversations(list);
-    setActiveId(list[0]?.id ?? null);
   }, [user?.id]);
+
+  // Sync active conversation with URL ?c=<id>. Absence = brand new empty chat.
+  useEffect(() => {
+    if (cParam && conversations.some((c) => c.id === cParam)) {
+      setActiveId(cParam);
+    } else {
+      setActiveId(null);
+    }
+  }, [cParam, conversations]);
 
   const active = useMemo(() => conversations.find((c) => c.id === activeId) ?? null, [conversations, activeId]);
   const messages = active?.messages ?? [];
@@ -209,20 +227,34 @@ function ChatPage() {
     setInput("");
     setAttached(null);
     setHistoryOpen(false);
+    navigate({ to: "/chat", search: {} });
   }
 
   function openConversation(id: string) {
     setActiveId(id);
     setHistoryOpen(false);
+    navigate({ to: "/chat", search: { c: id } });
   }
 
   function deleteConversation(id: string) {
     const next = conversations.filter((c) => c.id !== id);
     persist(next);
-    if (activeId === id) setActiveId(next[0]?.id ?? null);
+    if (activeId === id) {
+      setActiveId(null);
+      navigate({ to: "/chat", search: {} });
+    }
     setToDelete(null);
     toast.success("Conversation deleted");
   }
+
+  function clearAll() {
+    persist([]);
+    setActiveId(null);
+    setClearAllOpen(false);
+    navigate({ to: "/chat", search: {} });
+    toast.success("History cleared");
+  }
+
 
   async function send(customText?: string, retryLast = false) {
     if (!user) return;
@@ -239,14 +271,16 @@ function ChatPage() {
     if (!convo) {
       convo = {
         id: crypto.randomUUID(),
-        title: (text || "Image chat").slice(0, 60),
+        title: (text || "Image chat").slice(0, 40),
         createdAt: now,
         updatedAt: now,
         messages: [],
       };
       convos = [convo, ...convos];
       setActiveId(convo.id);
+      navigate({ to: "/chat", search: { c: convo.id } });
     }
+
 
     let msgs: Msg[];
     if (retryLast) {
@@ -595,11 +629,22 @@ function ChatPage() {
           <SheetHeader className="p-4 border-b border-border">
             <SheetTitle className="flex items-center gap-2"><HistoryIcon className="size-4 text-primary" /> Chat history</SheetTitle>
           </SheetHeader>
-          <div className="p-3 border-b border-border">
-            <Button onClick={newChat} className="w-full hero-gradient text-primary-foreground rounded-xl">
+          <div className="p-3 border-b border-border flex gap-2">
+            <Button onClick={newChat} className="flex-1 hero-gradient text-primary-foreground rounded-xl">
               <Plus className="size-4 mr-1" /> New chat
             </Button>
+            {conversations.length > 0 && (
+              <Button
+                variant="outline"
+                onClick={() => setClearAllOpen(true)}
+                className="rounded-xl text-destructive hover:bg-destructive/10"
+                aria-label="Clear all history"
+              >
+                <Trash2 className="size-4" />
+              </Button>
+            )}
           </div>
+
           <div className="flex-1 overflow-y-auto p-3 space-y-4">
             {conversations.length === 0 && (
               <p className="text-center text-xs text-muted-foreground py-8">No conversations yet.</p>
@@ -657,6 +702,20 @@ function ChatPage() {
         </DialogContent>
       </Dialog>
 
+      {/* Clear all confirm */}
+      <Dialog open={clearAllOpen} onOpenChange={setClearAllOpen}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Clear all history?</DialogTitle>
+            <DialogDescription>Every saved conversation will be permanently removed from this device.</DialogDescription>
+          </DialogHeader>
+          <div className="flex gap-2 justify-end mt-2">
+            <Button variant="ghost" onClick={() => setClearAllOpen(false)}>Cancel</Button>
+            <Button variant="destructive" onClick={clearAll}>Clear all</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <style>{`
         @keyframes voice-bar {
           0%, 100% { height: 25%; }
@@ -664,5 +723,6 @@ function ChatPage() {
         }
       `}</style>
     </div>
+
   );
 }
