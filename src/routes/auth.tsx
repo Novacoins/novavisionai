@@ -8,6 +8,7 @@ import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { isAndroidWebView, openInSystemBrowser } from "@/lib/webview";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -32,12 +33,28 @@ function AuthPage() {
   const [showPw, setShowPw] = useState(false);
   const [showPw2, setShowPw2] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [inWebView, setInWebView] = useState(false);
+
+  useEffect(() => {
+    setInWebView(isAndroidWebView());
+  }, []);
 
   useEffect(() => {
     if (!loading && user) navigate({ to: "/" });
   }, [loading, user, navigate]);
 
   async function signInGoogle() {
+    // Google blocks OAuth inside embedded Android WebViews.
+    // Route the flow through the system browser / Chrome Custom Tabs instead.
+    if (isAndroidWebView()) {
+      const opened = openInSystemBrowser(window.location.origin + "/auth");
+      if (opened) {
+        toast.info("Opening secure browser to complete Google sign-in…");
+        return;
+      }
+      toast.error("Google sign-in isn't available in this app. Please use email & password.");
+      return;
+    }
     setBusy(true);
     try {
       const res = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
