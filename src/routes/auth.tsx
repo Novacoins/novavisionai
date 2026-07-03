@@ -261,14 +261,18 @@ function AuthPage() {
               </Button>
             </form>
 
-            <div className="relative my-4">
-              <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-border" /></div>
-              <div className="relative flex justify-center"><span className="bg-background/60 backdrop-blur px-2 text-[11px] text-muted-foreground">or</span></div>
-            </div>
+            {!inWebView && (
+              <>
+                <div className="relative my-4">
+                  <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-border" /></div>
+                  <div className="relative flex justify-center"><span className="bg-background/60 backdrop-blur px-2 text-[11px] text-muted-foreground">or</span></div>
+                </div>
 
-            <Button onClick={signInGoogle} disabled={busy} variant="outline" className="w-full h-11">
-              <GoogleIcon className="size-4 mr-2" /> Continue with Google
-            </Button>
+                <Button onClick={signInGoogle} disabled={busy} variant="outline" className="w-full h-11">
+                  <GoogleIcon className="size-4 mr-2" /> Continue with Google
+                </Button>
+              </>
+            )}
 
             <p className="text-xs text-muted-foreground text-center mt-5">
               {view === "signin" ? (
