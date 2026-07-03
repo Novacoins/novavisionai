@@ -13,9 +13,14 @@ import { isAndroidWebView, openInSystemBrowser } from "@/lib/webview";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Sign in — Nova Vision AI" },
-      { name: "description", content: "Sign in or create an account to use Nova Vision AI." },
+      { title: "Sign in — Nova Vision AI Smart Visual Assistant" },
+      { name: "description", content: "Sign in or create your Nova Vision AI account to start scanning food, plants, and everyday objects with AI." },
+      { property: "og:title", content: "Sign in — Nova Vision AI" },
+      { property: "og:description", content: "Sign in or create your Nova Vision AI account to start scanning food, plants, and everyday objects with AI." },
+      { property: "og:url", content: "https://novavisionai.lovable.app/auth" },
+      { property: "og:type", content: "website" },
     ],
+    links: [{ rel: "canonical", href: "https://novavisionai.lovable.app/auth" }],
   }),
   component: AuthPage,
 });
