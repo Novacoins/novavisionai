@@ -2,8 +2,14 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Shield, Database, Camera, Cpu, Image as ImageIcon, Lock, UserCheck, Trash2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { PageHeader, PageShell } from "@/components/PageShell";
+import { pageHead } from "@/lib/page-head";
 
 export const Route = createFileRoute("/_authenticated/privacy")({
+  head: () => pageHead({
+    path: "/privacy",
+    title: "Privacy Policy — Nova Vision AI",
+    description: "How Nova Vision AI collects, stores, and protects the images and data you share while scanning with the app.",
+  }),
   component: PrivacyPage,
 });
 

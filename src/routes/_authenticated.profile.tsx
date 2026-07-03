@@ -110,7 +110,7 @@ function ProfilePage() {
         <div className="relative w-24 h-24 mx-auto">
           <div className="w-24 h-24 rounded-full hero-gradient grid place-items-center overflow-hidden glow">
             {profile.avatar_url ? (
-              <img src={profile.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
+              <img src={profile.avatar_url} alt="User profile avatar" className="w-full h-full object-cover" />
             ) : (
               <UserIcon className="size-10 text-primary-foreground" />
             )}

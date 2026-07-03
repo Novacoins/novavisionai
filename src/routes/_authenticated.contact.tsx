@@ -12,8 +12,14 @@ import { toast } from "sonner";
 import {
   Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
 } from "@/components/ui/dialog";
+import { pageHead } from "@/lib/page-head";
 
 export const Route = createFileRoute("/_authenticated/contact")({
+  head: () => pageHead({
+    path: "/contact",
+    title: "Contact Support — Nova Vision AI",
+    description: "Get help with Nova Vision AI. Send a message to the support team about scans, accounts, billing, or feedback.",
+  }),
   component: ContactPage,
 });
 

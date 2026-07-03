@@ -2,8 +2,14 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Info, Sparkles, Target, Eye, Zap, Cpu, Code2, Globe, Rocket, MessageCircle, ScanLine } from "lucide-react";
 import { motion } from "framer-motion";
 import { PageHeader, PageShell } from "@/components/PageShell";
+import { pageHead } from "@/lib/page-head";
 
 export const Route = createFileRoute("/_authenticated/about")({
+  head: () => pageHead({
+    path: "/about",
+    title: "About Nova Vision AI — Our Mission & Technology",
+    description: "Learn how Nova Vision AI blends multimodal vision, real-time reasoning, and a clean interface to help you understand the world through your camera.",
+  }),
   component: AboutPage,
 });
 
