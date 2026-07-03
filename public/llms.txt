@@ -1,0 +1,17 @@
+# Nova Vision AI
+
+> Nova Vision AI is a smart visual assistant that identifies food, plants, and everyday objects from your camera and delivers instant nutrition, safety, and care insights.
+
+Nova Vision AI combines multimodal AI with an Apple-inspired interface. Sign in to scan images, chat with the AI, plan meals, and manage a private library of scans.
+
+## Pages
+
+- [Home](/): Product overview and entry point to Nova Vision AI.
+- [Sign in](/auth): Create an account or sign in with email or Google.
+
+## Optional
+
+- [FAQ](/faq): Answers to common questions about scanning, accounts, and privacy.
+- [Privacy Policy](/privacy): How Nova Vision AI handles user data.
+- [Terms](/terms): Terms of service for using Nova Vision AI.
+- [Contact](/contact): Reach the Nova Vision AI support team.
