@@ -75,7 +75,10 @@ function HomePage() {
 
         <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
           <p className="text-sm text-muted-foreground">{greeting},</p>
-          <h1 className="text-2xl font-bold tracking-tight">{greetingName} 👋</h1>
+          <h1 className="text-2xl font-bold tracking-tight">
+            {greetingName} <span aria-hidden>👋</span>
+            <span className="sr-only">— Nova Vision AI multimodal scanner & assistant</span>
+          </h1>
           <p className="text-sm text-muted-foreground mt-1">{t("home.ready")}</p>
         </motion.section>
 
