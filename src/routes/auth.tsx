@@ -8,6 +8,7 @@ import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { isAndroidWebView, openInSystemBrowser } from "@/lib/webview";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -32,12 +33,28 @@ function AuthPage() {
   const [showPw, setShowPw] = useState(false);
   const [showPw2, setShowPw2] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [inWebView, setInWebView] = useState(false);
+
+  useEffect(() => {
+    setInWebView(isAndroidWebView());
+  }, []);
 
   useEffect(() => {
     if (!loading && user) navigate({ to: "/" });
   }, [loading, user, navigate]);
 
   async function signInGoogle() {
+    // Google blocks OAuth inside embedded Android WebViews.
+    // Route the flow through the system browser / Chrome Custom Tabs instead.
+    if (isAndroidWebView()) {
+      const opened = openInSystemBrowser(window.location.origin + "/auth");
+      if (opened) {
+        toast.info("Opening secure browser to complete Google sign-in…");
+        return;
+      }
+      toast.error("Google sign-in isn't available in this app. Please use email & password.");
+      return;
+    }
     setBusy(true);
     try {
       const res = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
@@ -136,15 +153,17 @@ function AuthPage() {
             </div>
 
             <div className="space-y-3">
-              <Button
-                onClick={signInGoogle}
-                disabled={busy}
-                variant="outline"
-                className="w-full h-12 font-medium"
-              >
-                <GoogleIcon className="size-5 mr-2" />
-                Continue with Google
-              </Button>
+              {!inWebView && (
+                <Button
+                  onClick={signInGoogle}
+                  disabled={busy}
+                  variant="outline"
+                  className="w-full h-12 font-medium"
+                >
+                  <GoogleIcon className="size-5 mr-2" />
+                  Continue with Google
+                </Button>
+              )}
               <Button
                 onClick={() => setView("signin")}
                 className="w-full h-12 hero-gradient text-primary-foreground font-semibold"
@@ -242,14 +261,18 @@ function AuthPage() {
               </Button>
             </form>
 
-            <div className="relative my-4">
-              <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-border" /></div>
-              <div className="relative flex justify-center"><span className="bg-background/60 backdrop-blur px-2 text-[11px] text-muted-foreground">or</span></div>
-            </div>
+            {!inWebView && (
+              <>
+                <div className="relative my-4">
+                  <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-border" /></div>
+                  <div className="relative flex justify-center"><span className="bg-background/60 backdrop-blur px-2 text-[11px] text-muted-foreground">or</span></div>
+                </div>
 
-            <Button onClick={signInGoogle} disabled={busy} variant="outline" className="w-full h-11">
-              <GoogleIcon className="size-4 mr-2" /> Continue with Google
-            </Button>
+                <Button onClick={signInGoogle} disabled={busy} variant="outline" className="w-full h-11">
+                  <GoogleIcon className="size-4 mr-2" /> Continue with Google
+                </Button>
+              </>
+            )}
 
             <p className="text-xs text-muted-foreground text-center mt-5">
               {view === "signin" ? (
