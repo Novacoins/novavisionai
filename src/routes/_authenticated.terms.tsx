@@ -2,8 +2,14 @@ import { createFileRoute } from "@tanstack/react-router";
 import { FileText, Handshake, ShieldCheck, Ban, Copyright, AlertTriangle, UserX, RefreshCw, Mail } from "lucide-react";
 import { motion } from "framer-motion";
 import { PageHeader, PageShell } from "@/components/PageShell";
+import { pageHead } from "@/lib/page-head";
 
 export const Route = createFileRoute("/_authenticated/terms")({
+  head: () => pageHead({
+    path: "/terms",
+    title: "Terms of Service — Nova Vision AI",
+    description: "The terms that govern your use of Nova Vision AI, including acceptable use, AI disclaimers, and account responsibilities.",
+  }),
   component: TermsPage,
 });
 

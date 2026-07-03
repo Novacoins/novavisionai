@@ -11,8 +11,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
+import { pageHead } from "@/lib/page-head";
 
 export const Route = createFileRoute("/_authenticated/meal-planner")({
+  head: () => pageHead({
+    path: "/meal-planner",
+    title: "AI Meal Planner — Personalized Weekly Meals",
+    description: "Generate personalized meal plans with Nova Vision AI. Get recipes, nutrition, and ingredient lists tailored to your goals and dietary preferences.",
+  }),
   component: MealPlanner,
 });
 

@@ -3,8 +3,30 @@ import { HelpCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import { PageHeader, PageShell } from "@/components/PageShell";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { pageHead } from "@/lib/page-head";
 
 export const Route = createFileRoute("/_authenticated/faq")({
+  head: () => ({
+    ...pageHead({
+      path: "/faq",
+      title: "FAQ — Nova Vision AI Questions & Answers",
+      description: "Answers to common questions about Nova Vision AI — scanning, accounts, privacy, languages, and billing.",
+    }),
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: QA.map((item) => ({
+            "@type": "Question",
+            name: item.q,
+            acceptedAnswer: { "@type": "Answer", text: item.a },
+          })),
+        }),
+      },
+    ],
+  }),
   component: FaqPage,
 });
 

@@ -7,8 +7,29 @@ import { saveScan, uploadScanImage } from "@/lib/scans";
 import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
 import { Leaf } from "lucide-react";
+import { pageHead } from "@/lib/page-head";
 
 export const Route = createFileRoute("/_authenticated/plant-scanner")({
+  head: () => ({
+    ...pageHead({
+      path: "/plant-scanner",
+      title: "Plant Scanner — Identify Plants Instantly",
+      description: "Scan any plant with your camera to identify the species, check toxicity and edibility, and get care tips from Nova Vision AI.",
+    }),
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          name: "Nova Vision AI — Plant Scanner",
+          applicationCategory: "LifestyleApplication",
+          operatingSystem: "Web, Android, iOS",
+          url: "https://novavisionai.lovable.app/plant-scanner",
+        }),
+      },
+    ],
+  }),
   component: PlantScanner,
 });
 
