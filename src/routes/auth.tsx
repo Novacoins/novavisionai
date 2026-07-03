@@ -153,15 +153,17 @@ function AuthPage() {
             </div>
 
             <div className="space-y-3">
-              <Button
-                onClick={signInGoogle}
-                disabled={busy}
-                variant="outline"
-                className="w-full h-12 font-medium"
-              >
-                <GoogleIcon className="size-5 mr-2" />
-                Continue with Google
-              </Button>
+              {!inWebView && (
+                <Button
+                  onClick={signInGoogle}
+                  disabled={busy}
+                  variant="outline"
+                  className="w-full h-12 font-medium"
+                >
+                  <GoogleIcon className="size-5 mr-2" />
+                  Continue with Google
+                </Button>
+              )}
               <Button
                 onClick={() => setView("signin")}
                 className="w-full h-12 hero-gradient text-primary-foreground font-semibold"
