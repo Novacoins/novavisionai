@@ -98,7 +98,7 @@ export function ScanCapture({
     <div className="space-y-4">
       {preview ? (
         <div className="relative rounded-2xl overflow-hidden glass-card">
-          <img src={preview} alt="Preview" className="w-full max-h-80 object-contain bg-black" />
+          <img src={preview} alt="Camera scan preview" className="w-full max-h-80 object-contain bg-black" />
           {loading && (
             <div className="absolute inset-0 grid place-items-center bg-black/50 backdrop-blur-sm">
               <div className="text-center text-white">
