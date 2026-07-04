@@ -1,3 +1,4 @@
+import { awardPoints } from "@/lib/points";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { ScanCapture, type CapturedImage } from "@/components/ScanCapture";
@@ -47,6 +48,7 @@ function PlantScanner() {
       setResult(ai as AIResult);
       const uploaded = await uploadScanImage(user.id, img.dataUrl);
       await saveScan({ userId: user.id, result: ai as AIResult, scanType: "plant", image: uploaded });
+      awardPoints("scan").catch(() => {});
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Plant analysis failed");
     } finally {

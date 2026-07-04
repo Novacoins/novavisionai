@@ -1,3 +1,4 @@
+import { awardPoints } from "@/lib/points";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -289,6 +290,7 @@ function ChatPage() {
       msgs = [...convo.messages, { role: "user", content: text, imageUrl: img, ts: now }];
       setInput("");
       setAttached(null);
+      awardPoints("chat").catch(() => {});
     }
 
     const updatedConvo: Conversation = { ...convo, messages: msgs, updatedAt: now };

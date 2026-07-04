@@ -154,8 +154,38 @@ export type Database = {
         }
         Relationships: []
       }
+      points_ledger: {
+        Row: {
+          action: string
+          amount: number
+          created_at: string
+          dedupe_key: string | null
+          id: string
+          user_id: string
+        }
+        Insert: {
+          action: string
+          amount: number
+          created_at?: string
+          dedupe_key?: string | null
+          id?: string
+          user_id: string
+        }
+        Update: {
+          action?: string
+          amount?: number
+          created_at?: string
+          dedupe_key?: string | null
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
+          achievements: Json
+          ai_interests: string[]
+          ai_points: number
           avatar_url: string | null
           country: string | null
           created_at: string
@@ -169,6 +199,9 @@ export type Database = {
           username: string | null
         }
         Insert: {
+          achievements?: Json
+          ai_interests?: string[]
+          ai_points?: number
           avatar_url?: string | null
           country?: string | null
           created_at?: string
@@ -182,6 +215,9 @@ export type Database = {
           username?: string | null
         }
         Update: {
+          achievements?: Json
+          ai_interests?: string[]
+          ai_points?: number
           avatar_url?: string | null
           country?: string | null
           created_at?: string
@@ -279,7 +315,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      award_points: {
+        Args: { _action: string; _amount: number; _dedupe_key?: string }
+        Returns: number
+      }
     }
     Enums: {
       [_ in never]: never
