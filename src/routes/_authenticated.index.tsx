@@ -243,7 +243,12 @@ function HomePage() {
           ) : (
             <div className="grid grid-cols-3 gap-2">
               {recent.map((s) => (
-                <Link key={s.id} to="/history" className="glass-card overflow-hidden aspect-square relative group">
+                <Link
+                  key={s.id}
+                  to="/scan-result/$scanId"
+                  params={{ scanId: s.id }}
+                  className="glass-card overflow-hidden aspect-square relative group"
+                >
                   {s.thumbnail_url ? (
                     <img src={s.thumbnail_url} alt={s.title} className="absolute inset-0 w-full h-full object-cover" />
                   ) : (
