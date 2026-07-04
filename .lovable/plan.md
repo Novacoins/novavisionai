@@ -1,73 +1,123 @@
-This is a very large request — essentially a full consumer AI app (Nova Vision / VisionNova AI) with camera scanning, multimodal AI, meal planner, plant scanner, sidebar with ~15 sub-pages, auth, history, favorites, chat, community, i18n for 20+ languages, PDF export, OCR, barcode, voice, notifications, etc.
+## Nova Vision AI — Production Upgrade Plan
 
-Before I start building, I need to confirm scope and priorities so I deliver something that actually works rather than 30 half-finished screens.
+This is a very large scope (13 major areas, ~40+ features). I'll break it into shippable phases so each phase is testable and reversible. Please confirm the phase order — I recommend shipping Phase 1 first, then iterating.
 
-## A few important realities
+---
 
-1. **This is a web app, not a native mobile app.** The Lovable stack is TanStack Start (React + Vite, deployed to Cloudflare Workers). I can build a mobile-optimized PWA with camera access via `getUserMedia` and file upload, but it is not a native Android/iOS app. Native push notifications, true background tasks, and app-store distribution are out of scope.
-2. **AI vision** will use Lovable AI Gateway (default `google/gemini-3-flash-preview`, which is multimodal). Works great for image analysis.
-3. **Backend** will use Lovable Cloud (auth, database for history/favorites/chats/profile, storage for scan images).
-4. **Realistic first version.** Building every single feature listed (community feed, voice assistant, OCR, barcode, 20 languages with real translations, PDF export, weekly meal planner, notifications, etc.) in one shot will produce a shallow, broken app. I'd rather ship a solid v1 and layer extras.
+### Phase 1 — Foundations (ship first)
 
-## Proposed v1 scope (what I'll build now)
+**1.1 Remove "Edit with Lovable" badge**
+- Requires Pro plan. I'll call `set_badge_visibility(hide_badge: true)`. If your plan doesn't support it, I'll tell you and skip.
 
-**Core**
-- Auth (email/password) via Lovable Cloud
-- Mobile-first layout with bottom nav: Home, Scan, Meal Planner, Plant Scanner, Profile
-- Premium sliding sidebar (hamburger) with emerald/black glassmorphism theme
+**1.2 Auth improvements**
+- Add **Forgot Password** flow (`/forgot-password` + `/reset-password` routes, `resetPasswordForEmail` + `updateUser`).
+- Session persistence is already correct (Supabase localStorage + autoRefresh); I'll verify + document.
+- Google login in Android WebView: already routed through system browser (`src/lib/webview.ts`). I'll add a Capacitor-friendly deep-link callback for wrapped apps.
 
-**Scan (core feature)**
-- Camera capture + image upload
-- Multimodal AI analysis returning: identification, category, safety, recommendations, nutrition (for food), care (for plants)
-- Results saved to scan history with thumbnail in Cloud storage
-- "Ask about this image" follow-up chat
+**1.3 Accent colors expansion**
+- Extend `src/lib/accent-color.tsx` from current palette to: Green (default), Blue, Purple, Red, Orange, Pink, Cyan, Indigo, Emerald, Yellow, White, Black. Persist to profile + localStorage.
 
-**Home**
-- Scan Anything CTA, daily meal suggestion, nutrition tip, recent scans, quick shortcuts
+---
 
-**Meal Planner**
-- AI-generated daily plan based on user goals/diet preferences stored on profile
-- Generate from preferences or from recent scanned ingredients
+### Phase 2 — Profile & Points system
 
-**Plant Scanner**
-- Dedicated flow with plant-specific prompt (name, edible, toxicity, care, warnings)
+**2.1 Database migrations**
+- `profiles`: add `ai_points int default 100`, `ai_interests text[]`, `achievements jsonb`, `country text` (if missing).
+- Drop UI for `dietary_goal`, `diet_preference` (keep columns to avoid data loss; hide in UI only).
+- Trigger: on new user, set `ai_points = 100`.
 
-**Sidebar pages (real, functional)**
-- My Profile (edit display name, country, dietary goals, diet prefs; stats: total scans, favorites)
-- Scan History (search, filter, favorite, delete, share)
-- Favorites
-- AI Chat (text + optional image attach, conversation persistence)
-- Appearance (light/dark/system, persisted)
-- Notifications settings (preferences stored; in-app toast notifications, no native push)
-- FAQ (static)
-- Contact Support (form → stored in DB + emailed via configurable support address)
-- About, Privacy Policy, Terms of Service (static content pages)
-- Logout (with confirmation)
+**2.2 Points awarding (server-side RPC)**
+- `award_points(user_id, action, amount)` SECURITY DEFINER.
+- Hook into: scan complete (+10), chat message sent (+5), image generated (+20), lesson completed (+30), daily login (+5, once per day via `last_login_at`).
 
-**Design system**
-- Emerald #0B8F4D primary, deep black #111, charcoal #1C1C1C, white
-- Glassmorphism cards, rounded corners, soft shadows, smooth Framer-Motion transitions
-- Dark mode default, light mode supported
-- Lucide icons
+**2.3 Profile page redesign**
+- Replace 🔥 Streak card with ⭐ AI Points card.
+- Show Favorites count (already queryable from `scans` where `is_favorite`).
+- AI Interests multi-select chips (saves to `profiles.ai_interests`).
+- Achievements grid (computed from thresholds: Beginner = 1 scan, AI Learner = 1 lesson, Daily Scanner = 7-day streak, Image Creator = 5 images, Power User = 500 points, AI Expert = 2000 points).
 
-## Deferred to later iterations (call out, don't silently build)
+---
 
-- Languages: I'll wire an Appearance/Language selector UI and persist the choice, but **only English content is shipped in v1**. Full translations for 20 locales are a multi-day effort that needs translation source files; I'll set up i18next so adding locales later is incremental.
-- Community feed (posts/likes/comments) — needs moderation, real social infra
-- Voice input / voice AI assistant
-- OCR / barcode / QR / image translation
-- PDF export of scans/reports
-- Weekly meal planner + shopping list + meal reminder notifications
-- Collections (folders for favorites)
-- Onboarding tutorial
+### Phase 3 — Recent Scan detail
 
-I can add these in follow-up turns once v1 is solid.
+- Recent scan cards on Home already exist. Add click handler → route to `/scan-result/$scanId`.
+- New route reads scan row, renders image + AI description + objects + summary + date + Save/Share/Favorite buttons (reuse `ScanResult` component).
 
-## Open questions
+---
 
-1. **Confirm v1 scope above is OK?** Or do you want me to push specific deferred items (e.g. OCR, voice, PDF export) into v1?
-2. **Auth:** email + password only, or also Google sign-in? (Google needs you to set up an OAuth client.)
-3. **Support email** for the Contact form — what address should messages go to? (I can store them in the DB regardless; sending email needs a Resend API key or similar.)
-4. **Existing app:** you mention "keep my current homepage / scan flow working." The project currently only has the Lovable blank template — there's no existing VisionNova code. I'll build from scratch. Confirm that's expected.
+### Phase 4 — AI Suite (remove "Coming Soon")
 
-Reply with answers (or just "go with v1 as proposed") and I'll start.
+This is the biggest phase. Each sub-feature is a real AI call via Lovable AI Gateway.
+
+**4.1 AI Learning Academy** — `academy` route already exists. Add:
+- Curriculum data (9 tracks × ~5 lessons each) stored in `academy_lessons` table.
+- Lesson viewer with AI-generated explanations (`google/gemini-3-flash-preview`).
+- Practice quiz (AI-generated 3 questions per lesson).
+- `academy_progress` table tracks completion → awards +30 points + "AI Learner" badge.
+
+**4.2 AI Image Studio** — `image-studio` route exists. Build 9 tools:
+- Generator, Wallpaper, Logo → `openai/gpt-image-2` via `/api/generate-image` streaming route.
+- Enhancer, Upscaler, Face Restore, Art Styles, BG Changer → `google/gemini-3.1-flash-image` (edit mode).
+- BG Remover → same, prompted for transparent output.
+- Nova Vision AI watermark added to canvas before download (bottom-right corner).
+- Save-to-Gallery: `generated_images` table.
+
+**4.3 AI Workspace** — `workspace` route exists. Tables:
+- `workspace_projects` (id, user_id, name, kind, created_at)
+- `workspace_items` (id, project_id, type, content jsonb) for saved chats, images, docs.
+- UI: project list → project detail with tabs (Chats / Images / Docs / Notes).
+
+**4.4 AI Tools Hub** — `tools` route exists. 12 tools, each a small form + server-fn call:
+- Writer, Translator, Summarizer, Grammar, Email, Blog, Resume → text completions.
+- OCR, PDF Reader/Summarizer → multimodal (image/PDF upload → Gemini).
+- Code Generator, SQL Generator → text completions with code-format system prompt.
+
+**4.5 AI Memory** — `ai-memory` route exists. Table `ai_memory` (user_id, key, value, updated_at).
+- Chat pulls memory as system context.
+- User can view + clear memory entries.
+
+**4.6 Daily AI Feed** — `daily-feed` route exists. Server fn generates 5 cards/day (news-style tips, prompts, productivity ideas). Cached per-day per-user in `daily_feed_cache`.
+
+**4.7 AI Chat** — already solid. Verify long conversations, image understanding (already supported via `imageUrl` in `chatMessage`).
+
+---
+
+### Phase 5 — Polish
+
+- Performance: React Query stale-time tuning, lazy-load studio/academy routes.
+- Error handling: consistent toast + retry across all AI calls.
+- Console-error sweep via Playwright.
+- Mobile responsive audit on 375×812 viewport.
+
+---
+
+### Technical section (for reviewer)
+
+**New DB tables:** `academy_lessons`, `academy_progress`, `workspace_projects`, `workspace_items`, `ai_memory`, `daily_feed_cache`, `generated_images`. All with RLS scoped to `auth.uid()` + GRANT block for `authenticated` + `service_role`.
+
+**New server fns (`src/lib/*.functions.ts`):**
+- `awardPoints`, `getProfileStats`
+- `academyGenerateLesson`, `academyGenerateQuiz`, `academyCompleteLesson`
+- `toolWrite`, `toolTranslate`, `toolSummarize`, `toolGrammar`, `toolOcr`, `toolPdfSummarize`, `toolCodeGen`, `toolSqlGen`, `toolEmail`, `toolResume`, `toolBlog`
+- `workspaceCreateProject`, `workspaceAddItem`, `workspaceListProjects`
+- `aiMemoryUpsert`, `aiMemoryClear`, `aiMemoryList`
+- `dailyFeedFetch`
+
+**New server routes (`src/routes/api/`):** `/api/generate-image` (streaming), `/api/edit-image` (streaming).
+
+**Watermark:** Canvas overlay applied client-side before download, text "Nova Vision AI" + logo mark, bottom-right, 10% opacity backdrop.
+
+**Estimated size:** ~40 new files, ~15 edited files, 7 migrations.
+
+---
+
+### Recommendation
+
+Ship in this order, one phase per turn:
+1. **Phase 1** (badge + auth + accents) — small, high user impact
+2. **Phase 2** (points + profile) — foundation for gamification
+3. **Phase 3** (scan detail) — quick win
+4. **Phase 4** in sub-phases: 4.2 Image Studio → 4.4 Tools → 4.1 Academy → 4.3 Workspace → 4.5 Memory → 4.6 Feed
+5. **Phase 5** polish
+
+**Approve this plan and I'll start with Phase 1.** Or tell me which phase to prioritize first if you want a different order.
