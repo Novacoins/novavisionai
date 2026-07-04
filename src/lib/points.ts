@@ -31,7 +31,7 @@ export async function awardPoints(
     const { data, error } = await supabase.rpc("award_points", {
       _action: action,
       _amount: amount ?? POINTS[action],
-      _dedupe_key: dedupeKey ?? null,
+      _dedupe_key: dedupeKey ?? undefined,
     });
     if (error) {
       console.warn("awardPoints failed", action, error.message);

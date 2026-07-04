@@ -39,6 +39,7 @@ import { Route as AuthenticatedAiMemoryRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedAccentColorRouteImport } from './routes/_authenticated.accent-color'
 import { Route as AuthenticatedAcademyRouteImport } from './routes/_authenticated.academy'
 import { Route as AuthenticatedAboutRouteImport } from './routes/_authenticated.about'
+import { Route as AuthenticatedScanResultScanIdRouteImport } from './routes/_authenticated.scan-result.$scanId'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -194,6 +195,12 @@ const AuthenticatedAboutRoute = AuthenticatedAboutRouteImport.update({
   path: '/about',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedScanResultScanIdRoute =
+  AuthenticatedScanResultScanIdRouteImport.update({
+    id: '/scan-result/$scanId',
+    path: '/scan-result/$scanId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
@@ -225,6 +232,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof AuthenticatedTermsRoute
   '/tools': typeof AuthenticatedToolsRoute
   '/workspace': typeof AuthenticatedWorkspaceRoute
+  '/scan-result/$scanId': typeof AuthenticatedScanResultScanIdRoute
 }
 export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
@@ -256,6 +264,7 @@ export interface FileRoutesByTo {
   '/tools': typeof AuthenticatedToolsRoute
   '/workspace': typeof AuthenticatedWorkspaceRoute
   '/': typeof AuthenticatedIndexRoute
+  '/scan-result/$scanId': typeof AuthenticatedScanResultScanIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -289,6 +298,7 @@ export interface FileRoutesById {
   '/_authenticated/tools': typeof AuthenticatedToolsRoute
   '/_authenticated/workspace': typeof AuthenticatedWorkspaceRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/scan-result/$scanId': typeof AuthenticatedScanResultScanIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -322,6 +332,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/tools'
     | '/workspace'
+    | '/scan-result/$scanId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/auth'
@@ -353,6 +364,7 @@ export interface FileRouteTypes {
     | '/tools'
     | '/workspace'
     | '/'
+    | '/scan-result/$scanId'
   id:
     | '__root__'
     | '/_authenticated'
@@ -385,6 +397,7 @@ export interface FileRouteTypes {
     | '/_authenticated/tools'
     | '/_authenticated/workspace'
     | '/_authenticated/'
+    | '/_authenticated/scan-result/$scanId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -607,6 +620,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAboutRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/scan-result/$scanId': {
+      id: '/_authenticated/scan-result/$scanId'
+      path: '/scan-result/$scanId'
+      fullPath: '/scan-result/$scanId'
+      preLoaderRoute: typeof AuthenticatedScanResultScanIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
@@ -636,6 +656,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedToolsRoute: typeof AuthenticatedToolsRoute
   AuthenticatedWorkspaceRoute: typeof AuthenticatedWorkspaceRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedScanResultScanIdRoute: typeof AuthenticatedScanResultScanIdRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -664,6 +685,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedToolsRoute: AuthenticatedToolsRoute,
   AuthenticatedWorkspaceRoute: AuthenticatedWorkspaceRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedScanResultScanIdRoute: AuthenticatedScanResultScanIdRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
