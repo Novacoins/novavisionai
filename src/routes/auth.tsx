@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Mail, Lock, Loader2, Eye, EyeOff, User, ArrowLeft, ScanLine } from "lucide-react";
@@ -261,6 +261,13 @@ function AuthPage() {
                 />
               )}
 
+              {view === "signin" && (
+                <div className="flex justify-end">
+                  <Link to="/forgot-password" className="text-xs text-primary hover:underline">
+                    Forgot password?
+                  </Link>
+                </div>
+              )}
               <Button type="submit" className="w-full hero-gradient text-primary-foreground font-semibold h-11" disabled={busy}>
                 {busy ? <Loader2 className="size-4 animate-spin" /> : view === "signin" ? "Sign in" : "Create account"}
               </Button>
