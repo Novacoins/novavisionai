@@ -289,6 +289,7 @@ function ChatPage() {
       msgs = [...convo.messages, { role: "user", content: text, imageUrl: img, ts: now }];
       setInput("");
       setAttached(null);
+      awardPoints("chat").catch(() => {});
     }
 
     const updatedConvo: Conversation = { ...convo, messages: msgs, updatedAt: now };

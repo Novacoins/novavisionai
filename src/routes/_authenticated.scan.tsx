@@ -38,7 +38,10 @@ function ScanPage() {
       setResult(ai as AIResult);
       const uploaded = await uploadScanImage(user.id, img.dataUrl);
       const row = await saveScan({ userId: user.id, result: ai as AIResult, scanType, image: uploaded });
-      if (row?.id) setScanId(row.id);
+      if (row?.id) {
+        setScanId(row.id);
+        awardPoints("scan").catch(() => {});
+      }
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Analysis failed. Please try again.");
     } finally {

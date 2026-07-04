@@ -47,6 +47,7 @@ function PlantScanner() {
       setResult(ai as AIResult);
       const uploaded = await uploadScanImage(user.id, img.dataUrl);
       await saveScan({ userId: user.id, result: ai as AIResult, scanType: "plant", image: uploaded });
+      awardPoints("scan").catch(() => {});
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Plant analysis failed");
     } finally {
