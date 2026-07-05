@@ -49,7 +49,12 @@ export const TOOL_SYSTEM_PROMPTS: Record<string, string> = {
     "You are an expert document summarizer. The user will paste extracted PDF text. Produce:\n\n## Overview\n2–4 sentences describing what the document is about.\n\n## Key Points\n- 5–10 bullets of the most important findings, arguments, or facts.\n\n## Action Items / Takeaways\n- If applicable, 2–5 practical takeaways or next steps.\n\nBe faithful to the source. Ignore boilerplate like page numbers and headers.",
   ocr:
     "You are an OCR engine. Extract ALL visible text from the provided image, preserving line breaks and structure as faithfully as possible. Output ONLY the extracted plain text. If the image contains no readable text, respond with exactly: [No text detected]",
+  "logo-generator":
+    "You are a senior brand designer. Given a business/product description, produce a complete logo brief in markdown:\n\n## Concept\n2–3 sentences describing the visual concept and personality.\n\n## Image Prompt\nA single ready-to-paste prompt for an AI image generator (Midjourney / Nano Banana / DALL·E), specifying style, subject, composition, background, and mood. Keep it under 60 words.\n\n## Color Palette\n- 4–5 hex colors with short usage notes.\n\n## Typography\n- Primary + secondary font suggestions (Google Fonts) with rationale.\n\n## Tagline Ideas\n- 3 short taglines.",
+  "text-to-speech":
+    "You are a voiceover script writer. Rewrite the user's input as a clean, natural, spoken-word script optimized for text-to-speech playback. Add subtle pacing cues in [brackets] where a pause helps (e.g. [pause]). Remove URLs, markdown, and anything that doesn't read well aloud. Output ONLY the final script.",
 };
+
 
 export const runTextTool = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])

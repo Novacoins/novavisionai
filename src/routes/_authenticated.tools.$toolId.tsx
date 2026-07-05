@@ -4,8 +4,9 @@ import { useServerFn } from "@tanstack/react-start";
 import ReactMarkdown from "react-markdown";
 import {
   Languages, SpellCheck, FileUser, PenLine, Mail, Code2, Database, FileText,
-  FileSearch, ScanText, Loader2, Copy, Check, Upload, Wrench, type LucideIcon,
+  FileSearch, ScanText, Loader2, Copy, Check, Upload, Wrench, Palette, Volume2, Play, Pause, type LucideIcon,
 } from "lucide-react";
+
 import { PageShell, PageHeader } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -96,7 +97,22 @@ const TOOLS: Record<string, ToolDef> = {
     icon: ScanText, color: "from-cyan-400 to-teal-500",
     mode: "ocr", placeholder: "", cta: "Extract Text",
   },
+  "logo-generator": {
+    label: "Logo Generator", desc: "Brand brief + image prompt",
+    icon: Palette, color: "from-pink-400 to-rose-500",
+    mode: "text",
+    placeholder: "Describe your business/product: name, industry, audience, vibe (e.g. 'Nova Roast — specialty coffee brand, minimalist, warm').",
+    cta: "Generate Logo Brief", minChars: 10,
+  },
+  "text-to-speech": {
+    label: "Text-to-Speech", desc: "Speak any text aloud",
+    icon: Volume2, color: "from-violet-400 to-fuchsia-500",
+    mode: "text",
+    placeholder: "Paste the text you want converted to a spoken script. Then tap Play on the result.",
+    cta: "Prepare Script", minChars: 5,
+  },
 };
+
 
 async function extractPdfText(file: File): Promise<string> {
   const pdfjs = await import("pdfjs-dist");
@@ -137,7 +153,9 @@ function ToolPage() {
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<string>("");
   const [copied, setCopied] = useState(false);
+  const [speaking, setSpeaking] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+
 
   const canSubmit = useMemo(() => {
     if (!tool) return false;
@@ -292,19 +310,40 @@ function ToolPage() {
           <div className="glass-card p-4 space-y-3">
             <div className="flex items-center justify-between">
               <div className="text-sm font-semibold">Result</div>
-              <button
-                onClick={onCopy}
-                className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full bg-secondary hover:bg-secondary/80 transition"
-              >
-                {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
-                {copied ? "Copied" : "Copy"}
-              </button>
+              <div className="flex items-center gap-2">
+                {toolId === "text-to-speech" && (
+                  <button
+                    onClick={() => {
+                      const synth = window.speechSynthesis;
+                      if (!synth) return toast.error("Speech not supported on this device");
+                      if (synth.speaking) { synth.cancel(); setSpeaking(false); return; }
+                      const u = new SpeechSynthesisUtterance(result.replace(/\[[^\]]+\]/g, ""));
+                      u.onend = () => setSpeaking(false);
+                      u.onerror = () => setSpeaking(false);
+                      synth.speak(u);
+                      setSpeaking(true);
+                    }}
+                    className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full bg-primary text-primary-foreground hover:opacity-90 transition"
+                  >
+                    {speaking ? <Pause className="size-3.5" /> : <Play className="size-3.5" />}
+                    {speaking ? "Stop" : "Play"}
+                  </button>
+                )}
+                <button
+                  onClick={onCopy}
+                  className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full bg-secondary hover:bg-secondary/80 transition"
+                >
+                  {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
+                  {copied ? "Copied" : "Copy"}
+                </button>
+              </div>
             </div>
             <div className="prose prose-sm dark:prose-invert max-w-none prose-pre:bg-muted prose-pre:text-foreground prose-pre:rounded-lg prose-headings:mt-3 prose-headings:mb-2">
               <ReactMarkdown>{result}</ReactMarkdown>
             </div>
           </div>
         )}
+
       </div>
     </PageShell>
   );
