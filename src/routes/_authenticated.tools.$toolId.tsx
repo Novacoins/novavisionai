@@ -100,9 +100,8 @@ const TOOLS: Record<string, ToolDef> = {
 
 async function extractPdfText(file: File): Promise<string> {
   const pdfjs = await import("pdfjs-dist");
-  // @ts-expect-error - worker entry has no types
-  const workerSrc = (await import("pdfjs-dist/build/pdf.worker.min.mjs?url")).default;
-  pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
+  const workerMod = (await import("pdfjs-dist/build/pdf.worker.min.mjs?url")) as { default: string };
+  pdfjs.GlobalWorkerOptions.workerSrc = workerMod.default;
   const buf = await file.arrayBuffer();
   const pdf = await pdfjs.getDocument({ data: buf }).promise;
   const maxPages = Math.min(pdf.numPages, 40);
