@@ -41,6 +41,7 @@ import { Route as AuthenticatedAcademyRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedAboutRouteImport } from './routes/_authenticated.about'
 import { Route as AuthenticatedToolsToolIdRouteImport } from './routes/_authenticated.tools.$toolId'
 import { Route as AuthenticatedScanResultScanIdRouteImport } from './routes/_authenticated.scan-result.$scanId'
+import { Route as AuthenticatedAcademyCourseIdRouteImport } from './routes/_authenticated.academy.$courseId'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -208,6 +209,12 @@ const AuthenticatedScanResultScanIdRoute =
     path: '/scan-result/$scanId',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAcademyCourseIdRoute =
+  AuthenticatedAcademyCourseIdRouteImport.update({
+    id: '/$courseId',
+    path: '/$courseId',
+    getParentRoute: () => AuthenticatedAcademyRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
@@ -216,7 +223,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/about': typeof AuthenticatedAboutRoute
-  '/academy': typeof AuthenticatedAcademyRoute
+  '/academy': typeof AuthenticatedAcademyRouteWithChildren
   '/accent-color': typeof AuthenticatedAccentColorRoute
   '/ai-memory': typeof AuthenticatedAiMemoryRoute
   '/appearance': typeof AuthenticatedAppearanceRoute
@@ -239,6 +246,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof AuthenticatedTermsRoute
   '/tools': typeof AuthenticatedToolsRouteWithChildren
   '/workspace': typeof AuthenticatedWorkspaceRoute
+  '/academy/$courseId': typeof AuthenticatedAcademyCourseIdRoute
   '/scan-result/$scanId': typeof AuthenticatedScanResultScanIdRoute
   '/tools/$toolId': typeof AuthenticatedToolsToolIdRoute
 }
@@ -248,7 +256,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/about': typeof AuthenticatedAboutRoute
-  '/academy': typeof AuthenticatedAcademyRoute
+  '/academy': typeof AuthenticatedAcademyRouteWithChildren
   '/accent-color': typeof AuthenticatedAccentColorRoute
   '/ai-memory': typeof AuthenticatedAiMemoryRoute
   '/appearance': typeof AuthenticatedAppearanceRoute
@@ -272,6 +280,7 @@ export interface FileRoutesByTo {
   '/tools': typeof AuthenticatedToolsRouteWithChildren
   '/workspace': typeof AuthenticatedWorkspaceRoute
   '/': typeof AuthenticatedIndexRoute
+  '/academy/$courseId': typeof AuthenticatedAcademyCourseIdRoute
   '/scan-result/$scanId': typeof AuthenticatedScanResultScanIdRoute
   '/tools/$toolId': typeof AuthenticatedToolsToolIdRoute
 }
@@ -283,7 +292,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/about': typeof AuthenticatedAboutRoute
-  '/_authenticated/academy': typeof AuthenticatedAcademyRoute
+  '/_authenticated/academy': typeof AuthenticatedAcademyRouteWithChildren
   '/_authenticated/accent-color': typeof AuthenticatedAccentColorRoute
   '/_authenticated/ai-memory': typeof AuthenticatedAiMemoryRoute
   '/_authenticated/appearance': typeof AuthenticatedAppearanceRoute
@@ -307,6 +316,7 @@ export interface FileRoutesById {
   '/_authenticated/tools': typeof AuthenticatedToolsRouteWithChildren
   '/_authenticated/workspace': typeof AuthenticatedWorkspaceRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/academy/$courseId': typeof AuthenticatedAcademyCourseIdRoute
   '/_authenticated/scan-result/$scanId': typeof AuthenticatedScanResultScanIdRoute
   '/_authenticated/tools/$toolId': typeof AuthenticatedToolsToolIdRoute
 }
@@ -342,6 +352,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/tools'
     | '/workspace'
+    | '/academy/$courseId'
     | '/scan-result/$scanId'
     | '/tools/$toolId'
   fileRoutesByTo: FileRoutesByTo
@@ -375,6 +386,7 @@ export interface FileRouteTypes {
     | '/tools'
     | '/workspace'
     | '/'
+    | '/academy/$courseId'
     | '/scan-result/$scanId'
     | '/tools/$toolId'
   id:
@@ -409,6 +421,7 @@ export interface FileRouteTypes {
     | '/_authenticated/tools'
     | '/_authenticated/workspace'
     | '/_authenticated/'
+    | '/_authenticated/academy/$courseId'
     | '/_authenticated/scan-result/$scanId'
     | '/_authenticated/tools/$toolId'
   fileRoutesById: FileRoutesById
@@ -647,8 +660,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedScanResultScanIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/academy/$courseId': {
+      id: '/_authenticated/academy/$courseId'
+      path: '/$courseId'
+      fullPath: '/academy/$courseId'
+      preLoaderRoute: typeof AuthenticatedAcademyCourseIdRouteImport
+      parentRoute: typeof AuthenticatedAcademyRoute
+    }
   }
 }
+
+interface AuthenticatedAcademyRouteChildren {
+  AuthenticatedAcademyCourseIdRoute: typeof AuthenticatedAcademyCourseIdRoute
+}
+
+const AuthenticatedAcademyRouteChildren: AuthenticatedAcademyRouteChildren = {
+  AuthenticatedAcademyCourseIdRoute: AuthenticatedAcademyCourseIdRoute,
+}
+
+const AuthenticatedAcademyRouteWithChildren =
+  AuthenticatedAcademyRoute._addFileChildren(AuthenticatedAcademyRouteChildren)
 
 interface AuthenticatedToolsRouteChildren {
   AuthenticatedToolsToolIdRoute: typeof AuthenticatedToolsToolIdRoute
@@ -663,7 +694,7 @@ const AuthenticatedToolsRouteWithChildren =
 
 interface AuthenticatedRouteChildren {
   AuthenticatedAboutRoute: typeof AuthenticatedAboutRoute
-  AuthenticatedAcademyRoute: typeof AuthenticatedAcademyRoute
+  AuthenticatedAcademyRoute: typeof AuthenticatedAcademyRouteWithChildren
   AuthenticatedAccentColorRoute: typeof AuthenticatedAccentColorRoute
   AuthenticatedAiMemoryRoute: typeof AuthenticatedAiMemoryRoute
   AuthenticatedAppearanceRoute: typeof AuthenticatedAppearanceRoute
@@ -692,7 +723,7 @@ interface AuthenticatedRouteChildren {
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAboutRoute: AuthenticatedAboutRoute,
-  AuthenticatedAcademyRoute: AuthenticatedAcademyRoute,
+  AuthenticatedAcademyRoute: AuthenticatedAcademyRouteWithChildren,
   AuthenticatedAccentColorRoute: AuthenticatedAccentColorRoute,
   AuthenticatedAiMemoryRoute: AuthenticatedAiMemoryRoute,
   AuthenticatedAppearanceRoute: AuthenticatedAppearanceRoute,
