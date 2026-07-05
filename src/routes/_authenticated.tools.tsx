@@ -26,8 +26,9 @@ function Page() {
         { to: "/tools/pdf-summarizer", label: "PDF Summarizer", desc: "Summarize any PDF", icon: FileSearch, color: "from-slate-400 to-slate-600" },
         { to: "/tools/code-generator", label: "Code Generator", desc: "Any language", icon: Code2, color: "from-lime-400 to-green-500" },
         { to: "/tools/sql-generator", label: "SQL Generator", desc: "English → SQL", icon: Database, color: "from-amber-400 to-orange-500" },
-        { label: "Logo Generator", icon: Palette, color: "from-pink-400 to-rose-500", soon: true },
-        { label: "Text-to-Speech", icon: Volume2, color: "from-violet-400 to-fuchsia-500", soon: true },
+        { to: "/tools/logo-generator", label: "Logo Generator", desc: "Brand + prompt", icon: Palette, color: "from-pink-400 to-rose-500" },
+        { to: "/tools/text-to-speech", label: "Text-to-Speech", desc: "Speak any text", icon: Volume2, color: "from-violet-400 to-fuchsia-500" },
+
         { to: "/chat", label: "Speech-to-Text", desc: "Voice in chat", icon: Mic, color: "from-teal-400 to-cyan-500" },
         { to: "/scan", label: "Food Scanner", icon: Utensils, color: "from-amber-400 to-yellow-500" },
         { to: "/plant-scanner", label: "Plant Identifier", icon: Leaf, color: "from-emerald-400 to-green-500" },
