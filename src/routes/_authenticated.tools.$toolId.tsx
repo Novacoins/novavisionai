@@ -4,8 +4,9 @@ import { useServerFn } from "@tanstack/react-start";
 import ReactMarkdown from "react-markdown";
 import {
   Languages, SpellCheck, FileUser, PenLine, Mail, Code2, Database, FileText,
-  FileSearch, ScanText, Loader2, Copy, Check, Upload, Wrench, type LucideIcon,
+  FileSearch, ScanText, Loader2, Copy, Check, Upload, Wrench, Palette, Volume2, Play, Pause, type LucideIcon,
 } from "lucide-react";
+
 import { PageShell, PageHeader } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
