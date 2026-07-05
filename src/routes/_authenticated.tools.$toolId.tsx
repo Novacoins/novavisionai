@@ -97,7 +97,22 @@ const TOOLS: Record<string, ToolDef> = {
     icon: ScanText, color: "from-cyan-400 to-teal-500",
     mode: "ocr", placeholder: "", cta: "Extract Text",
   },
+  "logo-generator": {
+    label: "Logo Generator", desc: "Brand brief + image prompt",
+    icon: Palette, color: "from-pink-400 to-rose-500",
+    mode: "text",
+    placeholder: "Describe your business/product: name, industry, audience, vibe (e.g. 'Nova Roast — specialty coffee brand, minimalist, warm').",
+    cta: "Generate Logo Brief", minChars: 10,
+  },
+  "text-to-speech": {
+    label: "Text-to-Speech", desc: "Speak any text aloud",
+    icon: Volume2, color: "from-violet-400 to-fuchsia-500",
+    mode: "text",
+    placeholder: "Paste the text you want converted to a spoken script. Then tap Play on the result.",
+    cta: "Prepare Script", minChars: 5,
+  },
 };
+
 
 async function extractPdfText(file: File): Promise<string> {
   const pdfjs = await import("pdfjs-dist");
