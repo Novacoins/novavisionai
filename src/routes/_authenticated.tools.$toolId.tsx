@@ -153,7 +153,9 @@ function ToolPage() {
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<string>("");
   const [copied, setCopied] = useState(false);
+  const [speaking, setSpeaking] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+
 
   const canSubmit = useMemo(() => {
     if (!tool) return false;
