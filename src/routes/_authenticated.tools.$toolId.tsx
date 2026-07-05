@@ -21,6 +21,7 @@ export const Route = createFileRoute("/_authenticated/tools/$toolId")({
   head: ({ params }) => {
     const t = TOOLS[params.toolId];
     return pageHead({
+      path: `/tools/${params.toolId}`,
       title: t ? `${t.label} — Nova Vision AI` : "AI Tool — Nova Vision AI",
       description: t?.desc ?? "Powerful AI tool.",
     });
