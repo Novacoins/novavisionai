@@ -308,19 +308,40 @@ function ToolPage() {
           <div className="glass-card p-4 space-y-3">
             <div className="flex items-center justify-between">
               <div className="text-sm font-semibold">Result</div>
-              <button
-                onClick={onCopy}
-                className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full bg-secondary hover:bg-secondary/80 transition"
-              >
-                {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
-                {copied ? "Copied" : "Copy"}
-              </button>
+              <div className="flex items-center gap-2">
+                {toolId === "text-to-speech" && (
+                  <button
+                    onClick={() => {
+                      const synth = window.speechSynthesis;
+                      if (!synth) return toast.error("Speech not supported on this device");
+                      if (synth.speaking) { synth.cancel(); setSpeaking(false); return; }
+                      const u = new SpeechSynthesisUtterance(result.replace(/\[[^\]]+\]/g, ""));
+                      u.onend = () => setSpeaking(false);
+                      u.onerror = () => setSpeaking(false);
+                      synth.speak(u);
+                      setSpeaking(true);
+                    }}
+                    className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full bg-primary text-primary-foreground hover:opacity-90 transition"
+                  >
+                    {speaking ? <Pause className="size-3.5" /> : <Play className="size-3.5" />}
+                    {speaking ? "Stop" : "Play"}
+                  </button>
+                )}
+                <button
+                  onClick={onCopy}
+                  className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full bg-secondary hover:bg-secondary/80 transition"
+                >
+                  {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
+                  {copied ? "Copied" : "Copy"}
+                </button>
+              </div>
             </div>
             <div className="prose prose-sm dark:prose-invert max-w-none prose-pre:bg-muted prose-pre:text-foreground prose-pre:rounded-lg prose-headings:mt-3 prose-headings:mb-2">
               <ReactMarkdown>{result}</ReactMarkdown>
             </div>
           </div>
         )}
+
       </div>
     </PageShell>
   );
