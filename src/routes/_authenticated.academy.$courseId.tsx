@@ -92,7 +92,7 @@ function CoursePage() {
     if (passed) {
       const next = markComplete(courseId, openLesson, user?.id);
       setProgress(next);
-      awardPoints("lesson").catch(() => {});
+      awardPoints("lesson_completed").catch(() => {});
       toast.success(`Lesson complete! +30 XP · ⭐ +30 AI Points`);
     } else {
       toast.error(`Score ${correct}/${quiz.questions.length} — try again to complete this lesson.`);
@@ -181,7 +181,7 @@ function CoursePage() {
                 onClick={() => {
                   const next = markComplete(courseId, openLesson, user?.id);
                   setProgress(next);
-                  awardPoints("lesson").catch(() => {});
+                  awardPoints("lesson_completed").catch(() => {});
                   toast.success("Lesson complete! +30 XP");
                   setOpenLesson(null);
                 }}
