@@ -1,123 +1,104 @@
-## Nova Vision AI — Production Upgrade Plan
 
-This is a very large scope (13 major areas, ~40+ features). I'll break it into shippable phases so each phase is testable and reversible. Please confirm the phase order — I recommend shipping Phase 1 first, then iterating.
+# Nova Vision AI — Full Functionality Plan
 
----
-
-### Phase 1 — Foundations (ship first)
-
-**1.1 Remove "Edit with Lovable" badge**
-- Requires Pro plan. I'll call `set_badge_visibility(hide_badge: true)`. If your plan doesn't support it, I'll tell you and skip.
-
-**1.2 Auth improvements**
-- Add **Forgot Password** flow (`/forgot-password` + `/reset-password` routes, `resetPasswordForEmail` + `updateUser`).
-- Session persistence is already correct (Supabase localStorage + autoRefresh); I'll verify + document.
-- Google login in Android WebView: already routed through system browser (`src/lib/webview.ts`). I'll add a Capacitor-friendly deep-link callback for wrapped apps.
-
-**1.3 Accent colors expansion**
-- Extend `src/lib/accent-color.tsx` from current palette to: Green (default), Blue, Purple, Red, Orange, Pink, Cyan, Indigo, Emerald, Yellow, White, Black. Persist to profile + localStorage.
+Ship in three phases. Each phase is independently usable, replaces "Coming Soon" tiles as it lands, and reuses the existing `chatMessage` server function as the central AI engine.
 
 ---
 
-### Phase 2 — Profile & Points system
+## Phase A — Tools Hub + Chat Modes + Preferences (ship first)
 
-**2.1 Database migrations**
-- `profiles`: add `ai_points int default 100`, `ai_interests text[]`, `achievements jsonb`, `country text` (if missing).
-- Drop UI for `dietary_goal`, `diet_preference` (keep columns to avoid data loss; hide in UI only).
-- Trigger: on new user, set `ai_points = 100`.
+**Goal:** every AI Tools Hub card and every AI Chat mode works end-to-end. No dead tiles.
 
-**2.2 Points awarding (server-side RPC)**
-- `award_points(user_id, action, amount)` SECURITY DEFINER.
-- Hook into: scan complete (+10), chat message sent (+5), image generated (+20), lesson completed (+30), daily login (+5, once per day via `last_login_at`).
+### 1. Central chat with modes
+- Extend `chatMessage` (`src/lib/ai.functions.ts`) to accept an optional `mode` id (`blog`, `resume`, `grammar`, `translator`, `summarizer`, `email`, `code`, `sql`, `logo`, `ocr`, `pdf`, `general`).
+- Add a mode registry (`src/lib/chat-modes.ts`) with: id, label, icon, color, system prompt (SEO Expert / HR Expert / Senior Engineer / DB Expert / etc.), starter suggestions.
+- `_authenticated.chat.tsx`: read `?mode=xxx` search param, show a mode chip in the header, pass mode into `chatMessage`, seed 3 starter prompts per mode.
+- All existing `/tools/*` tile links either (a) route straight to `/chat?mode=xxx` for text tools, or (b) keep the existing dedicated pages for tools that need custom UI (OCR image upload, PDF upload, Logo generator image, TTS/STT).
 
-**2.3 Profile page redesign**
-- Replace 🔥 Streak card with ⭐ AI Points card.
-- Show Favorites count (already queryable from `scans` where `is_favorite`).
-- AI Interests multi-select chips (saves to `profiles.ai_interests`).
-- Achievements grid (computed from thresholds: Beginner = 1 scan, AI Learner = 1 lesson, Daily Scanner = 7-day streak, Image Creator = 5 images, Power User = 500 points, AI Expert = 2000 points).
+### 2. Tool pages that need custom UI (real, not placeholders)
+- **OCR Scanner** — image upload → existing vision engine → extract text; copy/download buttons.
+- **PDF Summarizer** — PDF upload (≤20MB) → send as `file` block to Gemini → summary + Q&A follow-up (routes into chat with the PDF pre-attached in context).
+- **Logo Generator** — form (brand, style, colors) → Gemini image model → download PNG.
+- **Text-to-Speech** — text input + voice picker → `openai/gpt-4o-mini-tts` streaming → play + download MP3.
+- **Speech-to-Text** — record via Web Audio → WAV upload → `openai/gpt-4o-mini-transcribe` → transcript with copy.
+- **Resume Builder** — structured form → chat mode with resume system prompt → export as PDF (client-side jsPDF).
+- **Translator, Blog Writer, Grammar Checker, Text Summarizer, Email Writer, Code Generator, SQL Generator** — thin wrappers that route to `/chat?mode=xxx` with a preset first prompt template.
 
----
+### 3. Preferences (replaces "Coming Soon" tile in AI Memory)
+- New table `user_preferences` (user_id PK, ai_model, response_length, writing_style, tone, creativity, language, theme, voice, default_behavior, updated_at) with RLS + GRANTs.
+- New route `_authenticated.preferences.tsx` — real form, saves to DB, loaded and injected into every `chatMessage` system prompt.
 
-### Phase 3 — Recent Scan detail
+### 4. Cloud Sync tile
+- New route `_authenticated.cloud-sync.tsx` — shows last-updated timestamps per data type (profiles, scans, chats, prompts, notes, etc.) and a "✓ All data synced to cloud" state. Read-only status page.
 
-- Recent scan cards on Home already exist. Add click handler → route to `/scan-result/$scanId`.
-- New route reads scan row, renders image + AI description + objects + summary + date + Save/Share/Favorite buttons (reuse `ScanResult` component).
-
----
-
-### Phase 4 — AI Suite (remove "Coming Soon")
-
-This is the biggest phase. Each sub-feature is a real AI call via Lovable AI Gateway.
-
-**4.1 AI Learning Academy** — `academy` route already exists. Add:
-- Curriculum data (9 tracks × ~5 lessons each) stored in `academy_lessons` table.
-- Lesson viewer with AI-generated explanations (`google/gemini-3-flash-preview`).
-- Practice quiz (AI-generated 3 questions per lesson).
-- `academy_progress` table tracks completion → awards +30 points + "AI Learner" badge.
-
-**4.2 AI Image Studio** — `image-studio` route exists. Build 9 tools:
-- Generator, Wallpaper, Logo → `openai/gpt-image-2` via `/api/generate-image` streaming route.
-- Enhancer, Upscaler, Face Restore, Art Styles, BG Changer → `google/gemini-3.1-flash-image` (edit mode).
-- BG Remover → same, prompted for transparent output.
-- Nova Vision AI watermark added to canvas before download (bottom-right corner).
-- Save-to-Gallery: `generated_images` table.
-
-**4.3 AI Workspace** — `workspace` route exists. Tables:
-- `workspace_projects` (id, user_id, name, kind, created_at)
-- `workspace_items` (id, project_id, type, content jsonb) for saved chats, images, docs.
-- UI: project list → project detail with tabs (Chats / Images / Docs / Notes).
-
-**4.4 AI Tools Hub** — `tools` route exists. 12 tools, each a small form + server-fn call:
-- Writer, Translator, Summarizer, Grammar, Email, Blog, Resume → text completions.
-- OCR, PDF Reader/Summarizer → multimodal (image/PDF upload → Gemini).
-- Code Generator, SQL Generator → text completions with code-format system prompt.
-
-**4.5 AI Memory** — `ai-memory` route exists. Table `ai_memory` (user_id, key, value, updated_at).
-- Chat pulls memory as system context.
-- User can view + clear memory entries.
-
-**4.6 Daily AI Feed** — `daily-feed` route exists. Server fn generates 5 cards/day (news-style tips, prompts, productivity ideas). Cached per-day per-user in `daily_feed_cache`.
-
-**4.7 AI Chat** — already solid. Verify long conversations, image understanding (already supported via `imageUrl` in `chatMessage`).
+**Files added (~15):** chat-modes.ts, preferences.tsx, cloud-sync.tsx, tools/ocr.tsx, tools/pdf.tsx, tools/logo.tsx, tools/tts.tsx, tools/stt.tsx, tools/resume.tsx, plus updates to chat.tsx, tools.$toolId.tsx, ai.functions.ts, ai-memory.tsx, workspace.tsx, one migration.
 
 ---
 
-### Phase 5 — Polish
+## Phase B — AI Memory (Conversations + Prompts + Smart Memories + Clear)
 
-- Performance: React Query stale-time tuning, lazy-load studio/academy routes.
-- Error handling: consistent toast + retry across all AI calls.
-- Console-error sweep via Playwright.
-- Mobile responsive audit on 375×812 viewport.
+**Goal:** every card in `/ai-memory` is functional.
+
+### Tables (one migration)
+- `chat_conversations` already exists → add `pinned boolean`, `title text` (editable), `mode text`, `updated_at`.
+- `chat_messages` already exists → keep.
+- `saved_prompts` (id, user_id, title, body, tags text[], folder, favorite, created_at, updated_at).
+- `prompt_folders` (id, user_id, name).
+- `smart_memories` (id, user_id, key, value, enabled, updated_at).
+- `memory_settings` (user_id PK, memory_enabled boolean).
+
+All with RLS + GRANTs to `authenticated`.
+
+### Routes
+- `_authenticated.chat.tsx` upgraded:
+  - Real conversation persistence (save each user/assistant turn to `chat_messages`).
+  - Sidebar drawer: "New chat", search box, list grouped by Today/Yesterday/Older, pin/rename/delete row actions, click resumes exactly where left off.
+- `_authenticated.prompts.tsx` — Prompt Library: create/edit/delete/favorite/search/folder, "Use in chat" button that navigates to `/chat?prompt=<id>`.
+- `_authenticated.smart-memories.tsx` — list/add/edit/delete memories, global memory ON/OFF; injected into system prompt when enabled.
+- `_authenticated.clear-memory.tsx` — 4 destructive actions with confirmation dialogs: delete conversations, delete prompts, delete memories, clear local cache.
+
+Update `_authenticated.ai-memory.tsx` — remove all `soon: true`, wire to new routes.
+
+**Files added (~8):** prompts.tsx, smart-memories.tsx, clear-memory.tsx, one migration, chat sidebar component, chat persistence hook.
 
 ---
 
-### Technical section (for reviewer)
+## Phase C — AI Workspace (Projects, Docs, Notes, Images, Voice, Folders, Sync status)
 
-**New DB tables:** `academy_lessons`, `academy_progress`, `workspace_projects`, `workspace_items`, `ai_memory`, `daily_feed_cache`, `generated_images`. All with RLS scoped to `auth.uid()` + GRANT block for `authenticated` + `service_role`.
+**Goal:** every card in `/workspace` works.
 
-**New server fns (`src/lib/*.functions.ts`):**
-- `awardPoints`, `getProfileStats`
-- `academyGenerateLesson`, `academyGenerateQuiz`, `academyCompleteLesson`
-- `toolWrite`, `toolTranslate`, `toolSummarize`, `toolGrammar`, `toolOcr`, `toolPdfSummarize`, `toolCodeGen`, `toolSqlGen`, `toolEmail`, `toolResume`, `toolBlog`
-- `workspaceCreateProject`, `workspaceAddItem`, `workspaceListProjects`
-- `aiMemoryUpsert`, `aiMemoryClear`, `aiMemoryList`
-- `dailyFeedFetch`
+### Tables & storage
+- `projects` (id, user_id, name, folder_id, created_at).
+- `documents` (id, user_id, project_id, title, content_md, updated_at).
+- `notes` (id, user_id, project_id, title, content_json, updated_at).
+- `voice_notes` (id, user_id, project_id, title, storage_path, duration_sec, transcript, summary, created_at).
+- `workspace_folders` (id, user_id, name, parent_id).
+- Storage buckets: `voice-notes` (private), `workspace-uploads` (private). Both with per-user RLS on `storage.objects`.
 
-**New server routes (`src/routes/api/`):** `/api/generate-image` (streaming), `/api/edit-image` (streaming).
+### Routes
+- `_authenticated.projects.tsx` (+ `$projectId.tsx`) — CRUD, drag-and-drop into folders.
+- `_authenticated.documents.tsx` (+ `$docId.tsx`) — Tiptap editor, AI rewrite/summarize/improve buttons, export PDF (jsPDF) / DOCX (`docx` npm) / TXT.
+- `_authenticated.notes.tsx` (+ `$noteId.tsx`) — Tiptap with checklists/bullets, AI rewrite/summarize/expand, search.
+- `_authenticated.images-library.tsx` — reuse `scans` table + `scan-images` bucket, add album grouping, search, delete, "Analyze" reopens vision.
+- `_authenticated.voice-notes.tsx` — record (Web Audio → WAV), pause/resume, upload to bucket, transcribe with `gpt-4o-mini-transcribe`, summarize with chat engine, rename, export transcript.
+- `_authenticated.folders.tsx` — folder tree, drag-and-drop to reorganize.
+- `_authenticated.cloud-sync.tsx` — already added in Phase A; extend with new data counts.
 
-**Watermark:** Canvas overlay applied client-side before download, text "Nova Vision AI" + logo mark, bottom-right, 10% opacity backdrop.
+Update `_authenticated.workspace.tsx` — remove all `soon: true`.
 
-**Estimated size:** ~40 new files, ~15 edited files, 7 migrations.
+**Dependencies to add:** `@tiptap/react @tiptap/starter-kit @tiptap/extension-task-list @tiptap/extension-task-item`, `jspdf`, `docx`, `eventsource-parser`.
+
+**Files added (~14):** listed above + migration + storage buckets.
 
 ---
 
-### Recommendation
+## Global polish (folded into each phase)
+- Loading skeletons, toasts on success/error, empty states, per-page search where relevant, keyboard-friendly.
+- `awardPoints` calls already exist for chat/lesson/scan/image; add `+5` for saved prompt used, `+10` for note created, keep totals in profile.
+- Remove every `soon: true` from `HubGrid` usage after each phase.
 
-Ship in this order, one phase per turn:
-1. **Phase 1** (badge + auth + accents) — small, high user impact
-2. **Phase 2** (points + profile) — foundation for gamification
-3. **Phase 3** (scan detail) — quick win
-4. **Phase 4** in sub-phases: 4.2 Image Studio → 4.4 Tools → 4.1 Academy → 4.3 Workspace → 4.5 Memory → 4.6 Feed
-5. **Phase 5** polish
+---
 
-**Approve this plan and I'll start with Phase 1.** Or tell me which phase to prioritize first if you want a different order.
+## Phase A first — approve to start?
+
+Phase A alone is ~15 files and one migration. It eliminates every "Coming Soon" in the Tools Hub, gives every tool a real working flow, adds real Preferences, and makes Cloud Sync a real status page. Phases B and C follow in separate approved batches so each ships tested and demoable rather than as one giant unreviewable change.

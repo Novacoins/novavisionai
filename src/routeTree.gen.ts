@@ -22,6 +22,7 @@ import { Route as AuthenticatedStorageRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedScanRouteImport } from './routes/_authenticated.scan'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated.profile'
 import { Route as AuthenticatedPrivacyRouteImport } from './routes/_authenticated.privacy'
+import { Route as AuthenticatedPreferencesRouteImport } from './routes/_authenticated.preferences'
 import { Route as AuthenticatedPlantScannerRouteImport } from './routes/_authenticated.plant-scanner'
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated.notifications'
 import { Route as AuthenticatedMealPlannerRouteImport } from './routes/_authenticated.meal-planner'
@@ -33,6 +34,7 @@ import { Route as AuthenticatedFaqRouteImport } from './routes/_authenticated.fa
 import { Route as AuthenticatedDailyFeedRouteImport } from './routes/_authenticated.daily-feed'
 import { Route as AuthenticatedContactRouteImport } from './routes/_authenticated.contact'
 import { Route as AuthenticatedCommunityRouteImport } from './routes/_authenticated.community'
+import { Route as AuthenticatedCloudSyncRouteImport } from './routes/_authenticated.cloud-sync'
 import { Route as AuthenticatedChatRouteImport } from './routes/_authenticated.chat'
 import { Route as AuthenticatedAppearanceRouteImport } from './routes/_authenticated.appearance'
 import { Route as AuthenticatedAiMemoryRouteImport } from './routes/_authenticated.ai-memory'
@@ -107,6 +109,12 @@ const AuthenticatedPrivacyRoute = AuthenticatedPrivacyRouteImport.update({
   path: '/privacy',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedPreferencesRoute =
+  AuthenticatedPreferencesRouteImport.update({
+    id: '/preferences',
+    path: '/preferences',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedPlantScannerRoute =
   AuthenticatedPlantScannerRouteImport.update({
     id: '/plant-scanner',
@@ -164,6 +172,11 @@ const AuthenticatedContactRoute = AuthenticatedContactRouteImport.update({
 const AuthenticatedCommunityRoute = AuthenticatedCommunityRouteImport.update({
   id: '/community',
   path: '/community',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedCloudSyncRoute = AuthenticatedCloudSyncRouteImport.update({
+  id: '/cloud-sync',
+  path: '/cloud-sync',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedChatRoute = AuthenticatedChatRouteImport.update({
@@ -228,6 +241,7 @@ export interface FileRoutesByFullPath {
   '/ai-memory': typeof AuthenticatedAiMemoryRoute
   '/appearance': typeof AuthenticatedAppearanceRoute
   '/chat': typeof AuthenticatedChatRoute
+  '/cloud-sync': typeof AuthenticatedCloudSyncRoute
   '/community': typeof AuthenticatedCommunityRoute
   '/contact': typeof AuthenticatedContactRoute
   '/daily-feed': typeof AuthenticatedDailyFeedRoute
@@ -239,6 +253,7 @@ export interface FileRoutesByFullPath {
   '/meal-planner': typeof AuthenticatedMealPlannerRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/plant-scanner': typeof AuthenticatedPlantScannerRoute
+  '/preferences': typeof AuthenticatedPreferencesRoute
   '/privacy': typeof AuthenticatedPrivacyRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/scan': typeof AuthenticatedScanRoute
@@ -261,6 +276,7 @@ export interface FileRoutesByTo {
   '/ai-memory': typeof AuthenticatedAiMemoryRoute
   '/appearance': typeof AuthenticatedAppearanceRoute
   '/chat': typeof AuthenticatedChatRoute
+  '/cloud-sync': typeof AuthenticatedCloudSyncRoute
   '/community': typeof AuthenticatedCommunityRoute
   '/contact': typeof AuthenticatedContactRoute
   '/daily-feed': typeof AuthenticatedDailyFeedRoute
@@ -272,6 +288,7 @@ export interface FileRoutesByTo {
   '/meal-planner': typeof AuthenticatedMealPlannerRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/plant-scanner': typeof AuthenticatedPlantScannerRoute
+  '/preferences': typeof AuthenticatedPreferencesRoute
   '/privacy': typeof AuthenticatedPrivacyRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/scan': typeof AuthenticatedScanRoute
@@ -297,6 +314,7 @@ export interface FileRoutesById {
   '/_authenticated/ai-memory': typeof AuthenticatedAiMemoryRoute
   '/_authenticated/appearance': typeof AuthenticatedAppearanceRoute
   '/_authenticated/chat': typeof AuthenticatedChatRoute
+  '/_authenticated/cloud-sync': typeof AuthenticatedCloudSyncRoute
   '/_authenticated/community': typeof AuthenticatedCommunityRoute
   '/_authenticated/contact': typeof AuthenticatedContactRoute
   '/_authenticated/daily-feed': typeof AuthenticatedDailyFeedRoute
@@ -308,6 +326,7 @@ export interface FileRoutesById {
   '/_authenticated/meal-planner': typeof AuthenticatedMealPlannerRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/plant-scanner': typeof AuthenticatedPlantScannerRoute
+  '/_authenticated/preferences': typeof AuthenticatedPreferencesRoute
   '/_authenticated/privacy': typeof AuthenticatedPrivacyRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/scan': typeof AuthenticatedScanRoute
@@ -334,6 +353,7 @@ export interface FileRouteTypes {
     | '/ai-memory'
     | '/appearance'
     | '/chat'
+    | '/cloud-sync'
     | '/community'
     | '/contact'
     | '/daily-feed'
@@ -345,6 +365,7 @@ export interface FileRouteTypes {
     | '/meal-planner'
     | '/notifications'
     | '/plant-scanner'
+    | '/preferences'
     | '/privacy'
     | '/profile'
     | '/scan'
@@ -367,6 +388,7 @@ export interface FileRouteTypes {
     | '/ai-memory'
     | '/appearance'
     | '/chat'
+    | '/cloud-sync'
     | '/community'
     | '/contact'
     | '/daily-feed'
@@ -378,6 +400,7 @@ export interface FileRouteTypes {
     | '/meal-planner'
     | '/notifications'
     | '/plant-scanner'
+    | '/preferences'
     | '/privacy'
     | '/profile'
     | '/scan'
@@ -402,6 +425,7 @@ export interface FileRouteTypes {
     | '/_authenticated/ai-memory'
     | '/_authenticated/appearance'
     | '/_authenticated/chat'
+    | '/_authenticated/cloud-sync'
     | '/_authenticated/community'
     | '/_authenticated/contact'
     | '/_authenticated/daily-feed'
@@ -413,6 +437,7 @@ export interface FileRouteTypes {
     | '/_authenticated/meal-planner'
     | '/_authenticated/notifications'
     | '/_authenticated/plant-scanner'
+    | '/_authenticated/preferences'
     | '/_authenticated/privacy'
     | '/_authenticated/profile'
     | '/_authenticated/scan'
@@ -527,6 +552,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPrivacyRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/preferences': {
+      id: '/_authenticated/preferences'
+      path: '/preferences'
+      fullPath: '/preferences'
+      preLoaderRoute: typeof AuthenticatedPreferencesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/plant-scanner': {
       id: '/_authenticated/plant-scanner'
       path: '/plant-scanner'
@@ -602,6 +634,13 @@ declare module '@tanstack/react-router' {
       path: '/community'
       fullPath: '/community'
       preLoaderRoute: typeof AuthenticatedCommunityRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/cloud-sync': {
+      id: '/_authenticated/cloud-sync'
+      path: '/cloud-sync'
+      fullPath: '/cloud-sync'
+      preLoaderRoute: typeof AuthenticatedCloudSyncRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/chat': {
@@ -699,6 +738,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAiMemoryRoute: typeof AuthenticatedAiMemoryRoute
   AuthenticatedAppearanceRoute: typeof AuthenticatedAppearanceRoute
   AuthenticatedChatRoute: typeof AuthenticatedChatRoute
+  AuthenticatedCloudSyncRoute: typeof AuthenticatedCloudSyncRoute
   AuthenticatedCommunityRoute: typeof AuthenticatedCommunityRoute
   AuthenticatedContactRoute: typeof AuthenticatedContactRoute
   AuthenticatedDailyFeedRoute: typeof AuthenticatedDailyFeedRoute
@@ -710,6 +750,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedMealPlannerRoute: typeof AuthenticatedMealPlannerRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedPlantScannerRoute: typeof AuthenticatedPlantScannerRoute
+  AuthenticatedPreferencesRoute: typeof AuthenticatedPreferencesRoute
   AuthenticatedPrivacyRoute: typeof AuthenticatedPrivacyRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedScanRoute: typeof AuthenticatedScanRoute
@@ -728,6 +769,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAiMemoryRoute: AuthenticatedAiMemoryRoute,
   AuthenticatedAppearanceRoute: AuthenticatedAppearanceRoute,
   AuthenticatedChatRoute: AuthenticatedChatRoute,
+  AuthenticatedCloudSyncRoute: AuthenticatedCloudSyncRoute,
   AuthenticatedCommunityRoute: AuthenticatedCommunityRoute,
   AuthenticatedContactRoute: AuthenticatedContactRoute,
   AuthenticatedDailyFeedRoute: AuthenticatedDailyFeedRoute,
@@ -739,6 +781,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedMealPlannerRoute: AuthenticatedMealPlannerRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedPlantScannerRoute: AuthenticatedPlantScannerRoute,
+  AuthenticatedPreferencesRoute: AuthenticatedPreferencesRoute,
   AuthenticatedPrivacyRoute: AuthenticatedPrivacyRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedScanRoute: AuthenticatedScanRoute,
@@ -764,13 +807,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
