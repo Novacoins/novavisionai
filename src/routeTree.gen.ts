@@ -22,6 +22,7 @@ import { Route as AuthenticatedStorageRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedScanRouteImport } from './routes/_authenticated.scan'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated.profile'
 import { Route as AuthenticatedPrivacyRouteImport } from './routes/_authenticated.privacy'
+import { Route as AuthenticatedPreferencesRouteImport } from './routes/_authenticated.preferences'
 import { Route as AuthenticatedPlantScannerRouteImport } from './routes/_authenticated.plant-scanner'
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated.notifications'
 import { Route as AuthenticatedMealPlannerRouteImport } from './routes/_authenticated.meal-planner'
@@ -107,6 +108,12 @@ const AuthenticatedPrivacyRoute = AuthenticatedPrivacyRouteImport.update({
   path: '/privacy',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedPreferencesRoute =
+  AuthenticatedPreferencesRouteImport.update({
+    id: '/preferences',
+    path: '/preferences',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedPlantScannerRoute =
   AuthenticatedPlantScannerRouteImport.update({
     id: '/plant-scanner',
@@ -239,6 +246,7 @@ export interface FileRoutesByFullPath {
   '/meal-planner': typeof AuthenticatedMealPlannerRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/plant-scanner': typeof AuthenticatedPlantScannerRoute
+  '/preferences': typeof AuthenticatedPreferencesRoute
   '/privacy': typeof AuthenticatedPrivacyRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/scan': typeof AuthenticatedScanRoute
@@ -272,6 +280,7 @@ export interface FileRoutesByTo {
   '/meal-planner': typeof AuthenticatedMealPlannerRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/plant-scanner': typeof AuthenticatedPlantScannerRoute
+  '/preferences': typeof AuthenticatedPreferencesRoute
   '/privacy': typeof AuthenticatedPrivacyRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/scan': typeof AuthenticatedScanRoute
@@ -308,6 +317,7 @@ export interface FileRoutesById {
   '/_authenticated/meal-planner': typeof AuthenticatedMealPlannerRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/plant-scanner': typeof AuthenticatedPlantScannerRoute
+  '/_authenticated/preferences': typeof AuthenticatedPreferencesRoute
   '/_authenticated/privacy': typeof AuthenticatedPrivacyRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/scan': typeof AuthenticatedScanRoute
@@ -345,6 +355,7 @@ export interface FileRouteTypes {
     | '/meal-planner'
     | '/notifications'
     | '/plant-scanner'
+    | '/preferences'
     | '/privacy'
     | '/profile'
     | '/scan'
@@ -378,6 +389,7 @@ export interface FileRouteTypes {
     | '/meal-planner'
     | '/notifications'
     | '/plant-scanner'
+    | '/preferences'
     | '/privacy'
     | '/profile'
     | '/scan'
@@ -413,6 +425,7 @@ export interface FileRouteTypes {
     | '/_authenticated/meal-planner'
     | '/_authenticated/notifications'
     | '/_authenticated/plant-scanner'
+    | '/_authenticated/preferences'
     | '/_authenticated/privacy'
     | '/_authenticated/profile'
     | '/_authenticated/scan'
@@ -525,6 +538,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof AuthenticatedPrivacyRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/preferences': {
+      id: '/_authenticated/preferences'
+      path: '/preferences'
+      fullPath: '/preferences'
+      preLoaderRoute: typeof AuthenticatedPreferencesRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/plant-scanner': {
@@ -710,6 +730,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedMealPlannerRoute: typeof AuthenticatedMealPlannerRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedPlantScannerRoute: typeof AuthenticatedPlantScannerRoute
+  AuthenticatedPreferencesRoute: typeof AuthenticatedPreferencesRoute
   AuthenticatedPrivacyRoute: typeof AuthenticatedPrivacyRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedScanRoute: typeof AuthenticatedScanRoute
@@ -739,6 +760,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedMealPlannerRoute: AuthenticatedMealPlannerRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedPlantScannerRoute: AuthenticatedPlantScannerRoute,
+  AuthenticatedPreferencesRoute: AuthenticatedPreferencesRoute,
   AuthenticatedPrivacyRoute: AuthenticatedPrivacyRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedScanRoute: AuthenticatedScanRoute,
