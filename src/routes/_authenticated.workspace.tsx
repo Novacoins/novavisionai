@@ -19,7 +19,7 @@ function Page() {
         { label: "Voice Notes", desc: "Audio memos", icon: Mic, color: "from-fuchsia-400 to-purple-500", soon: true },
         { to: "/favorites", label: "Favorites", desc: "Saved items", icon: Heart, color: "from-rose-400 to-red-500" },
         { label: "Folders", desc: "Group your work", icon: FolderTree, color: "from-teal-400 to-cyan-500", soon: true },
-        { label: "Cloud Sync", desc: "Backup & restore", icon: Cloud, color: "from-slate-400 to-slate-600", soon: true },
+        { to: "/cloud-sync", label: "Cloud Sync", desc: "Backup & restore", icon: Cloud, color: "from-slate-400 to-slate-600" },
       ]}
     />
   );
