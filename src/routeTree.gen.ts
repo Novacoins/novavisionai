@@ -34,6 +34,7 @@ import { Route as AuthenticatedFaqRouteImport } from './routes/_authenticated.fa
 import { Route as AuthenticatedDailyFeedRouteImport } from './routes/_authenticated.daily-feed'
 import { Route as AuthenticatedContactRouteImport } from './routes/_authenticated.contact'
 import { Route as AuthenticatedCommunityRouteImport } from './routes/_authenticated.community'
+import { Route as AuthenticatedCloudSyncRouteImport } from './routes/_authenticated.cloud-sync'
 import { Route as AuthenticatedChatRouteImport } from './routes/_authenticated.chat'
 import { Route as AuthenticatedAppearanceRouteImport } from './routes/_authenticated.appearance'
 import { Route as AuthenticatedAiMemoryRouteImport } from './routes/_authenticated.ai-memory'
@@ -173,6 +174,11 @@ const AuthenticatedCommunityRoute = AuthenticatedCommunityRouteImport.update({
   path: '/community',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedCloudSyncRoute = AuthenticatedCloudSyncRouteImport.update({
+  id: '/cloud-sync',
+  path: '/cloud-sync',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedChatRoute = AuthenticatedChatRouteImport.update({
   id: '/chat',
   path: '/chat',
@@ -235,6 +241,7 @@ export interface FileRoutesByFullPath {
   '/ai-memory': typeof AuthenticatedAiMemoryRoute
   '/appearance': typeof AuthenticatedAppearanceRoute
   '/chat': typeof AuthenticatedChatRoute
+  '/cloud-sync': typeof AuthenticatedCloudSyncRoute
   '/community': typeof AuthenticatedCommunityRoute
   '/contact': typeof AuthenticatedContactRoute
   '/daily-feed': typeof AuthenticatedDailyFeedRoute
@@ -269,6 +276,7 @@ export interface FileRoutesByTo {
   '/ai-memory': typeof AuthenticatedAiMemoryRoute
   '/appearance': typeof AuthenticatedAppearanceRoute
   '/chat': typeof AuthenticatedChatRoute
+  '/cloud-sync': typeof AuthenticatedCloudSyncRoute
   '/community': typeof AuthenticatedCommunityRoute
   '/contact': typeof AuthenticatedContactRoute
   '/daily-feed': typeof AuthenticatedDailyFeedRoute
@@ -306,6 +314,7 @@ export interface FileRoutesById {
   '/_authenticated/ai-memory': typeof AuthenticatedAiMemoryRoute
   '/_authenticated/appearance': typeof AuthenticatedAppearanceRoute
   '/_authenticated/chat': typeof AuthenticatedChatRoute
+  '/_authenticated/cloud-sync': typeof AuthenticatedCloudSyncRoute
   '/_authenticated/community': typeof AuthenticatedCommunityRoute
   '/_authenticated/contact': typeof AuthenticatedContactRoute
   '/_authenticated/daily-feed': typeof AuthenticatedDailyFeedRoute
@@ -344,6 +353,7 @@ export interface FileRouteTypes {
     | '/ai-memory'
     | '/appearance'
     | '/chat'
+    | '/cloud-sync'
     | '/community'
     | '/contact'
     | '/daily-feed'
@@ -378,6 +388,7 @@ export interface FileRouteTypes {
     | '/ai-memory'
     | '/appearance'
     | '/chat'
+    | '/cloud-sync'
     | '/community'
     | '/contact'
     | '/daily-feed'
@@ -414,6 +425,7 @@ export interface FileRouteTypes {
     | '/_authenticated/ai-memory'
     | '/_authenticated/appearance'
     | '/_authenticated/chat'
+    | '/_authenticated/cloud-sync'
     | '/_authenticated/community'
     | '/_authenticated/contact'
     | '/_authenticated/daily-feed'
@@ -624,6 +636,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCommunityRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/cloud-sync': {
+      id: '/_authenticated/cloud-sync'
+      path: '/cloud-sync'
+      fullPath: '/cloud-sync'
+      preLoaderRoute: typeof AuthenticatedCloudSyncRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/chat': {
       id: '/_authenticated/chat'
       path: '/chat'
@@ -719,6 +738,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAiMemoryRoute: typeof AuthenticatedAiMemoryRoute
   AuthenticatedAppearanceRoute: typeof AuthenticatedAppearanceRoute
   AuthenticatedChatRoute: typeof AuthenticatedChatRoute
+  AuthenticatedCloudSyncRoute: typeof AuthenticatedCloudSyncRoute
   AuthenticatedCommunityRoute: typeof AuthenticatedCommunityRoute
   AuthenticatedContactRoute: typeof AuthenticatedContactRoute
   AuthenticatedDailyFeedRoute: typeof AuthenticatedDailyFeedRoute
@@ -749,6 +769,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAiMemoryRoute: AuthenticatedAiMemoryRoute,
   AuthenticatedAppearanceRoute: AuthenticatedAppearanceRoute,
   AuthenticatedChatRoute: AuthenticatedChatRoute,
+  AuthenticatedCloudSyncRoute: AuthenticatedCloudSyncRoute,
   AuthenticatedCommunityRoute: AuthenticatedCommunityRoute,
   AuthenticatedContactRoute: AuthenticatedContactRoute,
   AuthenticatedDailyFeedRoute: AuthenticatedDailyFeedRoute,
