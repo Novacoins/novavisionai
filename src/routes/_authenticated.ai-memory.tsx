@@ -12,7 +12,7 @@ function Page() {
       icon={<Brain className="size-5 text-[color:var(--sky)]" />}
       tiles={[
         { to: "/chat", label: "Conversations", desc: "Resume your AI chats", icon: MessageSquare, color: "from-emerald-400 to-green-500" },
-        { label: "Preferences", desc: "Tone & writing style", icon: Settings, color: "from-sky-400 to-blue-500", soon: true },
+        { to: "/preferences", label: "Preferences", desc: "Tone & writing style", icon: Settings, color: "from-sky-400 to-blue-500" },
         { label: "Saved Prompts", desc: "Reusable prompts library", icon: BookOpen, color: "from-fuchsia-400 to-purple-500", soon: true },
         { label: "Smart Memories", desc: "What Nova remembers", icon: Sparkles, color: "from-amber-400 to-orange-500", soon: true },
         { label: "Clear Memory", desc: "Delete all stored memories", icon: Trash2, color: "from-rose-400 to-red-500", soon: true },
