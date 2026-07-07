@@ -46,12 +46,51 @@ function HomePage() {
   }, []);
 
   useEffect(() => {
-    dailyTip({ data: undefined as never })
-      .then((r) => setTip(r.tip))
-      .catch(() => setTip("Eat the rainbow — colorful produce delivers a wider range of nutrients."));
-    generateMealPlan({ data: { goal: "stay healthy", diet: "balanced" } })
-      .then((r) => setMeals(r.meals.slice(0, 3).map((m) => ({ meal_type: m.meal_type, name: m.name, calories: m.calories }))))
-      .catch(() => setMeals([]));
+    const today = new Date().toISOString().slice(0, 10);
+    const FALLBACK_TIP = "Eat the rainbow — colorful produce delivers a wider range of nutrients.";
+    try {
+      const cachedTip = localStorage.getItem("nv:dailyTip");
+      if (cachedTip) {
+        const parsed = JSON.parse(cachedTip) as { date: string; tip: string };
+        if (parsed.date === today && parsed.tip) setTip(parsed.tip);
+      }
+      const cachedMeals = localStorage.getItem("nv:dailyMeals");
+      if (cachedMeals) {
+        const parsed = JSON.parse(cachedMeals) as { date: string; meals: typeof meals };
+        if (parsed.date === today && parsed.meals?.length) setMeals(parsed.meals);
+      }
+    } catch { /* ignore cache errors */ }
+
+    const hasCachedTip = (() => {
+      try {
+        const c = localStorage.getItem("nv:dailyTip");
+        return c ? (JSON.parse(c) as { date: string }).date === today : false;
+      } catch { return false; }
+    })();
+    if (!hasCachedTip) {
+      dailyTip({ data: undefined as never })
+        .then((r) => {
+          setTip(r.tip);
+          try { localStorage.setItem("nv:dailyTip", JSON.stringify({ date: today, tip: r.tip })); } catch { /* noop */ }
+        })
+        .catch(() => setTip((prev) => prev ?? FALLBACK_TIP));
+    }
+
+    const hasCachedMeals = (() => {
+      try {
+        const c = localStorage.getItem("nv:dailyMeals");
+        return c ? (JSON.parse(c) as { date: string }).date === today : false;
+      } catch { return false; }
+    })();
+    if (!hasCachedMeals) {
+      generateMealPlan({ data: { goal: "stay healthy", diet: "balanced" } })
+        .then((r) => {
+          const next = r.meals.slice(0, 3).map((m) => ({ meal_type: m.meal_type, name: m.name, calories: m.calories }));
+          setMeals(next);
+          try { localStorage.setItem("nv:dailyMeals", JSON.stringify({ date: today, meals: next })); } catch { /* noop */ }
+        })
+        .catch(() => setMeals((prev) => prev ?? []));
+    }
   }, []);
 
   useEffect(() => {
