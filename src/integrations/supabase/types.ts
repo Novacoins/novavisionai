@@ -310,6 +310,51 @@ export type Database = {
         }
         Relationships: []
       }
+      user_preferences: {
+        Row: {
+          ai_model: string
+          created_at: string
+          creativity: number
+          default_behavior: string
+          language: string
+          response_length: string
+          theme: string
+          tone: string
+          updated_at: string
+          user_id: string
+          voice: string
+          writing_style: string
+        }
+        Insert: {
+          ai_model?: string
+          created_at?: string
+          creativity?: number
+          default_behavior?: string
+          language?: string
+          response_length?: string
+          theme?: string
+          tone?: string
+          updated_at?: string
+          user_id: string
+          voice?: string
+          writing_style?: string
+        }
+        Update: {
+          ai_model?: string
+          created_at?: string
+          creativity?: number
+          default_behavior?: string
+          language?: string
+          response_length?: string
+          theme?: string
+          tone?: string
+          updated_at?: string
+          user_id?: string
+          voice?: string
+          writing_style?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
