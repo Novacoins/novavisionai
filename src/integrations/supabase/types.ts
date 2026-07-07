@@ -316,7 +316,7 @@ export type Database = {
     }
     Functions: {
       award_points: {
-        Args: { _action: string; _amount: number; _dedupe_key?: string }
+        Args: { _action: string; _dedupe_key?: string; _user_id: string }
         Returns: number
       }
     }
