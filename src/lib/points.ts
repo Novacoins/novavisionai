@@ -1,4 +1,4 @@
-import { supabase } from "@/integrations/supabase/client";
+import { awardPointsFn } from "./points.functions";
 
 export type PointsAction =
   | "signup"
@@ -18,28 +18,20 @@ export const POINTS: Record<PointsAction, number> = {
 };
 
 /**
- * Award points to the current user. Safe to call from any authenticated context.
- * Uses SECURITY DEFINER RPC to update profiles.ai_points atomically.
- * Optional dedupe_key prevents double-awards (e.g. daily-login per day).
+ * Award points to the current authenticated user. Amount is decided server-side
+ * from an allow-list; the client cannot influence how many points are awarded.
+ * Optional dedupeKey prevents double-awards. daily_login is auto-deduped per day.
  */
 export async function awardPoints(
   action: PointsAction,
-  amount?: number,
+  _amount?: number,
   dedupeKey?: string,
 ): Promise<number | null> {
   try {
-    const { data, error } = await supabase.rpc("award_points", {
-      _action: action,
-      _amount: amount ?? POINTS[action],
-      _dedupe_key: dedupeKey ?? undefined,
-    });
-    if (error) {
-      console.warn("awardPoints failed", action, error.message);
-      return null;
-    }
-    return typeof data === "number" ? data : null;
+    const total = await awardPointsFn({ data: { action, dedupeKey } });
+    return typeof total === "number" ? total : null;
   } catch (e) {
-    console.warn("awardPoints exception", e);
+    console.warn("awardPoints failed", action, e);
     return null;
   }
 }
