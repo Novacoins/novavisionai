@@ -48,10 +48,14 @@ export function ScanResult({
       <div className="glass-card p-5">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <Badge variant="secondary" className="mb-2 capitalize">{result.category}</Badge>
+            <Badge variant="secondary" className="mb-2 capitalize">
+              {result.category}
+            </Badge>
             <h2 className="text-xl font-bold leading-tight">{result.title}</h2>
           </div>
-          <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border ${safetyColor(result.safety)}`}>
+          <div
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border ${safetyColor(result.safety)}`}
+          >
             {safetyIcon(result.safety)}
             <span className="capitalize">{result.safety}</span>
           </div>
@@ -64,13 +68,17 @@ export function ScanResult({
               style={{ width: `${Math.round((result.confidence || 0) * 100)}%` }}
             />
           </div>
-          <span className="font-medium">{Math.round((result.confidence || 0) * 100)}% confidence</span>
+          <span className="font-medium">
+            {Math.round((result.confidence || 0) * 100)}% confidence
+          </span>
         </div>
         {(onFavorite || onShare) && (
           <div className="mt-4 flex gap-2">
             {onFavorite && (
               <Button variant="outline" size="sm" onClick={onFavorite}>
-                <Heart className={`size-4 mr-1.5 ${isFavorite ? "fill-destructive text-destructive" : ""}`} />
+                <Heart
+                  className={`size-4 mr-1.5 ${isFavorite ? "fill-destructive text-destructive" : ""}`}
+                />
                 {isFavorite ? "Saved" : "Save"}
               </Button>
             )}
@@ -91,7 +99,9 @@ export function ScanResult({
           </h3>
           <ul className="space-y-1.5 text-sm">
             {result.warnings.map((w, i) => (
-              <li key={i} className="text-destructive/90">• {w}</li>
+              <li key={i} className="text-destructive/90">
+                • {w}
+              </li>
             ))}
           </ul>
         </div>
@@ -102,7 +112,10 @@ export function ScanResult({
           <h3 className="text-sm font-semibold mb-3">Details</h3>
           <ul className="space-y-2 text-sm">
             {result.details.map((d, i) => (
-              <li key={i} className="flex gap-2"><span className="text-primary">•</span><span>{d}</span></li>
+              <li key={i} className="flex gap-2">
+                <span className="text-primary">•</span>
+                <span>{d}</span>
+              </li>
             ))}
           </ul>
         </div>
@@ -113,7 +126,10 @@ export function ScanResult({
           <h3 className="text-sm font-semibold mb-3">What to do next</h3>
           <ul className="space-y-2 text-sm">
             {result.recommendations.map((r, i) => (
-              <li key={i} className="flex gap-2"><Sparkles className="size-3.5 mt-1 text-primary shrink-0" /><span>{r}</span></li>
+              <li key={i} className="flex gap-2">
+                <Sparkles className="size-3.5 mt-1 text-primary shrink-0" />
+                <span>{r}</span>
+              </li>
             ))}
           </ul>
         </div>

@@ -3,7 +3,15 @@ import { motion } from "framer-motion";
 import { useRouterState } from "@tanstack/react-router";
 import { BackButton } from "./BackButton";
 
-export function PageHeader({ title, icon, subtitle }: { title: string; icon?: ReactNode; subtitle?: string }) {
+export function PageHeader({
+  title,
+  icon,
+  subtitle,
+}: {
+  title: string;
+  icon?: ReactNode;
+  subtitle?: string;
+}) {
   return (
     <div className="mb-4">
       <h1 className="text-xl font-bold tracking-tight flex items-center gap-2">
@@ -15,7 +23,13 @@ export function PageHeader({ title, icon, subtitle }: { title: string; icon?: Re
   );
 }
 
-export function PageShell({ children, showBack = true }: { children: ReactNode; showBack?: boolean }) {
+export function PageShell({
+  children,
+  showBack = true,
+}: {
+  children: ReactNode;
+  showBack?: boolean;
+}) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isHome = pathname === "/";
   return (

@@ -276,33 +276,19 @@ AI responses must match scanned content
 
 Navigation must be smooth UI must be beginner-friendly
 
-App should feel like a real consumer-ready product.                                                                          🚀 Nova Vision AI – Professional Sidebar (Hamburger Menu) menu Prompt
-
-
+App should feel like a real consumer-ready product. 🚀 Nova Vision AI – Professional Sidebar (Hamburger Menu) menu Prompt
 
 You are an expert Senior UI/UX Designer, Mobile App Architect, and Full-Stack AI Engineer.
 
-
-
 Upgrade my existing VisionNova AI application into a premium, modern, AI-powered experience similar in quality to ChatGPT, Gemini, Claude, and Perplexity while keeping my current homepage, camera scanner, upload image, AI recognition, scan history, and profile fully functional.
-
-
 
 🎨 Design Requirements
 
-
-
 Create a premium sidebar (hamburger menu) that slides smoothly from the left.
-
-
 
 Use a mysterious futuristic design.
 
-
-
 Theme
-
-
 
 - Emerald Green (#0B8F4D)
 
@@ -324,309 +310,147 @@ Theme
 
 - Material Design style
 
-
-
 The sidebar must look elegant and premium.
-
-
-
-
-
-
 
 🍔 Sidebar Menu
 
-
-
 🏠 Home
 
-
-
 Return to the homepage.
-
-
 
 Description:
 
 Go back to the AI dashboard and quickly start a new scan.
 
-
-
-
-
 👤 My Profile
-
-
 
 Create a beautiful profile page.
 
-
-
 Include:
-
-
 
 • Profile Photo
 
-
-
 • Display Name
-
-
 
 • Username
 
-
-
 • Email Address
-
-
 
 • Country
 
-
-
 • Joined Date
-
-
 
 • AI Usage Statistics
 
-
-
 • Total Scans
-
-
 
 • Favorite Items
 
-
-
 • Saved Collections
-
-
 
 • Edit Profile Button
 
-
-
 • Save Changes Button
-
-
 
 Use modern profile cards with smooth animations.
 
-
-
-
-
-
-
 📜 Scan History
-
-
 
 Display every scan the user has ever made.
 
-
-
 Each history item should include:
-
-
 
 • Thumbnail Image
 
-
-
 • Scan Title
-
-
 
 • Category
 
-
-
 • Date
-
-
 
 • Time
 
-
-
 • AI Confidence
-
-
 
 Actions:
 
-
-
 ⭐ Add to Favorites
 
-
-
 📤 Share
-
-
 
 📄 Export PDF
 
-
-
 🗑 Delete
-
-
 
 🔍 Search History
 
-
-
 📂 Filter by Category
-
-
 
 Allow swipe to delete.
 
-
-
 Show confirmation before deleting.
-
-
 
 Store all scan history securely.
 
-
-
-
-
 ❤️ Favorites
-
-
 
 Users can save important scans.
 
-
-
 Create a dedicated Favorites page.
-
-
 
 Allow:
 
-
-
 ⭐ Add
-
-
 
 ⭐ Remove
 
-
-
 📤 Share
-
-
 
 📄 Export
 
-
-
 🔍 Search
-
-
 
 📂 Organize by folders
 
-
-
 Display an empty-state illustration when there are no favorites.
-
-
-
-
-
-
 
 🤖 AI Chat
 
-
-
 Create a complete AI Chat page.
-
-
 
 Users can ask questions without uploading images.
 
-
-
 Include:
-
-
 
 💬 Chat Input
 
-
-
 🎤 Voice Input
-
-
 
 📎 Attach Image
 
-
-
 📄 Attach Document
-
-
 
 📷 Camera Button
 
-
-
 📚 Conversation History
-
-
 
 📌 Pin Chats
 
-
-
 🗑 Delete Chat
-
-
 
 🤖 AI should answer naturally with markdown formatting.
 
-
-
 Typing animation.
-
-
 
 Copy response.
 
-
-
 Regenerate response.
-
-
 
 Share response.
 
-
-
-
-
-
-
 🌍 Languages
 
-
-
 Allow users to instantly switch language.
-
-
 
 Support:
 
@@ -660,641 +484,297 @@ Support:
 
 🇺🇸 English
 
-
-
 🇪🇸 Spanish
-
-
 
 🇵🇹 Portuguese
 
-
-
 🇮🇹 Italian
-
-
 
 🇸🇦 Arabic
 
-
-
 🇳🇬 Hausa
-
-
 
 🇳🇬 Yoruba
 
-
-
 🇳🇬 Igbo
-
-
 
 Save the selected language automatically.
 
-
-
-
-
 🌙 Appearance
-
-
 
 Allow users to customize the app.
 
-
-
 Options:
-
-
 
 🌞 Light Mode
 
-
-
 🌙 Dark Mode
-
-
 
 ⚙ System Default
 
-
-
 Save the user's preference.
-
-
 
 Animate theme changes smoothly.
 
-
-
-
-
 🔔 Notifications
-
-
 
 Notification Settings
 
-
-
 Allow users to enable or disable:
-
-
 
 ✔ Scan completed
 
-
-
 ✔ AI Updates
-
-
 
 ✔ Product News
 
-
-
 ✔ Security Alerts
-
-
 
 ✔ Weekly Tips
 
-
-
 ✔ New Features
-
-
 
 Include notification history.
 
-
-
-
-
-
-
 👥 Community
-
-
 
 Create a Community page.
 
-
-
 Description:
-
-
 
 Welcome to the VisionNova AI Community.
 
-
-
 Connect with users from around the world.
-
-
 
 Share discoveries.
 
-
-
 Discuss AI.
-
-
 
 Learn from others.
 
-
-
 Request new features.
-
-
 
 Report bugs.
 
-
-
 Celebrate milestones.
-
-
 
 Include:
 
-
-
 💬 Discussions
-
-
 
 ❤️ Likes
 
-
-
 💬 Comments
-
-
 
 📷 Image Posts
 
-
-
 🏆 Community Badges
-
-
-
-
-
-
 
 ❓ FAQ
 
-
-
 Create a professional FAQ page.
-
-
 
 Questions:
 
-
-
 How do I scan an object?
-
-
 
 Open Scan and point your camera or upload an image.
 
-
-
-
-
-
-
 Can I scan plants?
 
-
-
 Yes.
-
-
 
 VisionNova AI identifies plants and provides detailed explanations.
 
-
-
-
-
-
-
 Can I scan food?
 
-
-
 Yes.
-
-
 
 The AI recognizes meals and provides useful information.
 
-
-
-
-
-
-
 Can I scan documents?
 
-
-
 Yes.
-
-
 
 Upload any document image for AI analysis.
 
-
-
-
-
-
-
 Is my data secure?
-
-
 
 Yes.
 
-
-
 Your account and scans are protected using secure technologies.
-
-
-
-
 
 Do I need an internet connection?
 
-
-
 Some AI features require internet access.
-
-
 
 ---
 
-
-
 How do I contact support?
-
-
 
 Use the Contact Support form inside the app.
 
-
-
-
-
-
-
 📩 Contact Support
-
-
 
 Create a beautiful Contact page.
 
-
-
 Fields:
-
-
 
 👤 Full Name
 
-
-
 📧 Email Address
-
-
 
 📱 Phone Number (Optional)
 
-
-
 📝 Subject
-
-
 
 💬 Message
 
-
-
 Buttons:
-
-
 
 📤 Send Message
 
-
-
 🗑 Clear Form
-
-
 
 When the user presses Send:
 
-
-
 Display a beautiful success popup.
-
-
 
 Message:
 
-
-
 ✅ Thank you for contacting VisionNova AI.
-
-
 
 Your message has been received successfully.
 
-
-
 Our support team will review it and reply to your email as soon as possible.
-
-
 
 Thank you for helping us improve VisionNova AI.
 
-
-
 The contact form should be configurable so messages can be sent to the support email address defined by the project settings.
-
-
-
-
-
-
 
 ℹ About VisionNova AI
 
-
-
 Create a beautiful About page.
-
-
 
 Display:
 
-
-
 🤖 VisionNova AI
-
-
 
 Version 9.7.1
 
-
-
 VisionNova AI is an advanced AI Vision Assistant designed to identify, explain, analyze and organize information from images captured through your device camera or uploaded from your gallery.
-
-
 
 Powered by modern Artificial Intelligence, VisionNova AI helps users understand plants, food, products, animals, documents, objects and much more.
 
-
-
 Our mission is to make AI accessible, accurate and helpful for everyone.
-
-
-
-
 
 🔒 Privacy Policy
 
-
-
 Create a complete Privacy Policy page explaining:
-
-
 
 • Data collection
 
-
-
 • Camera permissions
-
-
 
 • Uploaded images
 
-
-
 • Account information
-
-
 
 • AI processing
 
-
-
 • Security
-
-
 
 • Data deletion
 
-
-
 • User rights
-
-
 
 Use clear and readable language.
 
-
-
-
-
 📄 Terms of Service
-
-
 
 Create a professional Terms of Service page including:
 
-
-
 • Acceptable use
-
-
 
 • User responsibilities
 
-
-
 • AI limitations
-
-
 
 • Intellectual property
 
-
-
 • Disclaimer
-
-
 
 • Updates
 
-
-
 • Contact information
-
-
-
-
-
-
 
 🚪 Logout
 
-
-
 When the user taps Logout:
-
-
 
 Show confirmation dialog.
 
-
-
 "Are you sure you want to log out?"
-
-
 
 Buttons:
 
-
-
 Cancel
-
-
 
 Logout
 
-
-
 If confirmed:
-
-
 
 Securely sign the user out and return to the login screen.
 
-
-
-
-
 ✨ Additional Features (Not in the Sidebar)
-
-
 
 Keep these features integrated throughout the app:
 
-
-
 🔍 Universal Search
-
-
 
 Search scans, history, favorites and AI conversations.
 
-
-
 🎤 Voice Search
-
-
 
 Allow users to search by speaking.
 
-
-
 📍 Smart Object Recognition
-
-
 
 Automatically detect nearby objects through the camera.
 
-
-
 📦 Barcode & QR Scanner
-
-
 
 Recognize barcodes and QR codes.
 
-
-
 📝 OCR Text Scanner
-
-
 
 Extract editable text from images.
 
-
-
 🌐 AI Image Translation
-
-
 
 Translate text detected inside images into the selected language.
 
-
-
 🎙 Voice AI Assistant
-
-
 
 Allow users to speak with the AI naturally.
 
-
-
 📤 Share AI Results
-
-
 
 Share results as text, images or links.
 
-
-
 📄 Export Results to PDF
-
-
 
 Generate beautifully formatted PDF reports.
 
-
-
 📂 Collections
-
-
 
 Allow users to organize saved scans into folders with custom names.
 
-
-
-
-
 Final Goal
-
-
 
 Do not redesign my current homepage.
 
-
-
 Keep all existing scanning functionality working exactly as it is.
-
-
 
 Only upgrade the application with this premium navigation system, modern pages, beautiful animations, responsive layout, and production quality code while preserving all current features.
 

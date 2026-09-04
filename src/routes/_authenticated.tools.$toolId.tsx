@@ -3,8 +3,26 @@ import { useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import ReactMarkdown from "react-markdown";
 import {
-  Languages, SpellCheck, FileUser, PenLine, Mail, Code2, Database, FileText,
-  FileSearch, ScanText, Loader2, Copy, Check, Upload, Wrench, Palette, Volume2, Play, Pause, type LucideIcon,
+  Languages,
+  SpellCheck,
+  FileUser,
+  PenLine,
+  Mail,
+  Code2,
+  Database,
+  FileText,
+  FileSearch,
+  ScanText,
+  Loader2,
+  Copy,
+  Check,
+  Upload,
+  Wrench,
+  Palette,
+  Volume2,
+  Play,
+  Pause,
+  type LucideIcon,
 } from "lucide-react";
 
 import { PageShell, PageHeader } from "@/components/PageShell";
@@ -43,80 +61,127 @@ type ToolDef = {
 
 const TOOLS: Record<string, ToolDef> = {
   translator: {
-    label: "Translator", desc: "Translate text into any language",
-    icon: Languages, color: "from-indigo-400 to-violet-500",
-    mode: "translate", placeholder: "Paste text to translate…", cta: "Translate",
+    label: "Translator",
+    desc: "Translate text into any language",
+    icon: Languages,
+    color: "from-indigo-400 to-violet-500",
+    mode: "translate",
+    placeholder: "Paste text to translate…",
+    cta: "Translate",
   },
   "grammar-checker": {
-    label: "Grammar Checker", desc: "Fix grammar, spelling & clarity",
-    icon: SpellCheck, color: "from-rose-400 to-pink-500",
-    mode: "text", placeholder: "Paste your writing to check…", cta: "Check Grammar",
+    label: "Grammar Checker",
+    desc: "Fix grammar, spelling & clarity",
+    icon: SpellCheck,
+    color: "from-rose-400 to-pink-500",
+    mode: "text",
+    placeholder: "Paste your writing to check…",
+    cta: "Check Grammar",
   },
   "resume-builder": {
-    label: "Resume Builder", desc: "Generate an ATS-friendly resume",
-    icon: FileUser, color: "from-fuchsia-400 to-purple-500",
+    label: "Resume Builder",
+    desc: "Generate an ATS-friendly resume",
+    icon: FileUser,
+    color: "from-fuchsia-400 to-purple-500",
     mode: "text",
-    placeholder: "Describe your role, years of experience, key skills, achievements, and education…",
-    cta: "Build Resume", minChars: 30,
+    placeholder:
+      "Describe your role, years of experience, key skills, achievements, and education…",
+    cta: "Build Resume",
+    minChars: 30,
   },
   "blog-writer": {
-    label: "Blog Writer", desc: "Write full SEO-friendly blog posts",
-    icon: PenLine, color: "from-sky-400 to-blue-500",
-    mode: "text", placeholder: "Topic and any details (audience, tone, keywords)…", cta: "Write Blog",
+    label: "Blog Writer",
+    desc: "Write full SEO-friendly blog posts",
+    icon: PenLine,
+    color: "from-sky-400 to-blue-500",
+    mode: "text",
+    placeholder: "Topic and any details (audience, tone, keywords)…",
+    cta: "Write Blog",
   },
   "email-writer": {
-    label: "Email Writer", desc: "Polished emails in seconds",
-    icon: Mail, color: "from-cyan-400 to-teal-500",
+    label: "Email Writer",
+    desc: "Polished emails in seconds",
+    icon: Mail,
+    color: "from-cyan-400 to-teal-500",
     mode: "text",
     placeholder: "What do you want to say? Include recipient, purpose, and tone.",
     cta: "Write Email",
   },
   "code-generator": {
-    label: "Code Generator", desc: "Generate production-quality code",
-    icon: Code2, color: "from-lime-400 to-green-500",
-    mode: "text", placeholder: "Describe what the code should do (mention language if specific)…", cta: "Generate Code",
+    label: "Code Generator",
+    desc: "Generate production-quality code",
+    icon: Code2,
+    color: "from-lime-400 to-green-500",
+    mode: "text",
+    placeholder: "Describe what the code should do (mention language if specific)…",
+    cta: "Generate Code",
   },
   "sql-generator": {
-    label: "SQL Generator", desc: "Natural language → SQL",
-    icon: Database, color: "from-amber-400 to-orange-500",
-    mode: "text", placeholder: "Describe the query in plain English (mention tables/columns if known)…", cta: "Generate SQL",
+    label: "SQL Generator",
+    desc: "Natural language → SQL",
+    icon: Database,
+    color: "from-amber-400 to-orange-500",
+    mode: "text",
+    placeholder: "Describe the query in plain English (mention tables/columns if known)…",
+    cta: "Generate SQL",
   },
   "text-summarizer": {
-    label: "Text Summarizer", desc: "Condense long text into key points",
-    icon: FileText, color: "from-orange-400 to-red-500",
-    mode: "text", placeholder: "Paste the text you want summarized…", cta: "Summarize",
+    label: "Text Summarizer",
+    desc: "Condense long text into key points",
+    icon: FileText,
+    color: "from-orange-400 to-red-500",
+    mode: "text",
+    placeholder: "Paste the text you want summarized…",
+    cta: "Summarize",
     minChars: 80,
   },
   "pdf-summarizer": {
-    label: "PDF Summarizer", desc: "Upload a PDF and get a summary",
-    icon: FileSearch, color: "from-slate-400 to-slate-600",
-    mode: "pdf", placeholder: "", cta: "Summarize PDF",
+    label: "PDF Summarizer",
+    desc: "Upload a PDF and get a summary",
+    icon: FileSearch,
+    color: "from-slate-400 to-slate-600",
+    mode: "pdf",
+    placeholder: "",
+    cta: "Summarize PDF",
   },
   ocr: {
-    label: "OCR Scanner", desc: "Extract text from an image",
-    icon: ScanText, color: "from-cyan-400 to-teal-500",
-    mode: "ocr", placeholder: "", cta: "Extract Text",
+    label: "OCR Scanner",
+    desc: "Extract text from an image",
+    icon: ScanText,
+    color: "from-cyan-400 to-teal-500",
+    mode: "ocr",
+    placeholder: "",
+    cta: "Extract Text",
   },
   "logo-generator": {
-    label: "Logo Generator", desc: "Brand brief + image prompt",
-    icon: Palette, color: "from-pink-400 to-rose-500",
+    label: "Logo Generator",
+    desc: "Brand brief + image prompt",
+    icon: Palette,
+    color: "from-pink-400 to-rose-500",
     mode: "text",
-    placeholder: "Describe your business/product: name, industry, audience, vibe (e.g. 'Nova Roast — specialty coffee brand, minimalist, warm').",
-    cta: "Generate Logo Brief", minChars: 10,
+    placeholder:
+      "Describe your business/product: name, industry, audience, vibe (e.g. 'Nova Roast — specialty coffee brand, minimalist, warm').",
+    cta: "Generate Logo Brief",
+    minChars: 10,
   },
   "text-to-speech": {
-    label: "Text-to-Speech", desc: "Speak any text aloud",
-    icon: Volume2, color: "from-violet-400 to-fuchsia-500",
+    label: "Text-to-Speech",
+    desc: "Speak any text aloud",
+    icon: Volume2,
+    color: "from-violet-400 to-fuchsia-500",
     mode: "text",
-    placeholder: "Paste the text you want converted to a spoken script. Then tap Play on the result.",
-    cta: "Prepare Script", minChars: 5,
+    placeholder:
+      "Paste the text you want converted to a spoken script. Then tap Play on the result.",
+    cta: "Prepare Script",
+    minChars: 5,
   },
 };
 
-
 async function extractPdfText(file: File): Promise<string> {
   const pdfjs = await import("pdfjs-dist");
-  const workerMod = (await import("pdfjs-dist/build/pdf.worker.min.mjs?url")) as { default: string };
+  const workerMod = (await import("pdfjs-dist/build/pdf.worker.min.mjs?url")) as {
+    default: string;
+  };
   pdfjs.GlobalWorkerOptions.workerSrc = workerMod.default;
   const buf = await file.arrayBuffer();
   const pdf = await pdfjs.getDocument({ data: buf }).promise;
@@ -125,7 +190,9 @@ async function extractPdfText(file: File): Promise<string> {
   for (let i = 1; i <= maxPages; i++) {
     const page = await pdf.getPage(i);
     const content = await page.getTextContent();
-    const strings = content.items.map((it) => ("str" in it ? (it as { str: string }).str : "")).join(" ");
+    const strings = content.items
+      .map((it) => ("str" in it ? (it as { str: string }).str : ""))
+      .join(" ");
     text += `\n\n--- Page ${i} ---\n${strings}`;
   }
   return text.trim();
@@ -155,7 +222,6 @@ function ToolPage() {
   const [copied, setCopied] = useState(false);
   const [speaking, setSpeaking] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
-
 
   const canSubmit = useMemo(() => {
     if (!tool) return false;
@@ -227,7 +293,9 @@ function ToolPage() {
     setFile(f);
     setImagePreview(null);
     if (f && tool?.mode === "ocr") {
-      fileToDataUrl(f).then(setImagePreview).catch(() => setImagePreview(null));
+      fileToDataUrl(f)
+        .then(setImagePreview)
+        .catch(() => setImagePreview(null));
     }
   }
 
@@ -237,7 +305,9 @@ function ToolPage() {
         title={tool.label}
         subtitle={tool.desc}
         icon={
-          <span className={`size-8 rounded-xl grid place-items-center text-white bg-gradient-to-br ${tool.color}`}>
+          <span
+            className={`size-8 rounded-xl grid place-items-center text-white bg-gradient-to-br ${tool.color}`}
+          >
             <Icon className="size-4" />
           </span>
         }
@@ -246,7 +316,9 @@ function ToolPage() {
       <div className="space-y-4">
         {tool.mode === "translate" && (
           <div>
-            <Label htmlFor="lang" className="text-xs">Target language</Label>
+            <Label htmlFor="lang" className="text-xs">
+              Target language
+            </Label>
             <Input
               id="lang"
               value={targetLang}
@@ -259,7 +331,9 @@ function ToolPage() {
 
         {(tool.mode === "text" || tool.mode === "translate") && (
           <div>
-            <Label htmlFor="input" className="text-xs">Your input</Label>
+            <Label htmlFor="input" className="text-xs">
+              Your input
+            </Label>
             <Textarea
               id="input"
               value={input}
@@ -293,11 +367,17 @@ function ToolPage() {
                 {file ? file.name : tool.mode === "ocr" ? "Choose an image" : "Choose a PDF"}
               </div>
               <div className="text-[11px] text-muted-foreground">
-                {tool.mode === "ocr" ? "PNG, JPG, WEBP up to 10 MB" : "PDF up to 20 MB (first 40 pages)"}
+                {tool.mode === "ocr"
+                  ? "PNG, JPG, WEBP up to 10 MB"
+                  : "PDF up to 20 MB (first 40 pages)"}
               </div>
             </button>
             {imagePreview && (
-              <img src={imagePreview} alt="Preview" className="mt-3 max-h-56 rounded-lg mx-auto object-contain" />
+              <img
+                src={imagePreview}
+                alt="Preview"
+                className="mt-3 max-h-56 rounded-lg mx-auto object-contain"
+              />
             )}
           </div>
         )}
@@ -316,7 +396,11 @@ function ToolPage() {
                     onClick={() => {
                       const synth = window.speechSynthesis;
                       if (!synth) return toast.error("Speech not supported on this device");
-                      if (synth.speaking) { synth.cancel(); setSpeaking(false); return; }
+                      if (synth.speaking) {
+                        synth.cancel();
+                        setSpeaking(false);
+                        return;
+                      }
                       const u = new SpeechSynthesisUtterance(result.replace(/\[[^\]]+\]/g, ""));
                       u.onend = () => setSpeaking(false);
                       u.onerror = () => setSpeaking(false);
@@ -343,7 +427,6 @@ function ToolPage() {
             </div>
           </div>
         )}
-
       </div>
     </PageShell>
   );

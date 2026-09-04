@@ -20,7 +20,8 @@ async function callGateway(body: object, attempt = 0): Promise<string> {
       return callGateway(body, attempt + 1);
     }
     if (res.status === 429) throw new Error("AI is busy right now. Please try again in a moment.");
-    if (res.status === 402) throw new Error("AI credits exhausted. Please add credits to continue.");
+    if (res.status === 402)
+      throw new Error("AI credits exhausted. Please add credits to continue.");
     const txt = await res.text().catch(() => "");
     throw new Error(`AI request failed (${res.status}). ${txt.slice(0, 200)}`);
   }
@@ -47,14 +48,12 @@ export const TOOL_SYSTEM_PROMPTS: Record<string, string> = {
     "You are an expert summarizer. Summarize the user's text. Output format in markdown:\n\n## Summary\n2–4 concise sentences capturing the core message.\n\n## Key Points\n- 4–7 bullet points of the most important takeaways.\n\nBe faithful to the source — do not add outside information.",
   "pdf-summarizer":
     "You are an expert document summarizer. The user will paste extracted PDF text. Produce:\n\n## Overview\n2–4 sentences describing what the document is about.\n\n## Key Points\n- 5–10 bullets of the most important findings, arguments, or facts.\n\n## Action Items / Takeaways\n- If applicable, 2–5 practical takeaways or next steps.\n\nBe faithful to the source. Ignore boilerplate like page numbers and headers.",
-  ocr:
-    "You are an OCR engine. Extract ALL visible text from the provided image, preserving line breaks and structure as faithfully as possible. Output ONLY the extracted plain text. If the image contains no readable text, respond with exactly: [No text detected]",
+  ocr: "You are an OCR engine. Extract ALL visible text from the provided image, preserving line breaks and structure as faithfully as possible. Output ONLY the extracted plain text. If the image contains no readable text, respond with exactly: [No text detected]",
   "logo-generator":
     "You are a senior brand designer. Given a business/product description, produce a complete logo brief in markdown:\n\n## Concept\n2–3 sentences describing the visual concept and personality.\n\n## Image Prompt\nA single ready-to-paste prompt for an AI image generator (Midjourney / Nano Banana / DALL·E), specifying style, subject, composition, background, and mood. Keep it under 60 words.\n\n## Color Palette\n- 4–5 hex colors with short usage notes.\n\n## Typography\n- Primary + secondary font suggestions (Google Fonts) with rationale.\n\n## Tagline Ideas\n- 3 short taglines.",
   "text-to-speech":
     "You are a voiceover script writer. Rewrite the user's input as a clean, natural, spoken-word script optimized for text-to-speech playback. Add subtle pacing cues in [brackets] where a pause helps (e.g. [pause]). Remove URLs, markdown, and anything that doesn't read well aloud. Output ONLY the final script.",
 };
-
 
 export const runTextTool = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -86,9 +85,7 @@ export const runTextTool = createServerFn({ method: "POST" })
 
 export const runOcrTool = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
-    z.object({ imageDataUrl: z.string().min(20) }).parse(d),
-  )
+  .inputValidator((d: unknown) => z.object({ imageDataUrl: z.string().min(20) }).parse(d))
   .handler(async ({ data }) => {
     const text = await callGateway({
       model: MODEL,

@@ -2,7 +2,19 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import ReactMarkdown from "react-markdown";
-import { ArrowLeft, BookOpen, CheckCircle2, Circle, Loader2, Star, Trophy, Check, X, GraduationCap, Search } from "lucide-react";
+import {
+  ArrowLeft,
+  BookOpen,
+  CheckCircle2,
+  Circle,
+  Loader2,
+  Star,
+  Trophy,
+  Check,
+  X,
+  GraduationCap,
+  Search,
+} from "lucide-react";
 import { PageShell, PageHeader } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -55,7 +67,9 @@ function CoursePage() {
     return (
       <PageShell>
         <PageHeader title="Course not found" icon={<GraduationCap className="size-5" />} />
-        <Link to="/academy" className="text-sm text-primary underline">Back to Academy</Link>
+        <Link to="/academy" className="text-sm text-primary underline">
+          Back to Academy
+        </Link>
       </PageShell>
     );
   }
@@ -127,7 +141,9 @@ function CoursePage() {
                 </div>
                 {quiz.questions.map((q, qi) => (
                   <div key={qi} className="space-y-2">
-                    <div className="text-sm font-medium">{qi + 1}. {q.q}</div>
+                    <div className="text-sm font-medium">
+                      {qi + 1}. {q.q}
+                    </div>
                     <div className="grid gap-1.5">
                       {q.options.map((opt, oi) => {
                         const chosen = answers[qi] === oi;
@@ -147,7 +163,9 @@ function CoursePage() {
                             )}
                           >
                             <span className="inline-flex items-center gap-2">
-                              {submitted && correct && <Check className="size-3.5 text-emerald-600" />}
+                              {submitted && correct && (
+                                <Check className="size-3.5 text-emerald-600" />
+                              )}
                               {submitted && wrong && <X className="size-3.5 text-rose-600" />}
                               {opt}
                             </span>
@@ -155,9 +173,7 @@ function CoursePage() {
                         );
                       })}
                     </div>
-                    {submitted && (
-                      <p className="text-[11px] text-muted-foreground">{q.why}</p>
-                    )}
+                    {submitted && <p className="text-[11px] text-muted-foreground">{q.why}</p>}
                   </div>
                 ))}
                 {!submitted ? (
@@ -169,7 +185,11 @@ function CoursePage() {
                     Submit Answers
                   </Button>
                 ) : (
-                  <Button variant="secondary" onClick={() => setOpenLesson(null)} className="w-full">
+                  <Button
+                    variant="secondary"
+                    onClick={() => setOpenLesson(null)}
+                    className="w-full"
+                  >
                     Continue
                   </Button>
                 )}
@@ -204,7 +224,12 @@ function CoursePage() {
         title={course.title}
         subtitle={course.subtitle}
         icon={
-          <span className={cn("size-8 rounded-xl grid place-items-center text-white bg-gradient-to-br", course.color)}>
+          <span
+            className={cn(
+              "size-8 rounded-xl grid place-items-center text-white bg-gradient-to-br",
+              course.color,
+            )}
+          >
             <span className="text-lg">{course.emoji}</span>
           </span>
         }
@@ -212,7 +237,9 @@ function CoursePage() {
 
       <div className="glass-card p-4 mb-4 space-y-3">
         <div className="flex items-center justify-between text-sm">
-          <div className="font-semibold">{done} / {total} lessons</div>
+          <div className="font-semibold">
+            {done} / {total} lessons
+          </div>
           <div className="inline-flex items-center gap-1 text-amber-500 font-semibold">
             <Star className="size-4 fill-amber-500" /> {progress.xp} XP
           </div>
@@ -223,7 +250,9 @@ function CoursePage() {
             <Trophy className="size-5 text-amber-500" />
             <div className="text-sm">
               <div className="font-semibold">Course Certificate Unlocked</div>
-              <div className="text-xs text-muted-foreground">You completed every lesson in {course.title}.</div>
+              <div className="text-xs text-muted-foreground">
+                You completed every lesson in {course.title}.
+              </div>
             </div>
           </div>
         ) : nextLesson ? (
@@ -252,14 +281,22 @@ function CoursePage() {
               onClick={() => openAndLoad(lesson)}
               className="w-full glass-card p-3.5 flex items-center gap-3 text-left hover:bg-accent/30 transition"
             >
-              <span className="text-xs text-muted-foreground w-6 shrink-0 text-center font-mono">{String(i + 1).padStart(2, "0")}</span>
-              {done ? <CheckCircle2 className="size-5 text-emerald-500 shrink-0" /> : <Circle className="size-5 text-muted-foreground shrink-0" />}
+              <span className="text-xs text-muted-foreground w-6 shrink-0 text-center font-mono">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              {done ? (
+                <CheckCircle2 className="size-5 text-emerald-500 shrink-0" />
+              ) : (
+                <Circle className="size-5 text-muted-foreground shrink-0" />
+              )}
               <span className="text-sm font-medium leading-snug">{lesson}</span>
             </button>
           );
         })}
         {filtered.length === 0 && (
-          <p className="text-sm text-muted-foreground text-center py-8">No lessons match "{query}"</p>
+          <p className="text-sm text-muted-foreground text-center py-8">
+            No lessons match "{query}"
+          </p>
         )}
       </div>
     </PageShell>

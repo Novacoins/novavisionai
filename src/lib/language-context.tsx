@@ -97,12 +97,17 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       applyLang("en");
       return;
     }
-    supabase.from("profiles").select("language").eq("id", user.id).single().then(({ data }) => {
-      const code = data?.language || "en";
-      setLang(code);
-      localStorage.setItem("nv-lang", code);
-      applyLang(code);
-    });
+    supabase
+      .from("profiles")
+      .select("language")
+      .eq("id", user.id)
+      .single()
+      .then(({ data }) => {
+        const code = data?.language || "en";
+        setLang(code);
+        localStorage.setItem("nv-lang", code);
+        applyLang(code);
+      });
   }, [user?.id]); // eslint-disable-line
 
   async function setLanguage(code: string) {

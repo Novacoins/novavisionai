@@ -72,7 +72,8 @@ export function CinematicSky({ className = "" }: { className?: string }) {
           style={{
             top: c.top,
             left: 0,
-            background: "linear-gradient(90deg, transparent, oklch(0.95 0.02 235 / 0.7), transparent)",
+            background:
+              "linear-gradient(90deg, transparent, oklch(0.95 0.02 235 / 0.7), transparent)",
             opacity: c.op,
             transform: `scale(${c.scale})`,
             animation: `drift-cloud ${c.dur} linear ${i * -10}s infinite`,

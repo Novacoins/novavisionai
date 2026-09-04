@@ -15,7 +15,8 @@ export const Route = createFileRoute("/_authenticated/plant-scanner")({
     ...pageHead({
       path: "/plant-scanner",
       title: "Plant Scanner — Identify Plants Instantly",
-      description: "Scan any plant with your camera to identify the species, check toxicity and edibility, and get care tips from Nova Vision AI.",
+      description:
+        "Scan any plant with your camera to identify the species, check toxicity and edibility, and get care tips from Nova Vision AI.",
     }),
     scripts: [
       {
@@ -47,7 +48,12 @@ function PlantScanner() {
       const ai = await analyzeImage({ data: { imageDataUrl: img.dataUrl, scanType: "plant" } });
       setResult(ai as AIResult);
       const uploaded = await uploadScanImage(user.id, img.dataUrl);
-      await saveScan({ userId: user.id, result: ai as AIResult, scanType: "plant", image: uploaded });
+      await saveScan({
+        userId: user.id,
+        result: ai as AIResult,
+        scanType: "plant",
+        image: uploaded,
+      });
       awardPoints("scan").catch(() => {});
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Plant analysis failed");

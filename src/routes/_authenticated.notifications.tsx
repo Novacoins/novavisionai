@@ -43,10 +43,16 @@ function NotificationsPage() {
 
   useEffect(() => {
     if (!user) return;
-    supabase.from("notification_preferences").select("*").eq("user_id", user.id).single().then(async ({ data }) => {
-      if (data) setPrefs({ ...DEFAULT, ...data });
-      else await supabase.from("notification_preferences").insert({ user_id: user.id, ...DEFAULT });
-    });
+    supabase
+      .from("notification_preferences")
+      .select("*")
+      .eq("user_id", user.id)
+      .single()
+      .then(async ({ data }) => {
+        if (data) setPrefs({ ...DEFAULT, ...data });
+        else
+          await supabase.from("notification_preferences").insert({ user_id: user.id, ...DEFAULT });
+      });
   }, [user]);
 
   async function update(key: keyof Prefs, value: boolean) {
@@ -56,23 +62,32 @@ function NotificationsPage() {
       await supabase.from("notification_preferences").upsert({ user_id: user.id, ...next });
       toast.success("Preferences saved");
     }
-    if (key === "scan_completed" && value && "Notification" in window) Notification.requestPermission();
+    if (key === "scan_completed" && value && "Notification" in window)
+      Notification.requestPermission();
   }
 
   return (
     <PageShell>
-      <PageHeader title="Notifications" icon={<Bell className="size-5 text-primary" />} subtitle="Choose what you'd like to hear about" />
+      <PageHeader
+        title="Notifications"
+        icon={<Bell className="size-5 text-primary" />}
+        subtitle="Choose what you'd like to hear about"
+      />
       <div className="glass-card divide-y divide-border">
         {(Object.keys(LABELS) as (keyof Prefs)[]).map((k) => (
           <div key={k} className="flex items-center justify-between p-4">
-            <Label htmlFor={k} className="text-sm font-medium">{LABELS[k]}</Label>
+            <Label htmlFor={k} className="text-sm font-medium">
+              {LABELS[k]}
+            </Label>
             <Switch id={k} checked={prefs[k]} onCheckedChange={(v) => update(k, v)} />
           </div>
         ))}
       </div>
       <div className="glass-card p-4 mt-4">
         <h3 className="text-sm font-semibold mb-2">Notification history</h3>
-        <p className="text-xs text-muted-foreground">You'll see in-app notifications here when they arrive.</p>
+        <p className="text-xs text-muted-foreground">
+          You'll see in-app notifications here when they arrive.
+        </p>
       </div>
     </PageShell>
   );

@@ -5,7 +5,11 @@ import { toast } from "sonner";
 
 export type CapturedImage = { dataUrl: string; file: Blob };
 
-async function fileToCompressedDataUrl(file: Blob, maxSide = 1280, quality = 0.82): Promise<CapturedImage> {
+async function fileToCompressedDataUrl(
+  file: Blob,
+  maxSide = 1280,
+  quality = 0.82,
+): Promise<CapturedImage> {
   const bitmap = await createImageBitmap(file);
   const scale = Math.min(1, maxSide / Math.max(bitmap.width, bitmap.height));
   const w = Math.round(bitmap.width * scale);
@@ -98,7 +102,11 @@ export function ScanCapture({
     <div className="space-y-4">
       {preview ? (
         <div className="relative rounded-2xl overflow-hidden glass-card">
-          <img src={preview} alt="Camera scan preview" className="w-full max-h-80 object-contain bg-black" />
+          <img
+            src={preview}
+            alt="Camera scan preview"
+            className="w-full max-h-80 object-contain bg-black"
+          />
           {loading && (
             <div className="absolute inset-0 grid place-items-center bg-black/50 backdrop-blur-sm">
               <div className="text-center text-white">
@@ -117,7 +125,10 @@ export function ScanCapture({
         </div>
       ) : (
         <div className="grid grid-cols-2 gap-3">
-          <Button onClick={openCamera} className="h-32 flex-col gap-2 hero-gradient text-primary-foreground glow font-semibold">
+          <Button
+            onClick={openCamera}
+            className="h-32 flex-col gap-2 hero-gradient text-primary-foreground glow font-semibold"
+          >
             <Camera className="size-7" />
             Take photo
           </Button>
@@ -156,7 +167,9 @@ export function ScanCapture({
       {streamOpen && (
         <div className="fixed inset-0 z-50 bg-black flex flex-col">
           <div className="flex items-center justify-between p-4 text-white">
-            <button onClick={closeCamera} className="p-2"><X className="size-6" /></button>
+            <button onClick={closeCamera} className="p-2">
+              <X className="size-6" />
+            </button>
             <span className="text-sm font-medium">Tap to capture</span>
             <span className="w-10" />
           </div>

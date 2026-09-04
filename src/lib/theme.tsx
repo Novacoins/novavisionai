@@ -1,7 +1,11 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 
 type Theme = "light" | "dark" | "system";
-const Ctx = createContext<{ theme: Theme; setTheme: (t: Theme) => void; resolved: "light" | "dark" }>({
+const Ctx = createContext<{
+  theme: Theme;
+  setTheme: (t: Theme) => void;
+  resolved: "light" | "dark";
+}>({
   theme: "dark",
   setTheme: () => {},
   resolved: "dark",
@@ -22,7 +26,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [resolved, setResolved] = useState<"light" | "dark">("dark");
 
   useEffect(() => {
-    const stored = (typeof window !== "undefined" && localStorage.getItem("vn-theme")) as Theme | null;
+    const stored = (typeof window !== "undefined" &&
+      localStorage.getItem("vn-theme")) as Theme | null;
     const initial: Theme = stored ?? "dark";
     setThemeState(initial);
     setResolved(apply(initial));

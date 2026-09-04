@@ -57,7 +57,10 @@ function ForgotPasswordPage() {
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-md glass-card p-7 shadow-2xl backdrop-blur-2xl"
       >
-        <Link to="/auth" className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mb-4">
+        <Link
+          to="/auth"
+          className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mb-4"
+        >
           <ArrowLeft className="size-3.5" /> Back to sign in
         </Link>
         <div className="flex flex-col items-center text-center mb-5">
@@ -72,7 +75,8 @@ function ForgotPasswordPage() {
         {sent ? (
           <div className="text-center space-y-3">
             <p className="text-sm text-foreground">
-              If an account exists for <span className="font-medium">{email}</span>, a reset link is on its way.
+              If an account exists for <span className="font-medium">{email}</span>, a reset link is
+              on its way.
             </p>
             <p className="text-xs text-muted-foreground">
               Didn't get it? Check your spam folder, then try again.
@@ -95,7 +99,11 @@ function ForgotPasswordPage() {
                 autoComplete="email"
               />
             </div>
-            <Button type="submit" className="w-full hero-gradient text-primary-foreground font-semibold h-11" disabled={busy}>
+            <Button
+              type="submit"
+              className="w-full hero-gradient text-primary-foreground font-semibold h-11"
+              disabled={busy}
+            >
               {busy ? <Loader2 className="size-4 animate-spin" /> : "Send reset link"}
             </Button>
           </form>

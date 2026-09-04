@@ -8,8 +8,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
-  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 export const Route = createFileRoute("/_authenticated/storage")({
@@ -24,7 +30,17 @@ type Item = {
   created_at: string;
 };
 
-const CATEGORIES = ["all", "food", "plant", "product", "object", "document", "ingredient", "animal", "unknown"];
+const CATEGORIES = [
+  "all",
+  "food",
+  "plant",
+  "product",
+  "object",
+  "document",
+  "ingredient",
+  "animal",
+  "unknown",
+];
 
 async function addWatermarkAndDownload(url: string, filename: string) {
   const img = new Image();
@@ -94,10 +110,13 @@ function StoragePage() {
   const filtered = useMemo(() => {
     if (!items) return null;
     let list = items;
-    if (category !== "all") list = list.filter((i) => (i.category ?? "").toLowerCase() === category);
+    if (category !== "all")
+      list = list.filter((i) => (i.category ?? "").toLowerCase() === category);
     if (q.trim()) {
       const s = q.toLowerCase();
-      list = list.filter((i) => i.title?.toLowerCase().includes(s) || i.category?.toLowerCase().includes(s));
+      list = list.filter(
+        (i) => i.title?.toLowerCase().includes(s) || i.category?.toLowerCase().includes(s),
+      );
     }
     list = [...list].sort((a, b) => {
       const da = new Date(a.created_at).getTime();
@@ -140,7 +159,14 @@ function StoragePage() {
   const doDownloadMany = async () => {
     const chosen = (filtered ?? []).filter((i) => selected.has(i.id));
     for (const it of chosen) {
-      try { await addWatermarkAndDownload(it.thumbnail_url || it.thumbnail_url!, `nova-vision-${it.id.slice(0, 8)}.jpg`); } catch { /* skip */ }
+      try {
+        await addWatermarkAndDownload(
+          it.thumbnail_url || it.thumbnail_url!,
+          `nova-vision-${it.id.slice(0, 8)}.jpg`,
+        );
+      } catch {
+        /* skip */
+      }
     }
     toast.success(`Downloaded ${chosen.length} images`);
   };
@@ -183,29 +209,45 @@ function StoragePage() {
             <button
               onClick={() => setSort("newest")}
               className={`px-3 h-7 rounded-full ${sort === "newest" ? "bg-primary/15 text-primary" : "text-muted-foreground"}`}
-            >Newest</button>
+            >
+              Newest
+            </button>
             <button
               onClick={() => setSort("oldest")}
               className={`px-3 h-7 rounded-full ${sort === "oldest" ? "bg-primary/15 text-primary" : "text-muted-foreground"}`}
-            >Oldest</button>
+            >
+              Oldest
+            </button>
           </div>
           <button
-            onClick={() => { setSelectMode((v) => !v); setSelected(new Set()); }}
+            onClick={() => {
+              setSelectMode((v) => !v);
+              setSelected(new Set());
+            }}
             className="px-3 h-7 rounded-full glass-card font-medium"
-          >{selectMode ? "Cancel" : "Select"}</button>
+          >
+            {selectMode ? "Cancel" : "Select"}
+          </button>
         </div>
       </div>
 
       {selectMode && selected.size > 0 && (
         <motion.div
-          initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
           className="sticky top-2 z-20 glass-card p-2 flex items-center gap-2"
         >
           <span className="text-xs font-medium px-2">{selected.size} selected</span>
-          <button onClick={doDownloadMany} className="ml-auto h-9 px-3 rounded-lg bg-primary/15 text-primary text-xs font-semibold flex items-center gap-1.5">
+          <button
+            onClick={doDownloadMany}
+            className="ml-auto h-9 px-3 rounded-lg bg-primary/15 text-primary text-xs font-semibold flex items-center gap-1.5"
+          >
             <Download className="size-3.5" /> Download
           </button>
-          <button onClick={() => setConfirmDelete({ ids: Array.from(selected) })} className="h-9 px-3 rounded-lg bg-destructive/15 text-destructive text-xs font-semibold flex items-center gap-1.5">
+          <button
+            onClick={() => setConfirmDelete({ ids: Array.from(selected) })}
+            className="h-9 px-3 rounded-lg bg-destructive/15 text-destructive text-xs font-semibold flex items-center gap-1.5"
+          >
             <Trash2 className="size-3.5" /> Delete
           </button>
         </motion.div>
@@ -213,7 +255,9 @@ function StoragePage() {
 
       {filtered === null ? (
         <div className="grid grid-cols-2 gap-3">
-          {[0, 1, 2, 3].map((i) => <Skeleton key={i} className="aspect-square rounded-2xl" />)}
+          {[0, 1, 2, 3].map((i) => (
+            <Skeleton key={i} className="aspect-square rounded-2xl" />
+          ))}
         </div>
       ) : filtered.length === 0 ? (
         <div className="glass-card p-8 text-center">
@@ -230,18 +274,27 @@ function StoragePage() {
                 <motion.div
                   key={item.id}
                   layout
-                  initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9 }}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
                   transition={{ delay: i * 0.02 }}
                   className={`glass-card overflow-hidden relative ${isSel ? "ring-2 ring-primary" : ""}`}
                 >
                   <button
-                    onClick={() => selectMode ? toggleSelect(item.id) : setPreview(item)}
+                    onClick={() => (selectMode ? toggleSelect(item.id) : setPreview(item))}
                     className="block w-full aspect-square relative"
                   >
                     {item.thumbnail_url || item.thumbnail_url ? (
-                      <img src={item.thumbnail_url || item.thumbnail_url!} alt={item.title} loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
+                      <img
+                        src={item.thumbnail_url || item.thumbnail_url!}
+                        alt={item.title}
+                        loading="lazy"
+                        className="absolute inset-0 w-full h-full object-cover"
+                      />
                     ) : (
-                      <div className="absolute inset-0 grid place-items-center text-muted-foreground text-xs">No image</div>
+                      <div className="absolute inset-0 grid place-items-center text-muted-foreground text-xs">
+                        No image
+                      </div>
                     )}
                     {selectMode && (
                       <span className="absolute top-2 left-2 size-6 rounded-full bg-black/50 text-white grid place-items-center">
@@ -257,9 +310,26 @@ function StoragePage() {
                     </div>
                     {!selectMode && (
                       <div className="flex items-center gap-1 pt-1">
-                        <button onClick={() => setPreview(item)} className="flex-1 h-7 rounded-md bg-muted text-[10px] font-medium flex items-center justify-center gap-1"><Eye className="size-3" />View</button>
-                        <button onClick={() => doDownload(item)} className="flex-1 h-7 rounded-md bg-primary/15 text-primary text-[10px] font-medium flex items-center justify-center gap-1"><Download className="size-3" />Save</button>
-                        <button onClick={() => setConfirmDelete({ ids: [item.id] })} className="h-7 px-2 rounded-md bg-destructive/15 text-destructive flex items-center justify-center"><Trash2 className="size-3" /></button>
+                        <button
+                          onClick={() => setPreview(item)}
+                          className="flex-1 h-7 rounded-md bg-muted text-[10px] font-medium flex items-center justify-center gap-1"
+                        >
+                          <Eye className="size-3" />
+                          View
+                        </button>
+                        <button
+                          onClick={() => doDownload(item)}
+                          className="flex-1 h-7 rounded-md bg-primary/15 text-primary text-[10px] font-medium flex items-center justify-center gap-1"
+                        >
+                          <Download className="size-3" />
+                          Save
+                        </button>
+                        <button
+                          onClick={() => setConfirmDelete({ ids: [item.id] })}
+                          className="h-7 px-2 rounded-md bg-destructive/15 text-destructive flex items-center justify-center"
+                        >
+                          <Trash2 className="size-3" />
+                        </button>
                       </div>
                     )}
                   </div>
@@ -273,22 +343,31 @@ function StoragePage() {
       <AnimatePresence>
         {preview && (
           <motion.div
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 bg-black/90 grid place-items-center p-4"
             onClick={() => setPreview(null)}
           >
-            <button className="absolute top-4 right-4 size-10 rounded-full bg-white/10 text-white grid place-items-center" onClick={() => setPreview(null)}>
+            <button
+              className="absolute top-4 right-4 size-10 rounded-full bg-white/10 text-white grid place-items-center"
+              onClick={() => setPreview(null)}
+            >
               <X className="size-5" />
             </button>
             <motion.img
-              initial={{ scale: 0.9 }} animate={{ scale: 1 }}
+              initial={{ scale: 0.9 }}
+              animate={{ scale: 1 }}
               src={preview.thumbnail_url || preview.thumbnail_url!}
               alt={preview.title}
               className="max-w-full max-h-[80vh] rounded-2xl object-contain"
               onClick={(e) => e.stopPropagation()}
             />
             <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
-              <button onClick={() => doDownload(preview)} className="h-11 px-5 rounded-full bg-primary text-primary-foreground text-sm font-semibold flex items-center gap-2">
+              <button
+                onClick={() => doDownload(preview)}
+                className="h-11 px-5 rounded-full bg-primary text-primary-foreground text-sm font-semibold flex items-center gap-2"
+              >
                 <Download className="size-4" /> Download
               </button>
             </div>
@@ -299,12 +378,22 @@ function StoragePage() {
       <AlertDialog open={!!confirmDelete} onOpenChange={(o) => !o && setConfirmDelete(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete {confirmDelete?.ids.length} image{(confirmDelete?.ids.length ?? 0) > 1 ? "s" : ""}?</AlertDialogTitle>
-            <AlertDialogDescription>This can't be undone. The images will be permanently removed from your storage.</AlertDialogDescription>
+            <AlertDialogTitle>
+              Delete {confirmDelete?.ids.length} image
+              {(confirmDelete?.ids.length ?? 0) > 1 ? "s" : ""}?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              This can't be undone. The images will be permanently removed from your storage.
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={() => confirmDelete && doDelete(confirmDelete.ids)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">Delete</AlertDialogAction>
+            <AlertDialogAction
+              onClick={() => confirmDelete && doDelete(confirmDelete.ids)}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Delete
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

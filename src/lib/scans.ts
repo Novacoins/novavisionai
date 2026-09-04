@@ -1,7 +1,10 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { AIResult } from "@/components/ScanResult";
 
-export async function uploadScanImage(userId: string, dataUrl: string): Promise<{ path: string; signedUrl: string } | null> {
+export async function uploadScanImage(
+  userId: string,
+  dataUrl: string,
+): Promise<{ path: string; signedUrl: string } | null> {
   try {
     const blob = await (await fetch(dataUrl)).blob();
     const path = `${userId}/${Date.now()}.jpg`;
@@ -10,7 +13,9 @@ export async function uploadScanImage(userId: string, dataUrl: string): Promise<
       upsert: false,
     });
     if (error) throw error;
-    const { data: signed } = await supabase.storage.from("scan-images").createSignedUrl(path, 60 * 60 * 24 * 365);
+    const { data: signed } = await supabase.storage
+      .from("scan-images")
+      .createSignedUrl(path, 60 * 60 * 24 * 365);
     return { path, signedUrl: signed?.signedUrl ?? "" };
   } catch (e) {
     console.error("upload failed", e);

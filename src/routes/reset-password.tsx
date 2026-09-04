@@ -109,7 +109,19 @@ function ResetPasswordPage() {
   );
 }
 
-function PwField({ value, onChange, show, onToggle, placeholder }: { value: string; onChange: (v: string) => void; show: boolean; onToggle: () => void; placeholder: string }) {
+function PwField({
+  value,
+  onChange,
+  show,
+  onToggle,
+  placeholder,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  show: boolean;
+  onToggle: () => void;
+  placeholder: string;
+}) {
   return (
     <div className="relative">
       <Lock className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />

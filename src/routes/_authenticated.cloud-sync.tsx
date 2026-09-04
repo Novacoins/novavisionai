@@ -10,7 +10,12 @@ import { pageHead } from "@/lib/page-head";
 
 export const Route = createFileRoute("/_authenticated/cloud-sync")({
   component: CloudSyncPage,
-  head: () => pageHead({ path: "/cloud-sync", title: "Cloud Sync — Nova Vision AI", description: "See what's backed up in the cloud." }),
+  head: () =>
+    pageHead({
+      path: "/cloud-sync",
+      title: "Cloud Sync — Nova Vision AI",
+      description: "See what's backed up in the cloud.",
+    }),
 });
 
 type Row = { key: string; label: string; count: number; latest: string | null };
@@ -66,7 +71,9 @@ function CloudSyncPage() {
     setLoading(false);
   }, [user]);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    load();
+  }, [load]);
 
   const latestAny = rows.reduce<string | null>((acc, r) => {
     if (!r.latest) return acc;
@@ -92,7 +99,13 @@ function CloudSyncPage() {
             Last activity: {formatWhen(latestAny)}
           </div>
           <Button onClick={load} variant="outline" size="sm" className="mt-3" disabled={loading}>
-            {loading ? <Loader2 className="size-4 animate-spin" /> : <><RefreshCw className="size-3.5 mr-1.5" /> Refresh</>}
+            {loading ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : (
+              <>
+                <RefreshCw className="size-3.5 mr-1.5" /> Refresh
+              </>
+            )}
           </Button>
         </div>
 
@@ -101,20 +114,26 @@ function CloudSyncPage() {
             <div className="py-10 grid place-items-center">
               <Loader2 className="size-5 animate-spin text-muted-foreground" />
             </div>
-          ) : rows.map((r) => (
-            <div key={r.key} className="flex items-center justify-between px-4 py-3">
-              <div className="flex items-center gap-3 min-w-0">
-                <span className="size-8 rounded-lg bg-primary/10 text-primary grid place-items-center shrink-0">
-                  <DatabaseIcon className="size-4" />
-                </span>
-                <div className="min-w-0">
-                  <div className="text-sm font-medium truncate">{r.label}</div>
-                  <div className="text-[11px] text-muted-foreground">{r.count.toLocaleString()} item{r.count === 1 ? "" : "s"}</div>
+          ) : (
+            rows.map((r) => (
+              <div key={r.key} className="flex items-center justify-between px-4 py-3">
+                <div className="flex items-center gap-3 min-w-0">
+                  <span className="size-8 rounded-lg bg-primary/10 text-primary grid place-items-center shrink-0">
+                    <DatabaseIcon className="size-4" />
+                  </span>
+                  <div className="min-w-0">
+                    <div className="text-sm font-medium truncate">{r.label}</div>
+                    <div className="text-[11px] text-muted-foreground">
+                      {r.count.toLocaleString()} item{r.count === 1 ? "" : "s"}
+                    </div>
+                  </div>
+                </div>
+                <div className="text-[11px] text-muted-foreground shrink-0">
+                  {formatWhen(r.latest)}
                 </div>
               </div>
-              <div className="text-[11px] text-muted-foreground shrink-0">{formatWhen(r.latest)}</div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
 
         <p className="text-[11px] text-muted-foreground text-center">
@@ -124,6 +143,3 @@ function CloudSyncPage() {
     </PageShell>
   );
 }
-
-
-

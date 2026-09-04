@@ -40,15 +40,21 @@ export function HubGrid({
                 tile.soon && "opacity-80",
               )}
             >
-              <span className={cn(
-                "size-11 rounded-2xl grid place-items-center text-white shadow-md bg-gradient-to-br",
-                tile.color,
-              )}>
+              <span
+                className={cn(
+                  "size-11 rounded-2xl grid place-items-center text-white shadow-md bg-gradient-to-br",
+                  tile.color,
+                )}
+              >
                 <Icon className="size-5" />
               </span>
               <div>
                 <div className="text-sm font-semibold leading-tight">{tile.label}</div>
-                {tile.desc && <div className="text-[11px] text-muted-foreground mt-0.5 line-clamp-2">{tile.desc}</div>}
+                {tile.desc && (
+                  <div className="text-[11px] text-muted-foreground mt-0.5 line-clamp-2">
+                    {tile.desc}
+                  </div>
+                )}
               </div>
               {tile.soon && (
                 <span className="absolute top-2 right-2 text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-[oklch(0.78_0.13_235_/_0.18)] text-[color:var(--sky-soft)] border border-[oklch(0.78_0.13_235_/_0.35)]">
@@ -58,7 +64,9 @@ export function HubGrid({
             </motion.div>
           );
           return tile.to && !tile.soon ? (
-            <Link key={tile.label} to={tile.to as "/"} className="block">{content}</Link>
+            <Link key={tile.label} to={tile.to as "/"} className="block">
+              {content}
+            </Link>
           ) : (
             <div key={tile.label}>{content}</div>
           );

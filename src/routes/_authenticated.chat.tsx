@@ -3,11 +3,33 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  MessageSquare, Send, Paperclip, Camera, Mic, Copy, RefreshCw, Loader2, X,
-  FileText, FilePlus, Construction, Plus, History as HistoryIcon, Trash2, Check, Sparkles, Square,
+  MessageSquare,
+  Send,
+  Paperclip,
+  Camera,
+  Mic,
+  Copy,
+  RefreshCw,
+  Loader2,
+  X,
+  FileText,
+  FilePlus,
+  Construction,
+  Plus,
+  History as HistoryIcon,
+  Trash2,
+  Check,
+  Sparkles,
+  Square,
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { PageHeader } from "@/components/PageShell";
 import { Button } from "@/components/ui/button";
@@ -24,9 +46,14 @@ export const Route = createFileRoute("/_authenticated/chat")({
   }),
 });
 
-
 type Msg = { role: "user" | "assistant"; content: string; imageUrl?: string; ts: number };
-type Conversation = { id: string; title: string; createdAt: number; updatedAt: number; messages: Msg[] };
+type Conversation = {
+  id: string;
+  title: string;
+  createdAt: number;
+  updatedAt: number;
+  messages: Msg[];
+};
 
 const DEFAULT_SUGGESTIONS = [
   "✍️ Write me a professional email",
@@ -62,13 +89,17 @@ function saveConversations(userId: string | undefined, convos: Conversation[]) {
   }
 }
 
-
 function groupConversations(convos: Conversation[]) {
   const now = new Date();
   const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
   const startOfYesterday = startOfToday - 86400000;
   const start7 = startOfToday - 7 * 86400000;
-  const buckets = { Today: [] as Conversation[], Yesterday: [] as Conversation[], "Previous 7 Days": [] as Conversation[], Older: [] as Conversation[] };
+  const buckets = {
+    Today: [] as Conversation[],
+    Yesterday: [] as Conversation[],
+    "Previous 7 Days": [] as Conversation[],
+    Older: [] as Conversation[],
+  };
   for (const c of convos) {
     if (c.updatedAt >= startOfToday) buckets.Today.push(c);
     else if (c.updatedAt >= startOfYesterday) buckets.Yesterday.push(c);
@@ -84,7 +115,12 @@ function extractFollowUps(text: string): string[] {
   if (!m) return [];
   const lines = m
     .split("\n")
-    .map((l) => l.replace(/^\s*[-*\d.]+\s*/, "").replace(/^["“]|["”]$/g, "").trim())
+    .map((l) =>
+      l
+        .replace(/^\s*[-*\d.]+\s*/, "")
+        .replace(/^["“]|["”]$/g, "")
+        .trim(),
+    )
     .filter((l) => l.length > 3 && l.length < 140 && /[a-zA-Z]/.test(l));
   return lines.slice(0, 3);
 }
@@ -98,11 +134,23 @@ function timeLabel(ts: number) {
 }
 
 /* ---------- Code block with Copy ---------- */
-function CodeBlock({ inline, className, children }: { inline?: boolean; className?: string; children?: React.ReactNode }) {
+function CodeBlock({
+  inline,
+  className,
+  children,
+}: {
+  inline?: boolean;
+  className?: string;
+  children?: React.ReactNode;
+}) {
   const [copied, setCopied] = useState(false);
   const text = String(children ?? "").replace(/\n$/, "");
   if (inline) {
-    return <code className={cn("px-1.5 py-0.5 rounded bg-muted text-[0.85em] font-mono", className)}>{children}</code>;
+    return (
+      <code className={cn("px-1.5 py-0.5 rounded bg-muted text-[0.85em] font-mono", className)}>
+        {children}
+      </code>
+    );
   }
   const lang = /language-(\w+)/.exec(className || "")?.[1] ?? "";
   return (
@@ -117,7 +165,8 @@ function CodeBlock({ inline, className, children }: { inline?: boolean; classNam
           }}
           className="flex items-center gap-1 hover:text-white transition-colors"
         >
-          {copied ? <Check className="size-3" /> : <Copy className="size-3" />} {copied ? "Copied" : "Copy code"}
+          {copied ? <Check className="size-3" /> : <Copy className="size-3" />}{" "}
+          {copied ? "Copied" : "Copy code"}
         </button>
       </div>
       <pre className="bg-zinc-950 text-zinc-100 text-[13px] leading-relaxed p-3 overflow-x-auto m-0">
@@ -129,7 +178,11 @@ function CodeBlock({ inline, className, children }: { inline?: boolean; classNam
 
 /* ---------- Auto-grow textarea ---------- */
 function AutoTextarea({
-  value, onChange, onKeyDown, placeholder, disabled,
+  value,
+  onChange,
+  onKeyDown,
+  placeholder,
+  disabled,
 }: {
   value: string;
   onChange: (v: string) => void;
@@ -173,7 +226,9 @@ function ChatPage() {
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [attached, setAttached] = useState<string | null>(null);
-  const [comingSoon, setComingSoon] = useState<null | { title: string; icon: typeof FileText }>(null);
+  const [comingSoon, setComingSoon] = useState<null | { title: string; icon: typeof FileText }>(
+    null,
+  );
   const [historyOpen, setHistoryOpen] = useState(false);
   const [toDelete, setToDelete] = useState<string | null>(null);
   const [clearAllOpen, setClearAllOpen] = useState(false);
@@ -200,7 +255,10 @@ function ChatPage() {
     }
   }, [cParam, conversations]);
 
-  const active = useMemo(() => conversations.find((c) => c.id === activeId) ?? null, [conversations, activeId]);
+  const active = useMemo(
+    () => conversations.find((c) => c.id === activeId) ?? null,
+    [conversations, activeId],
+  );
   const messages = active?.messages ?? [];
 
   useEffect(() => {
@@ -218,10 +276,13 @@ function ChatPage() {
     }
   }, [messages]);
 
-  const persist = useCallback((next: Conversation[]) => {
-    setConversations(next);
-    saveConversations(user?.id, next);
-  }, [user?.id]);
+  const persist = useCallback(
+    (next: Conversation[]) => {
+      setConversations(next);
+      saveConversations(user?.id, next);
+    },
+    [user?.id],
+  );
 
   function newChat() {
     setActiveId(null);
@@ -256,7 +317,6 @@ function ChatPage() {
     toast.success("History cleared");
   }
 
-
   async function send(customText?: string, retryLast = false) {
     if (!user) return;
     const now = Date.now();
@@ -264,8 +324,8 @@ function ChatPage() {
     let convos = conversations;
 
     const providedText = customText ?? input;
-    const text = retryLast ? messages[messages.length - 2]?.content ?? "" : providedText.trim();
-    const img = retryLast ? messages[messages.length - 2]?.imageUrl : attached ?? undefined;
+    const text = retryLast ? (messages[messages.length - 2]?.content ?? "") : providedText.trim();
+    const img = retryLast ? messages[messages.length - 2]?.imageUrl : (attached ?? undefined);
     if (!text && !img) return;
 
     // Ensure conversation exists
@@ -281,7 +341,6 @@ function ChatPage() {
       setActiveId(convo.id);
       navigate({ to: "/chat", search: { c: convo.id } });
     }
-
 
     let msgs: Msg[];
     if (retryLast) {
@@ -300,10 +359,16 @@ function ChatPage() {
     setBusy(true);
     try {
       const res = await chatMessage({
-        data: { messages: msgs.map((m) => ({ role: m.role, content: m.content, imageUrl: m.imageUrl })) },
+        data: {
+          messages: msgs.map((m) => ({ role: m.role, content: m.content, imageUrl: m.imageUrl })),
+        },
       });
       const reply: Msg = { role: "assistant", content: res.text, ts: Date.now() };
-      const finalConvo: Conversation = { ...updatedConvo, messages: [...msgs, reply], updatedAt: Date.now() };
+      const finalConvo: Conversation = {
+        ...updatedConvo,
+        messages: [...msgs, reply],
+        updatedAt: Date.now(),
+      };
       nextConvos = nextConvos.map((c) => (c.id === finalConvo.id ? finalConvo : c));
       persist(nextConvos);
     } catch (e) {
@@ -324,13 +389,26 @@ function ChatPage() {
       recRef.current?.stop();
       return;
     }
-    const SR = (window as unknown as { webkitSpeechRecognition?: new () => unknown; SpeechRecognition?: new () => unknown }).webkitSpeechRecognition
-      ?? (window as unknown as { SpeechRecognition?: new () => unknown }).SpeechRecognition;
+    const SR =
+      (
+        window as unknown as {
+          webkitSpeechRecognition?: new () => unknown;
+          SpeechRecognition?: new () => unknown;
+        }
+      ).webkitSpeechRecognition ??
+      (window as unknown as { SpeechRecognition?: new () => unknown }).SpeechRecognition;
     if (!SR) return toast.error("Voice input not supported on this device");
     const rec = new SR() as {
-      lang: string; interimResults: boolean; continuous: boolean;
-      onresult: (e: { results: ArrayLike<ArrayLike<{ transcript: string }> & { isFinal?: boolean }> }) => void;
-      onerror: () => void; onend: () => void; start: () => void; stop: () => void;
+      lang: string;
+      interimResults: boolean;
+      continuous: boolean;
+      onresult: (e: {
+        results: ArrayLike<ArrayLike<{ transcript: string }> & { isFinal?: boolean }>;
+      }) => void;
+      onerror: () => void;
+      onend: () => void;
+      start: () => void;
+      stop: () => void;
     };
     rec.lang = "en-US";
     rec.interimResults = true;
@@ -346,7 +424,10 @@ function ChatPage() {
       }
       setInput((finalText + interim).trim());
     };
-    rec.onerror = () => { toast.error("Voice input failed"); setRecording(false); };
+    rec.onerror = () => {
+      toast.error("Voice input failed");
+      setRecording(false);
+    };
     rec.onend = () => {
       setRecording(false);
       if (finalText) {
@@ -368,7 +449,10 @@ function ChatPage() {
     toast.success("Copied");
   }
 
-  const grouped = useMemo(() => groupConversations([...conversations].sort((a, b) => b.updatedAt - a.updatedAt)), [conversations]);
+  const grouped = useMemo(
+    () => groupConversations([...conversations].sort((a, b) => b.updatedAt - a.updatedAt)),
+    [conversations],
+  );
   const charCount = input.length;
 
   const showEmpty = messages.length === 0;
@@ -377,7 +461,11 @@ function ChatPage() {
   return (
     <div className="flex flex-col h-[calc(100dvh-3.5rem-5rem)]">
       <div className="px-4 pt-3 flex items-center justify-between gap-2">
-        <PageHeader title="AI Chat" icon={<MessageSquare className="size-5 text-primary" />} subtitle="Ask Nova Vision anything" />
+        <PageHeader
+          title="AI Chat"
+          icon={<MessageSquare className="size-5 text-primary" />}
+          subtitle="Ask Nova Vision anything"
+        />
         <div className="flex gap-1 shrink-0">
           <button
             onClick={() => setHistoryOpen(true)}
@@ -403,7 +491,9 @@ function ChatPage() {
               <Sparkles className="size-6 text-primary-foreground" />
             </div>
             <p className="text-sm font-semibold">Start a conversation</p>
-            <p className="text-xs text-muted-foreground mt-1">Ask about anything — food, plants, code, writing, ideas.</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              Ask about anything — food, plants, code, writing, ideas.
+            </p>
           </div>
         )}
         {messages.map((m, i) => {
@@ -422,12 +512,24 @@ function ChatPage() {
                   <Sparkles className="size-4 text-primary-foreground" />
                 </div>
               )}
-              <div className={cn("max-w-[82%] group", isUser ? "items-end" : "items-start", "flex flex-col")}>
-                <div className={cn(
-                  "rounded-2xl px-4 py-2.5 shadow-sm",
-                  isUser ? "bg-primary text-primary-foreground rounded-tr-md" : "glass-card rounded-tl-md",
-                )}>
-                  {m.imageUrl && <img src={m.imageUrl} alt="" className="rounded-lg mb-2 max-h-52" />}
+              <div
+                className={cn(
+                  "max-w-[82%] group",
+                  isUser ? "items-end" : "items-start",
+                  "flex flex-col",
+                )}
+              >
+                <div
+                  className={cn(
+                    "rounded-2xl px-4 py-2.5 shadow-sm",
+                    isUser
+                      ? "bg-primary text-primary-foreground rounded-tr-md"
+                      : "glass-card rounded-tl-md",
+                  )}
+                >
+                  {m.imageUrl && (
+                    <img src={m.imageUrl} alt="" className="rounded-lg mb-2 max-h-52" />
+                  )}
                   {isUser ? (
                     <p className="text-[15px] leading-relaxed whitespace-pre-wrap">{clean}</p>
                   ) : (
@@ -443,18 +545,26 @@ function ChatPage() {
                     </div>
                   )}
                 </div>
-                <div className={cn(
-                  "flex items-center gap-2 mt-1 text-[10px] text-muted-foreground px-1",
-                  isUser ? "flex-row-reverse" : "flex-row",
-                )}>
+                <div
+                  className={cn(
+                    "flex items-center gap-2 mt-1 text-[10px] text-muted-foreground px-1",
+                    isUser ? "flex-row-reverse" : "flex-row",
+                  )}
+                >
                   <span>{timeLabel(m.ts)}</span>
                   {!isUser && (
                     <>
-                      <button onClick={() => copyMessage(clean)} className="flex items-center gap-1 hover:text-foreground transition-colors">
+                      <button
+                        onClick={() => copyMessage(clean)}
+                        className="flex items-center gap-1 hover:text-foreground transition-colors"
+                      >
                         <Copy className="size-3" /> Copy
                       </button>
                       {i === messages.length - 1 && (
-                        <button onClick={() => send(undefined, true)} className="flex items-center gap-1 hover:text-foreground transition-colors">
+                        <button
+                          onClick={() => send(undefined, true)}
+                          className="flex items-center gap-1 hover:text-foreground transition-colors"
+                        >
                           <RefreshCw className="size-3" /> Regenerate
                         </button>
                       )}
@@ -466,14 +576,27 @@ function ChatPage() {
           );
         })}
         {busy && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-start gap-2">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex justify-start gap-2"
+          >
             <div className="size-8 shrink-0 rounded-full hero-gradient grid place-items-center glow">
               <Sparkles className="size-4 text-primary-foreground" />
             </div>
             <div className="glass-card px-4 py-3 flex gap-1 rounded-2xl rounded-tl-md">
-              <span className="size-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: "0ms" }} />
-              <span className="size-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: "120ms" }} />
-              <span className="size-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: "240ms" }} />
+              <span
+                className="size-2 rounded-full bg-primary animate-bounce"
+                style={{ animationDelay: "0ms" }}
+              />
+              <span
+                className="size-2 rounded-full bg-primary animate-bounce"
+                style={{ animationDelay: "120ms" }}
+              />
+              <span
+                className="size-2 rounded-full bg-primary animate-bounce"
+                style={{ animationDelay: "240ms" }}
+              />
             </div>
           </motion.div>
         )}
@@ -534,21 +657,41 @@ function ChatPage() {
         {attached && (
           <div className="relative mb-2 inline-block">
             <img src={attached} alt="" className="h-16 rounded-lg" />
-            <button onClick={() => setAttached(null)} className="absolute -top-1 -right-1 size-5 bg-destructive text-destructive-foreground rounded-full grid place-items-center">
+            <button
+              onClick={() => setAttached(null)}
+              className="absolute -top-1 -right-1 size-5 bg-destructive text-destructive-foreground rounded-full grid place-items-center"
+            >
               <X className="size-3" />
             </button>
           </div>
         )}
         <div className="flex items-end gap-2">
           <div className="flex flex-col gap-1">
-            <button onClick={() => fileRef.current?.click()} className="p-2 rounded-lg hover:bg-accent" aria-label="Attach image"><Paperclip className="size-4" /></button>
-            <button onClick={() => camRef.current?.click()} className="p-2 rounded-lg hover:bg-accent" aria-label="Camera"><Camera className="size-4" /></button>
+            <button
+              onClick={() => fileRef.current?.click()}
+              className="p-2 rounded-lg hover:bg-accent"
+              aria-label="Attach image"
+            >
+              <Paperclip className="size-4" />
+            </button>
+            <button
+              onClick={() => camRef.current?.click()}
+              className="p-2 rounded-lg hover:bg-accent"
+              aria-label="Camera"
+            >
+              <Camera className="size-4" />
+            </button>
           </div>
           <div className={cn("flex-1 relative transition-all", highlightInput && "animate-pulse")}>
             <AutoTextarea
               value={input}
               onChange={setInput}
-              onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  send();
+                }
+              }}
               placeholder="Message Nova Vision…"
               disabled={busy}
             />
@@ -570,7 +713,9 @@ function ChatPage() {
               aria-label={recording ? "Stop voice" : "Start voice"}
             >
               {recording ? <Square className="size-4" /> : <Mic className="size-4" />}
-              {recording && <span className="absolute inset-0 rounded-lg border-2 border-primary animate-ping" />}
+              {recording && (
+                <span className="absolute inset-0 rounded-lg border-2 border-primary animate-ping" />
+              )}
             </button>
             <button
               onClick={() => setComingSoon({ title: "Attach File", icon: FilePlus })}
@@ -591,8 +736,21 @@ function ChatPage() {
           >
             {busy ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
           </Button>
-          <input ref={fileRef} type="file" hidden accept="image/*" onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])} />
-          <input ref={camRef} type="file" hidden accept="image/*" capture="environment" onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])} />
+          <input
+            ref={fileRef}
+            type="file"
+            hidden
+            accept="image/*"
+            onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
+          />
+          <input
+            ref={camRef}
+            type="file"
+            hidden
+            accept="image/*"
+            capture="environment"
+            onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
+          />
         </div>
         <button
           onClick={() => setComingSoon({ title: "Document", icon: FileText })}
@@ -607,13 +765,19 @@ function ChatPage() {
         <DialogContent className="glass-card backdrop-blur-2xl border-border max-w-sm">
           <AnimatePresence>
             {comingSoon && (
-              <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }}>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+              >
                 <div className="flex flex-col items-center text-center py-2">
                   <div className="size-16 rounded-3xl hero-gradient grid place-items-center glow mb-4">
                     <Construction className="size-8 text-primary-foreground" />
                   </div>
                   <DialogHeader>
-                    <DialogTitle className="text-center text-lg">🚧 {comingSoon.title} — Coming Soon</DialogTitle>
+                    <DialogTitle className="text-center text-lg">
+                      🚧 {comingSoon.title} — Coming Soon
+                    </DialogTitle>
                     <DialogDescription className="text-center mt-2">
                       This feature is under development and will be available in a future update.
                     </DialogDescription>
@@ -629,10 +793,15 @@ function ChatPage() {
       <Sheet open={historyOpen} onOpenChange={setHistoryOpen}>
         <SheetContent side="left" className="w-[88%] max-w-sm p-0 flex flex-col">
           <SheetHeader className="p-4 border-b border-border">
-            <SheetTitle className="flex items-center gap-2"><HistoryIcon className="size-4 text-primary" /> Chat history</SheetTitle>
+            <SheetTitle className="flex items-center gap-2">
+              <HistoryIcon className="size-4 text-primary" /> Chat history
+            </SheetTitle>
           </SheetHeader>
           <div className="p-3 border-b border-border flex gap-2">
-            <Button onClick={newChat} className="flex-1 hero-gradient text-primary-foreground rounded-xl">
+            <Button
+              onClick={newChat}
+              className="flex-1 hero-gradient text-primary-foreground rounded-xl"
+            >
               <Plus className="size-4 mr-1" /> New chat
             </Button>
             {conversations.length > 0 && (
@@ -649,27 +818,42 @@ function ChatPage() {
 
           <div className="flex-1 overflow-y-auto p-3 space-y-4">
             {conversations.length === 0 && (
-              <p className="text-center text-xs text-muted-foreground py-8">No conversations yet.</p>
+              <p className="text-center text-xs text-muted-foreground py-8">
+                No conversations yet.
+              </p>
             )}
             {(Object.keys(grouped) as (keyof typeof grouped)[]).map((label) => {
               const items = grouped[label];
               if (!items.length) return null;
               return (
                 <div key={label}>
-                  <div className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground px-1 mb-2">{label}</div>
+                  <div className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground px-1 mb-2">
+                    {label}
+                  </div>
                   <ul className="space-y-1">
                     {items.map((c) => {
                       const last = c.messages[c.messages.length - 1];
                       const preview = last ? last.content.replace(/[#*`]/g, "").slice(0, 50) : "";
                       return (
                         <li key={c.id}>
-                          <div className={cn(
-                            "group flex items-start gap-2 p-2.5 rounded-xl cursor-pointer transition-colors",
-                            activeId === c.id ? "bg-primary/10 border border-primary/30" : "hover:bg-accent border border-transparent",
-                          )}>
-                            <button onClick={() => openConversation(c.id)} className="flex-1 min-w-0 text-left">
+                          <div
+                            className={cn(
+                              "group flex items-start gap-2 p-2.5 rounded-xl cursor-pointer transition-colors",
+                              activeId === c.id
+                                ? "bg-primary/10 border border-primary/30"
+                                : "hover:bg-accent border border-transparent",
+                            )}
+                          >
+                            <button
+                              onClick={() => openConversation(c.id)}
+                              className="flex-1 min-w-0 text-left"
+                            >
                               <div className="text-sm font-medium truncate">{c.title}</div>
-                              {preview && <div className="text-[11px] text-muted-foreground truncate mt-0.5">{preview}</div>}
+                              {preview && (
+                                <div className="text-[11px] text-muted-foreground truncate mt-0.5">
+                                  {preview}
+                                </div>
+                              )}
                             </button>
                             <button
                               onClick={() => setToDelete(c.id)}
@@ -695,11 +879,17 @@ function ChatPage() {
         <DialogContent className="max-w-sm">
           <DialogHeader>
             <DialogTitle>Delete conversation?</DialogTitle>
-            <DialogDescription>This chat will be removed from your history. This cannot be undone.</DialogDescription>
+            <DialogDescription>
+              This chat will be removed from your history. This cannot be undone.
+            </DialogDescription>
           </DialogHeader>
           <div className="flex gap-2 justify-end mt-2">
-            <Button variant="ghost" onClick={() => setToDelete(null)}>Cancel</Button>
-            <Button variant="destructive" onClick={() => toDelete && deleteConversation(toDelete)}>Delete</Button>
+            <Button variant="ghost" onClick={() => setToDelete(null)}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={() => toDelete && deleteConversation(toDelete)}>
+              Delete
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
@@ -709,11 +899,17 @@ function ChatPage() {
         <DialogContent className="max-w-sm">
           <DialogHeader>
             <DialogTitle>Clear all history?</DialogTitle>
-            <DialogDescription>Every saved conversation will be permanently removed from this device.</DialogDescription>
+            <DialogDescription>
+              Every saved conversation will be permanently removed from this device.
+            </DialogDescription>
           </DialogHeader>
           <div className="flex gap-2 justify-end mt-2">
-            <Button variant="ghost" onClick={() => setClearAllOpen(false)}>Cancel</Button>
-            <Button variant="destructive" onClick={clearAll}>Clear all</Button>
+            <Button variant="ghost" onClick={() => setClearAllOpen(false)}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={clearAll}>
+              Clear all
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
@@ -725,6 +921,5 @@ function ChatPage() {
         }
       `}</style>
     </div>
-
   );
 }

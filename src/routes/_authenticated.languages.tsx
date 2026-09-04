@@ -21,7 +21,11 @@ function LanguagesPage() {
 
   return (
     <PageShell>
-      <PageHeader title={t("languages.title")} icon={<Globe className="size-5 text-primary" />} subtitle={t("languages.subtitle")} />
+      <PageHeader
+        title={t("languages.title")}
+        icon={<Globe className="size-5 text-primary" />}
+        subtitle={t("languages.subtitle")}
+      />
       <ul className="space-y-1.5">
         {LANGUAGES.map((l, i) => (
           <motion.li

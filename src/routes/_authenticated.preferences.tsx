@@ -13,7 +13,12 @@ import { pageHead } from "@/lib/page-head";
 
 export const Route = createFileRoute("/_authenticated/preferences")({
   component: PreferencesPage,
-  head: () => pageHead({ path: "/preferences", title: "AI Preferences — Nova Vision AI", description: "Customize how Nova responds — model, tone, style, voice." }),
+  head: () =>
+    pageHead({
+      path: "/preferences",
+      title: "AI Preferences — Nova Vision AI",
+      description: "Customize how Nova responds — model, tone, style, voice.",
+    }),
 });
 
 type Prefs = {
@@ -49,10 +54,18 @@ const LENGTHS = ["short", "balanced", "detailed"];
 const STYLES = ["clear", "formal", "casual", "creative", "technical"];
 const TONES = ["friendly", "professional", "playful", "empathetic", "direct"];
 const LANGS = [
-  { id: "en", label: "English" }, { id: "es", label: "Spanish" }, { id: "fr", label: "French" },
-  { id: "de", label: "German" }, { id: "pt", label: "Portuguese" }, { id: "it", label: "Italian" },
-  { id: "ar", label: "Arabic" }, { id: "hi", label: "Hindi" }, { id: "zh", label: "Chinese" },
-  { id: "ja", label: "Japanese" }, { id: "ko", label: "Korean" }, { id: "ru", label: "Russian" },
+  { id: "en", label: "English" },
+  { id: "es", label: "Spanish" },
+  { id: "fr", label: "French" },
+  { id: "de", label: "German" },
+  { id: "pt", label: "Portuguese" },
+  { id: "it", label: "Italian" },
+  { id: "ar", label: "Arabic" },
+  { id: "hi", label: "Hindi" },
+  { id: "zh", label: "Chinese" },
+  { id: "ja", label: "Japanese" },
+  { id: "ko", label: "Korean" },
+  { id: "ru", label: "Russian" },
 ];
 const THEMES = ["system", "light", "dark"];
 const VOICES = ["alloy", "verse", "aria", "coral", "sage"];
@@ -66,15 +79,29 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   );
 }
 
-function Select({ value, onChange, options }: { value: string; onChange: (v: string) => void; options: { id: string; label: string }[] | string[] }) {
-  const opts = options.map((o) => (typeof o === "string" ? { id: o, label: o[0].toUpperCase() + o.slice(1) } : o));
+function Select({
+  value,
+  onChange,
+  options,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  options: { id: string; label: string }[] | string[];
+}) {
+  const opts = options.map((o) =>
+    typeof o === "string" ? { id: o, label: o[0].toUpperCase() + o.slice(1) } : o,
+  );
   return (
     <select
       value={value}
       onChange={(e) => onChange(e.target.value)}
       className="w-full h-10 rounded-lg border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
     >
-      {opts.map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
+      {opts.map((o) => (
+        <option key={o.id} value={o.id}>
+          {o.label}
+        </option>
+      ))}
     </select>
   );
 }
@@ -95,10 +122,15 @@ function PreferencesPage() {
         .maybeSingle();
       if (!error && data) {
         setPrefs({
-          ai_model: data.ai_model, response_length: data.response_length,
-          writing_style: data.writing_style, tone: data.tone,
-          creativity: Number(data.creativity), language: data.language,
-          theme: data.theme, voice: data.voice, default_behavior: data.default_behavior ?? "",
+          ai_model: data.ai_model,
+          response_length: data.response_length,
+          writing_style: data.writing_style,
+          tone: data.tone,
+          creativity: Number(data.creativity),
+          language: data.language,
+          theme: data.theme,
+          voice: data.voice,
+          default_behavior: data.default_behavior ?? "",
         });
       }
       setLoading(false);
@@ -141,20 +173,36 @@ function PreferencesPage() {
       <div className="space-y-4">
         <div className="glass-card p-4 space-y-4">
           <Field label="AI Model">
-            <Select value={prefs.ai_model} onChange={(v) => update("ai_model", v)} options={MODELS} />
+            <Select
+              value={prefs.ai_model}
+              onChange={(v) => update("ai_model", v)}
+              options={MODELS}
+            />
           </Field>
           <div className="grid grid-cols-2 gap-3">
             <Field label="Response length">
-              <Select value={prefs.response_length} onChange={(v) => update("response_length", v)} options={LENGTHS} />
+              <Select
+                value={prefs.response_length}
+                onChange={(v) => update("response_length", v)}
+                options={LENGTHS}
+              />
             </Field>
             <Field label="Writing style">
-              <Select value={prefs.writing_style} onChange={(v) => update("writing_style", v)} options={STYLES} />
+              <Select
+                value={prefs.writing_style}
+                onChange={(v) => update("writing_style", v)}
+                options={STYLES}
+              />
             </Field>
             <Field label="Tone">
               <Select value={prefs.tone} onChange={(v) => update("tone", v)} options={TONES} />
             </Field>
             <Field label="Language">
-              <Select value={prefs.language} onChange={(v) => update("language", v)} options={LANGS} />
+              <Select
+                value={prefs.language}
+                onChange={(v) => update("language", v)}
+                options={LANGS}
+              />
             </Field>
             <Field label="Theme">
               <Select value={prefs.theme} onChange={(v) => update("theme", v)} options={THEMES} />
@@ -165,13 +213,18 @@ function PreferencesPage() {
           </div>
           <Field label={`Creativity (${prefs.creativity.toFixed(1)})`}>
             <input
-              type="range" min={0} max={1} step={0.1}
+              type="range"
+              min={0}
+              max={1}
+              step={0.1}
               value={prefs.creativity}
               onChange={(e) => update("creativity", Number(e.target.value))}
               className="w-full accent-primary"
             />
             <div className="flex justify-between text-[10px] text-muted-foreground">
-              <span>Precise</span><span>Balanced</span><span>Creative</span>
+              <span>Precise</span>
+              <span>Balanced</span>
+              <span>Creative</span>
             </div>
           </Field>
         </div>
@@ -185,12 +238,20 @@ function PreferencesPage() {
               className="min-h-[100px]"
               maxLength={800}
             />
-            <div className="text-[10px] text-muted-foreground text-right">{prefs.default_behavior.length}/800</div>
+            <div className="text-[10px] text-muted-foreground text-right">
+              {prefs.default_behavior.length}/800
+            </div>
           </Field>
         </div>
 
         <Button onClick={save} disabled={saving} className="w-full h-11">
-          {saving ? <Loader2 className="size-4 animate-spin" /> : <><Save className="size-4 mr-1.5" /> Save preferences</>}
+          {saving ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : (
+            <>
+              <Save className="size-4 mr-1.5" /> Save preferences
+            </>
+          )}
         </Button>
 
         <div className="glass-card p-3 flex gap-2 items-start text-xs text-muted-foreground">

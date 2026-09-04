@@ -1,0 +1,6 @@
+{
+  "name": "Nova Vision AI",
+  "description": "Scan food, plants, and everyday objects with AI. Get instant identification, safety checks, nutrition info, and personalized meal plans.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

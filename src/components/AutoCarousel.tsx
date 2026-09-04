@@ -19,8 +19,12 @@ const SLIDES = [
 ];
 
 export function AutoCarousel({ className }: { className?: string }) {
-  const autoplay = useRef(Autoplay({ delay: 2800, stopOnInteraction: false, stopOnMouseEnter: true }));
-  const [emblaRef, embla] = useEmblaCarousel({ loop: true, dragFree: false, align: "center" }, [autoplay.current]);
+  const autoplay = useRef(
+    Autoplay({ delay: 2800, stopOnInteraction: false, stopOnMouseEnter: true }),
+  );
+  const [emblaRef, embla] = useEmblaCarousel({ loop: true, dragFree: false, align: "center" }, [
+    autoplay.current,
+  ]);
   const [selected, setSelected] = useState(0);
 
   useEffect(() => {
@@ -64,7 +68,9 @@ export function AutoCarousel({ className }: { className?: string }) {
                   draggable={false}
                   className="absolute inset-0 w-full h-full object-cover select-none"
                   initial={{ scale: 1.06, opacity: 0 }}
-                  animate={selected === i ? { scale: 1, opacity: 1 } : { scale: 1.06, opacity: 0.7 }}
+                  animate={
+                    selected === i ? { scale: 1, opacity: 1 } : { scale: 1.06, opacity: 0.7 }
+                  }
                   transition={{ duration: 0.8, ease: "easeOut" }}
                 />
               </div>

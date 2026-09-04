@@ -9,14 +9,54 @@ import { dailyTip } from "@/lib/ai.functions";
 export const Route = createFileRoute("/_authenticated/daily-feed")({ component: Page });
 
 const CATEGORIES = [
-  { key: "ai-news", label: "AI News", color: "from-sky-400 to-blue-500", prompt: "One short AI industry update from this week (1-2 sentences)." },
-  { key: "productivity", label: "Productivity", color: "from-emerald-400 to-green-500", prompt: "One actionable productivity tip (1-2 sentences)." },
-  { key: "tech", label: "Technology", color: "from-violet-400 to-indigo-500", prompt: "One interesting technology insight (1-2 sentences)." },
-  { key: "business", label: "Business Idea", color: "from-amber-400 to-orange-500", prompt: "One small online business idea (1-2 sentences)." },
-  { key: "health", label: "Health Tip", color: "from-rose-400 to-pink-500", prompt: "One simple health tip (1-2 sentences)." },
-  { key: "finance", label: "Finance", color: "from-yellow-400 to-amber-500", prompt: "One personal finance tip (1-2 sentences)." },
-  { key: "motivation", label: "Motivation", color: "from-fuchsia-400 to-purple-500", prompt: "One short motivational quote with attribution if known." },
-  { key: "prompt", label: "Prompt of the Day", color: "from-cyan-400 to-teal-500", prompt: "One creative AI prompt users can try today (1 sentence)." },
+  {
+    key: "ai-news",
+    label: "AI News",
+    color: "from-sky-400 to-blue-500",
+    prompt: "One short AI industry update from this week (1-2 sentences).",
+  },
+  {
+    key: "productivity",
+    label: "Productivity",
+    color: "from-emerald-400 to-green-500",
+    prompt: "One actionable productivity tip (1-2 sentences).",
+  },
+  {
+    key: "tech",
+    label: "Technology",
+    color: "from-violet-400 to-indigo-500",
+    prompt: "One interesting technology insight (1-2 sentences).",
+  },
+  {
+    key: "business",
+    label: "Business Idea",
+    color: "from-amber-400 to-orange-500",
+    prompt: "One small online business idea (1-2 sentences).",
+  },
+  {
+    key: "health",
+    label: "Health Tip",
+    color: "from-rose-400 to-pink-500",
+    prompt: "One simple health tip (1-2 sentences).",
+  },
+  {
+    key: "finance",
+    label: "Finance",
+    color: "from-yellow-400 to-amber-500",
+    prompt: "One personal finance tip (1-2 sentences).",
+  },
+  {
+    key: "motivation",
+    label: "Motivation",
+    color: "from-fuchsia-400 to-purple-500",
+    prompt: "One short motivational quote with attribution if known.",
+  },
+  {
+    key: "prompt",
+    label: "Prompt of the Day",
+    color: "from-cyan-400 to-teal-500",
+    prompt: "One creative AI prompt users can try today (1 sentence).",
+  },
 ];
 
 function Page() {
@@ -40,7 +80,9 @@ function Page() {
     setLoading(false);
   }
 
-  useEffect(() => { refresh(); }, []);
+  useEffect(() => {
+    refresh();
+  }, []);
 
   return (
     <PageShell>
@@ -67,7 +109,9 @@ function Page() {
             className="glass-card p-4"
           >
             <div className="flex items-center gap-2 mb-2">
-              <span className={`size-7 rounded-lg bg-gradient-to-br ${c.color} grid place-items-center text-white shadow`}>
+              <span
+                className={`size-7 rounded-lg bg-gradient-to-br ${c.color} grid place-items-center text-white shadow`}
+              >
                 <Sparkles className="size-4" />
               </span>
               <h3 className="text-sm font-semibold">{c.label}</h3>

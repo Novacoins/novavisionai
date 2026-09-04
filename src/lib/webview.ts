@@ -40,11 +40,17 @@ export function openInSystemBrowser(url: string): boolean {
       return true;
     }
     // Android intent fallback — Chrome will handle it in a Custom Tab.
-    const intent = url.replace(/^https?:\/\//, "intent://") +
+    const intent =
+      url.replace(/^https?:\/\//, "intent://") +
       "#Intent;scheme=https;package=com.android.chrome;end";
     window.location.href = intent;
     return true;
   } catch {
-    try { window.open(url, "_blank", "noopener,noreferrer"); return true; } catch { return false; }
+    try {
+      window.open(url, "_blank", "noopener,noreferrer");
+      return true;
+    } catch {
+      return false;
+    }
   }
 }

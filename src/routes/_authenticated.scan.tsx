@@ -38,7 +38,12 @@ function ScanPage() {
       const ai = await analyzeImage({ data: { imageDataUrl: img.dataUrl, scanType } });
       setResult(ai as AIResult);
       const uploaded = await uploadScanImage(user.id, img.dataUrl);
-      const row = await saveScan({ userId: user.id, result: ai as AIResult, scanType, image: uploaded });
+      const row = await saveScan({
+        userId: user.id,
+        result: ai as AIResult,
+        scanType,
+        image: uploaded,
+      });
       if (row?.id) {
         setScanId(row.id);
         awardPoints("scan").catch(() => {});
@@ -62,7 +67,11 @@ function ScanPage() {
     if (!result) return;
     const text = `${result.title}\n\n${result.summary}\n\nVia Nova Vision AI`;
     if (navigator.share) {
-      try { await navigator.share({ title: result.title, text }); } catch { /* dismissed */ }
+      try {
+        await navigator.share({ title: result.title, text });
+      } catch {
+        /* dismissed */
+      }
     } else {
       await navigator.clipboard.writeText(text);
       toast.success("Copied to clipboard");
@@ -84,7 +93,9 @@ function ScanPage() {
             key={t.id}
             onClick={() => setScanType(t.id)}
             className={`flex-1 py-2 text-sm font-medium rounded-lg transition ${
-              scanType === t.id ? "bg-background shadow-sm text-foreground" : "text-muted-foreground"
+              scanType === t.id
+                ? "bg-background shadow-sm text-foreground"
+                : "text-muted-foreground"
             }`}
           >
             {t.label}

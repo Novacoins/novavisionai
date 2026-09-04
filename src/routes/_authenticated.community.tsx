@@ -9,13 +9,18 @@ export const Route = createFileRoute("/_authenticated/community")({
 function CommunityPage() {
   return (
     <PageShell>
-      <PageHeader title="Community" icon={<Users className="size-5 text-primary" />} subtitle="Welcome to the Nova Vision AI Community" />
+      <PageHeader
+        title="Community"
+        icon={<Users className="size-5 text-primary" />}
+        subtitle="Welcome to the Nova Vision AI Community"
+      />
       <div className="glass-card p-5 text-center">
         <div className="size-16 rounded-2xl hero-gradient grid place-items-center mx-auto glow mb-3">
           <Users className="size-7 text-primary-foreground" />
         </div>
         <p className="text-sm text-muted-foreground leading-relaxed">
-          Connect with users around the world, share discoveries, discuss AI, request features, report bugs, and celebrate milestones together.
+          Connect with users around the world, share discoveries, discuss AI, request features,
+          report bugs, and celebrate milestones together.
         </p>
       </div>
 
@@ -36,7 +41,8 @@ function CommunityPage() {
 
       <div className="glass-card p-4 mt-4 text-center">
         <p className="text-xs text-muted-foreground">
-          The community feed is rolling out soon. For now, share your scans via the share button on any result.
+          The community feed is rolling out soon. For now, share your scans via the share button on
+          any result.
         </p>
       </div>
     </PageShell>

@@ -2,15 +2,43 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import {
-  Home, User, History, Heart, MessageSquare, Globe, Moon, Bell, Users, HelpCircle,
-  Mail, Info, Shield, FileText, LogOut, X, Sparkles, Brain, Newspaper, Briefcase,
-  Wrench, Image as ImageIcon, GraduationCap, HardDrive, Palette,
+  Home,
+  User,
+  History,
+  Heart,
+  MessageSquare,
+  Globe,
+  Moon,
+  Bell,
+  Users,
+  HelpCircle,
+  Mail,
+  Info,
+  Shield,
+  FileText,
+  LogOut,
+  X,
+  Sparkles,
+  Brain,
+  Newspaper,
+  Briefcase,
+  Wrench,
+  Image as ImageIcon,
+  GraduationCap,
+  HardDrive,
+  Palette,
 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { useState } from "react";
 import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
-  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { cn } from "@/lib/utils";
 
@@ -20,43 +48,175 @@ const groups: { title: string; items: Item[] }[] = [
   {
     title: "Main",
     items: [
-      { to: "/", icon: Home, label: "Home", desc: "Back to dashboard", color: "from-sky-400 to-blue-500" },
-      { to: "/profile", icon: User, label: "My Profile", desc: "Account & stats", color: "from-emerald-400 to-teal-500" },
-      { to: "/history", icon: History, label: "Scan History", desc: "Everything you've scanned", color: "from-amber-400 to-orange-500" },
-      { to: "/storage", icon: HardDrive, label: "Storage", desc: "All your saved images", color: "from-sky-500 to-cyan-500" },
-      { to: "/favorites", icon: Heart, label: "Favorites", desc: "Your saved scans", color: "from-rose-400 to-pink-500" },
+      {
+        to: "/",
+        icon: Home,
+        label: "Home",
+        desc: "Back to dashboard",
+        color: "from-sky-400 to-blue-500",
+      },
+      {
+        to: "/profile",
+        icon: User,
+        label: "My Profile",
+        desc: "Account & stats",
+        color: "from-emerald-400 to-teal-500",
+      },
+      {
+        to: "/history",
+        icon: History,
+        label: "Scan History",
+        desc: "Everything you've scanned",
+        color: "from-amber-400 to-orange-500",
+      },
+      {
+        to: "/storage",
+        icon: HardDrive,
+        label: "Storage",
+        desc: "All your saved images",
+        color: "from-sky-500 to-cyan-500",
+      },
+      {
+        to: "/favorites",
+        icon: Heart,
+        label: "Favorites",
+        desc: "Your saved scans",
+        color: "from-rose-400 to-pink-500",
+      },
     ],
   },
   {
     title: "AI Suite",
     items: [
-      { to: "/ai-memory", icon: Brain, label: "AI Memory", desc: "Conversations & preferences", color: "from-fuchsia-400 to-purple-500" },
-      { to: "/daily-feed", icon: Newspaper, label: "Daily AI Feed", desc: "News, tips & prompts", color: "from-cyan-400 to-sky-500" },
-      { to: "/workspace", icon: Briefcase, label: "AI Workspace", desc: "Projects & documents", color: "from-indigo-400 to-violet-500" },
-      { to: "/tools", icon: Wrench, label: "AI Tools Hub", desc: "Writer, OCR, translator…", color: "from-lime-400 to-green-500" },
-      { to: "/image-studio", icon: ImageIcon, label: "AI Image Studio", desc: "Generate & enhance", color: "from-pink-400 to-rose-500" },
-      { to: "/academy", icon: GraduationCap, label: "AI Learning Academy", desc: "Lessons & quizzes", color: "from-yellow-400 to-amber-500" },
-      { to: "/chat", icon: MessageSquare, label: "AI Chat", desc: "Talk to Nova Vision", color: "from-emerald-400 to-green-500" },
+      {
+        to: "/ai-memory",
+        icon: Brain,
+        label: "AI Memory",
+        desc: "Conversations & preferences",
+        color: "from-fuchsia-400 to-purple-500",
+      },
+      {
+        to: "/daily-feed",
+        icon: Newspaper,
+        label: "Daily AI Feed",
+        desc: "News, tips & prompts",
+        color: "from-cyan-400 to-sky-500",
+      },
+      {
+        to: "/workspace",
+        icon: Briefcase,
+        label: "AI Workspace",
+        desc: "Projects & documents",
+        color: "from-indigo-400 to-violet-500",
+      },
+      {
+        to: "/tools",
+        icon: Wrench,
+        label: "AI Tools Hub",
+        desc: "Writer, OCR, translator…",
+        color: "from-lime-400 to-green-500",
+      },
+      {
+        to: "/image-studio",
+        icon: ImageIcon,
+        label: "AI Image Studio",
+        desc: "Generate & enhance",
+        color: "from-pink-400 to-rose-500",
+      },
+      {
+        to: "/academy",
+        icon: GraduationCap,
+        label: "AI Learning Academy",
+        desc: "Lessons & quizzes",
+        color: "from-yellow-400 to-amber-500",
+      },
+      {
+        to: "/chat",
+        icon: MessageSquare,
+        label: "AI Chat",
+        desc: "Talk to Nova Vision",
+        color: "from-emerald-400 to-green-500",
+      },
     ],
   },
   {
     title: "Settings",
     items: [
-      { to: "/appearance", icon: Moon, label: "Appearance", desc: "Theme & display", color: "from-slate-400 to-slate-600" },
-      { to: "/accent-color", icon: Palette, label: "Accent Color", desc: "Personalize your theme", color: "from-fuchsia-500 to-pink-500" },
-      { to: "/languages", icon: Globe, label: "Languages", desc: "App language", color: "from-blue-400 to-indigo-500" },
-      { to: "/notifications", icon: Bell, label: "Notifications", desc: "Manage alerts", color: "from-orange-400 to-red-500" },
+      {
+        to: "/appearance",
+        icon: Moon,
+        label: "Appearance",
+        desc: "Theme & display",
+        color: "from-slate-400 to-slate-600",
+      },
+      {
+        to: "/accent-color",
+        icon: Palette,
+        label: "Accent Color",
+        desc: "Personalize your theme",
+        color: "from-fuchsia-500 to-pink-500",
+      },
+      {
+        to: "/languages",
+        icon: Globe,
+        label: "Languages",
+        desc: "App language",
+        color: "from-blue-400 to-indigo-500",
+      },
+      {
+        to: "/notifications",
+        icon: Bell,
+        label: "Notifications",
+        desc: "Manage alerts",
+        color: "from-orange-400 to-red-500",
+      },
     ],
   },
   {
     title: "Support",
     items: [
-      { to: "/community", icon: Users, label: "Community", desc: "Connect with users", color: "from-teal-400 to-cyan-500" },
-      { to: "/faq", icon: HelpCircle, label: "FAQ", desc: "Common questions", color: "from-violet-400 to-purple-500" },
-      { to: "/contact", icon: Mail, label: "Contact Support", desc: "We're here to help", color: "from-sky-400 to-blue-500" },
-      { to: "/about", icon: Info, label: "About", desc: "What is Nova Vision AI", color: "from-emerald-400 to-teal-500" },
-      { to: "/privacy", icon: Shield, label: "Privacy Policy", desc: "How we handle data", color: "from-slate-400 to-zinc-500" },
-      { to: "/terms", icon: FileText, label: "Terms of Service", desc: "Rules of the road", color: "from-slate-400 to-zinc-500" },
+      {
+        to: "/community",
+        icon: Users,
+        label: "Community",
+        desc: "Connect with users",
+        color: "from-teal-400 to-cyan-500",
+      },
+      {
+        to: "/faq",
+        icon: HelpCircle,
+        label: "FAQ",
+        desc: "Common questions",
+        color: "from-violet-400 to-purple-500",
+      },
+      {
+        to: "/contact",
+        icon: Mail,
+        label: "Contact Support",
+        desc: "We're here to help",
+        color: "from-sky-400 to-blue-500",
+      },
+      {
+        to: "/about",
+        icon: Info,
+        label: "About",
+        desc: "What is Nova Vision AI",
+        color: "from-emerald-400 to-teal-500",
+      },
+      {
+        to: "/privacy",
+        icon: Shield,
+        label: "Privacy Policy",
+        desc: "How we handle data",
+        color: "from-slate-400 to-zinc-500",
+      },
+      {
+        to: "/terms",
+        icon: FileText,
+        label: "Terms of Service",
+        desc: "Rules of the road",
+        color: "from-slate-400 to-zinc-500",
+      },
     ],
   },
 ];
@@ -105,7 +265,6 @@ export function AppSidebar({ open, onClose }: { open: boolean; onClose: () => vo
               >
                 <X className="size-5 drop-shadow-[0_0_8px_rgba(99,216,255,0.85)]" />
               </button>
-
             </div>
 
             <nav className="flex-1 overflow-y-auto p-3 space-y-5">
@@ -135,26 +294,35 @@ export function AppSidebar({ open, onClose }: { open: boolean; onClose: () => vo
                                 : "hover:bg-white/5 border border-transparent",
                             )}
                           >
-                            <span className={cn(
-                              "size-10 rounded-xl grid place-items-center shrink-0 shadow-md transition-all",
-                              active
-                                ? "bg-white/20 text-white"
-                                : cn("text-white bg-gradient-to-br", it.color),
-                            )}>
+                            <span
+                              className={cn(
+                                "size-10 rounded-xl grid place-items-center shrink-0 shadow-md transition-all",
+                                active
+                                  ? "bg-white/20 text-white"
+                                  : cn("text-white bg-gradient-to-br", it.color),
+                              )}
+                            >
                               <Icon className="size-5" />
                             </span>
                             <span className="flex-1 min-w-0">
-                              <span className={cn(
-                                "block text-sm font-semibold truncate",
-                                active && "text-white",
-                              )}>{it.label}</span>
-                              <span className={cn(
-                                "block text-[11px] truncate",
-                                active ? "text-white/85" : "text-muted-foreground",
-                              )}>{it.desc}</span>
+                              <span
+                                className={cn(
+                                  "block text-sm font-semibold truncate",
+                                  active && "text-white",
+                                )}
+                              >
+                                {it.label}
+                              </span>
+                              <span
+                                className={cn(
+                                  "block text-[11px] truncate",
+                                  active ? "text-white/85" : "text-muted-foreground",
+                                )}
+                              >
+                                {it.desc}
+                              </span>
                             </span>
                           </Link>
-
                         </motion.div>
                       );
                     })}
@@ -173,7 +341,9 @@ export function AppSidebar({ open, onClose }: { open: boolean; onClose: () => vo
                 </span>
                 <span className="text-sm font-medium">{t("sidebar.logout")}</span>
               </button>
-              <div className="px-3 pt-2 text-[10px] text-muted-foreground">v9.8.0 · Powered by Lovable AI</div>
+              <div className="px-3 pt-2 text-[10px] text-muted-foreground">
+                v9.8.0 · Powered by Lovable AI
+              </div>
             </div>
           </motion.aside>
         </>

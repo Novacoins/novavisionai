@@ -7,7 +7,12 @@ import { AppSidebar } from "./AppSidebar";
 import { useLanguage } from "@/lib/language-context";
 import { cn } from "@/lib/utils";
 
-type Tab = { to: string; key: "home" | "scan" | "meals" | "plants" | "profile"; icon: typeof Home; exact?: boolean };
+type Tab = {
+  to: string;
+  key: "home" | "scan" | "meals" | "plants" | "profile";
+  icon: typeof Home;
+  exact?: boolean;
+};
 const tabs: Tab[] = [
   { to: "/", key: "home", icon: Home, exact: true },
   { to: "/scan", key: "scan", icon: ScanLine },
@@ -29,9 +34,7 @@ export function AppLayout({ children, title }: { children: ReactNode; title?: st
       <header
         className={cn(
           "sticky top-0 z-30 flex items-center justify-between px-4 h-14 backdrop-blur-xl border-b transition-colors",
-          isHome
-            ? "bg-white/40 border-white/50 text-slate-800"
-            : "bg-background/70 border-border",
+          isHome ? "bg-white/40 border-white/50 text-slate-800" : "bg-background/70 border-border",
         )}
       >
         <button
@@ -62,7 +65,6 @@ export function AppLayout({ children, title }: { children: ReactNode; title?: st
         </Link>
       </header>
 
-
       <main className="flex-1 pb-24">
         <AnimatePresence mode="wait">
           <motion.div
@@ -77,10 +79,12 @@ export function AppLayout({ children, title }: { children: ReactNode; title?: st
         </AnimatePresence>
       </main>
 
-      <nav className={cn(
-        "fixed bottom-0 inset-x-0 z-30 px-3 pb-[max(env(safe-area-inset-bottom),0.5rem)] pt-2 backdrop-blur-xl border-t transition-colors",
-        isHome ? "bg-white/55 border-white/60" : "bg-background/80 border-border",
-      )}>
+      <nav
+        className={cn(
+          "fixed bottom-0 inset-x-0 z-30 px-3 pb-[max(env(safe-area-inset-bottom),0.5rem)] pt-2 backdrop-blur-xl border-t transition-colors",
+          isHome ? "bg-white/55 border-white/60" : "bg-background/80 border-border",
+        )}
+      >
         <ul className="grid grid-cols-5 gap-1 max-w-md mx-auto">
           {tabs.map((tab) => {
             const active = tab.exact ? pathname === tab.to : pathname.startsWith(tab.to);
@@ -94,7 +98,12 @@ export function AppLayout({ children, title }: { children: ReactNode; title?: st
                     active ? "text-primary" : "text-muted-foreground hover:text-foreground",
                   )}
                 >
-                  <span className={cn("p-1.5 rounded-lg transition-all", active && "bg-primary/15 glow")}>
+                  <span
+                    className={cn(
+                      "p-1.5 rounded-lg transition-all",
+                      active && "bg-primary/15 glow",
+                    )}
+                  >
                     <Icon className="size-5" />
                   </span>
                   <span className="font-medium">{t(`nav.${tab.key}`)}</span>

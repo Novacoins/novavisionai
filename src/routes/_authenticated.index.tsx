@@ -2,7 +2,17 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { Camera, Leaf, Utensils, Upload, Sparkles, ChevronRight, ScanLine, Search, MessagesSquare } from "lucide-react";
+import {
+  Camera,
+  Leaf,
+  Utensils,
+  Upload,
+  Sparkles,
+  ChevronRight,
+  ScanLine,
+  Search,
+  MessagesSquare,
+} from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { dailyTip, generateMealPlan } from "@/lib/ai.functions";
@@ -35,7 +45,9 @@ function HomePage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [tip, setTip] = useState<string | null>(null);
-  const [meals, setMeals] = useState<{ meal_type: string; name: string; calories: number }[] | null>(null);
+  const [meals, setMeals] = useState<
+    { meal_type: string; name: string; calories: number }[] | null
+  >(null);
   const [recent, setRecent] = useState<RecentScan[] | null>(null);
   const [search, setSearch] = useState("");
   const [phIndex, setPhIndex] = useState(0);
@@ -59,19 +71,27 @@ function HomePage() {
         const parsed = JSON.parse(cachedMeals) as { date: string; meals: typeof meals };
         if (parsed.date === today && parsed.meals?.length) setMeals(parsed.meals);
       }
-    } catch { /* ignore cache errors */ }
+    } catch {
+      /* ignore cache errors */
+    }
 
     const hasCachedTip = (() => {
       try {
         const c = localStorage.getItem("nv:dailyTip");
         return c ? (JSON.parse(c) as { date: string }).date === today : false;
-      } catch { return false; }
+      } catch {
+        return false;
+      }
     })();
     if (!hasCachedTip) {
       dailyTip({ data: undefined as never })
         .then((r) => {
           setTip(r.tip);
-          try { localStorage.setItem("nv:dailyTip", JSON.stringify({ date: today, tip: r.tip })); } catch { /* noop */ }
+          try {
+            localStorage.setItem("nv:dailyTip", JSON.stringify({ date: today, tip: r.tip }));
+          } catch {
+            /* noop */
+          }
         })
         .catch(() => setTip((prev) => prev ?? FALLBACK_TIP));
     }
@@ -80,14 +100,22 @@ function HomePage() {
       try {
         const c = localStorage.getItem("nv:dailyMeals");
         return c ? (JSON.parse(c) as { date: string }).date === today : false;
-      } catch { return false; }
+      } catch {
+        return false;
+      }
     })();
     if (!hasCachedMeals) {
       generateMealPlan({ data: { goal: "stay healthy", diet: "balanced" } })
         .then((r) => {
-          const next = r.meals.slice(0, 3).map((m) => ({ meal_type: m.meal_type, name: m.name, calories: m.calories }));
+          const next = r.meals
+            .slice(0, 3)
+            .map((m) => ({ meal_type: m.meal_type, name: m.name, calories: m.calories }));
           setMeals(next);
-          try { localStorage.setItem("nv:dailyMeals", JSON.stringify({ date: today, meals: next })); } catch { /* noop */ }
+          try {
+            localStorage.setItem("nv:dailyMeals", JSON.stringify({ date: today, meals: next }));
+          } catch {
+            /* noop */
+          }
         })
         .catch(() => setMeals((prev) => prev ?? []));
     }
@@ -105,13 +133,13 @@ function HomePage() {
 
   const greetingName = user?.user_metadata?.display_name || user?.email?.split("@")[0] || "there";
   const hour = new Date().getHours();
-  const greeting = hour < 12 ? t("home.morning") : hour < 18 ? t("home.afternoon") : t("home.evening");
+  const greeting =
+    hour < 12 ? t("home.morning") : hour < 18 ? t("home.afternoon") : t("home.evening");
 
   return (
     <div className="sky-day relative min-h-[100dvh]">
       <SkyDay className="fixed inset-0 -z-10" />
       <div className="relative px-4 pt-3 pb-4 space-y-5 max-w-md mx-auto">
-
         <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
           <p className="text-sm text-muted-foreground">{greeting},</p>
           <h1 className="text-2xl font-bold tracking-tight">
@@ -188,7 +216,10 @@ function HomePage() {
               animate={{ rotate: [0, 6, -6, 0] }}
               transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
               className="relative size-14 rounded-2xl grid place-items-center text-primary-foreground shrink-0"
-              style={{ background: "var(--gradient-hero)", boxShadow: "0 0 30px -6px var(--primary)" }}
+              style={{
+                background: "var(--gradient-hero)",
+                boxShadow: "0 0 30px -6px var(--primary)",
+              }}
             >
               <MessagesSquare className="size-7" />
             </motion.div>
@@ -197,7 +228,9 @@ function HomePage() {
                 <Sparkles className="size-3" /> Nova Assistant
               </div>
               <div className="text-lg font-bold mt-0.5 leading-tight">Chat with AI</div>
-              <div className="text-xs text-muted-foreground mt-0.5">Ask anything — code, ideas, math, life</div>
+              <div className="text-xs text-muted-foreground mt-0.5">
+                Ask anything — code, ideas, math, life
+              </div>
             </div>
             <ChevronRight className="relative size-5 text-muted-foreground group-hover:translate-x-1 transition-transform" />
           </motion.div>
@@ -210,8 +243,14 @@ function HomePage() {
             { to: "/scan", label: t("home.upload"), icon: Upload },
             { to: "/meal-planner", label: t("home.mealsShort"), icon: ScanLine },
           ].map(({ to, label, icon: Icon }) => (
-            <Link key={label} to={to} className="glass-card p-3 flex flex-col items-center gap-1.5 active:scale-95 transition">
-              <span className="size-10 rounded-xl bg-primary/15 text-primary grid place-items-center"><Icon className="size-5" /></span>
+            <Link
+              key={label}
+              to={to}
+              className="glass-card p-3 flex flex-col items-center gap-1.5 active:scale-95 transition"
+            >
+              <span className="size-10 rounded-xl bg-primary/15 text-primary grid place-items-center">
+                <Icon className="size-5" />
+              </span>
               <span className="text-xs font-medium">{label}</span>
             </Link>
           ))}
@@ -239,10 +278,14 @@ function HomePage() {
           <div className="space-y-2">
             {meals === null ? (
               <>
-                <Skeleton className="h-16" /> <Skeleton className="h-16" /> <Skeleton className="h-16" />
+                <Skeleton className="h-16" /> <Skeleton className="h-16" />{" "}
+                <Skeleton className="h-16" />
               </>
             ) : meals.length === 0 ? (
-              <Link to="/meal-planner" className="glass-card p-4 block text-sm text-muted-foreground text-center">
+              <Link
+                to="/meal-planner"
+                className="glass-card p-4 block text-sm text-muted-foreground text-center"
+              >
                 {t("home.generateFirst")}
               </Link>
             ) : (
@@ -271,7 +314,9 @@ function HomePage() {
           </div>
           {recent === null ? (
             <div className="grid grid-cols-3 gap-2">
-              {[0, 1, 2].map((i) => <Skeleton key={i} className="aspect-square rounded-xl" />)}
+              {[0, 1, 2].map((i) => (
+                <Skeleton key={i} className="aspect-square rounded-xl" />
+              ))}
             </div>
           ) : recent.length === 0 ? (
             <Link to="/scan" className="glass-card p-6 block text-center">
@@ -289,9 +334,15 @@ function HomePage() {
                   className="glass-card overflow-hidden aspect-square relative group"
                 >
                   {s.thumbnail_url ? (
-                    <img src={s.thumbnail_url} alt={s.title} className="absolute inset-0 w-full h-full object-cover" />
+                    <img
+                      src={s.thumbnail_url}
+                      alt={s.title}
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
                   ) : (
-                    <div className="absolute inset-0 grid place-items-center text-muted-foreground"><Camera className="size-6" /></div>
+                    <div className="absolute inset-0 grid place-items-center text-muted-foreground">
+                      <Camera className="size-6" />
+                    </div>
                   )}
                   <div className="absolute inset-x-0 bottom-0 p-1.5 bg-gradient-to-t from-black/80 to-transparent">
                     <div className="text-[10px] font-medium text-white truncate">{s.title}</div>

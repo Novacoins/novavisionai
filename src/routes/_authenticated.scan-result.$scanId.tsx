@@ -59,7 +59,9 @@ function ScanResultPage() {
       setImgUrl(url);
       setLoading(false);
     })();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [scanId, user, navigate]);
 
   async function toggleFavorite() {
@@ -85,7 +87,9 @@ function ScanResultPage() {
         await nav.share({ title: row.title, text: shareText, url: shareUrl });
         return;
       }
-    } catch { /* fallthrough */ }
+    } catch {
+      /* fallthrough */
+    }
     try {
       await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
       toast.success("Link copied to clipboard");
@@ -143,7 +147,9 @@ function ScanResultPage() {
           <p className="text-sm text-muted-foreground">No AI details saved for this scan.</p>
           <div className="flex gap-2">
             <Button variant="outline" size="sm" onClick={toggleFavorite}>
-              <Heart className={`size-4 mr-1.5 ${row.is_favorite ? "fill-destructive text-destructive" : ""}`} />
+              <Heart
+                className={`size-4 mr-1.5 ${row.is_favorite ? "fill-destructive text-destructive" : ""}`}
+              />
               {row.is_favorite ? "Saved" : "Save"}
             </Button>
             <Button variant="outline" size="sm" onClick={share}>

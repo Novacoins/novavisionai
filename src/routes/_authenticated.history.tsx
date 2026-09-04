@@ -8,10 +8,22 @@ import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
-  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -33,9 +45,17 @@ type ScanRow = {
 };
 
 type ChatMsg = { role: "user" | "assistant"; content: string; ts: number };
-type Conversation = { id: string; title: string; createdAt: number; updatedAt: number; messages: ChatMsg[] };
+type Conversation = {
+  id: string;
+  title: string;
+  createdAt: number;
+  updatedAt: number;
+  messages: ChatMsg[];
+};
 
-function chatKey(userId: string | undefined) { return `nova-chats-${userId ?? "anon"}`; }
+function chatKey(userId: string | undefined) {
+  return `nova-chats-${userId ?? "anon"}`;
+}
 
 function loadChats(userId: string | undefined): Conversation[] {
   if (typeof window === "undefined") return [];
@@ -43,11 +63,17 @@ function loadChats(userId: string | undefined): Conversation[] {
     const raw = localStorage.getItem(chatKey(userId));
     const parsed = raw ? JSON.parse(raw) : [];
     return Array.isArray(parsed) ? parsed : [];
-  } catch { return []; }
+  } catch {
+    return [];
+  }
 }
 
 function saveChats(userId: string | undefined, list: Conversation[]) {
-  try { localStorage.setItem(chatKey(userId), JSON.stringify(list)); } catch { /* quota */ }
+  try {
+    localStorage.setItem(chatKey(userId), JSON.stringify(list));
+  } catch {
+    /* quota */
+  }
 }
 
 function groupChats(list: Conversation[]) {
@@ -91,9 +117,14 @@ function HistoryPage() {
     setRows((scans ?? []) as ScanRow[]);
     setChats(loadChats(user.id).sort((a, b) => b.updatedAt - a.updatedAt));
   }
-  useEffect(() => { load(); }, [user]);
+  useEffect(() => {
+    load();
+  }, [user]);
 
-  const categories = useMemo(() => Array.from(new Set((rows ?? []).map((r) => r.category))), [rows]);
+  const categories = useMemo(
+    () => Array.from(new Set((rows ?? []).map((r) => r.category))),
+    [rows],
+  );
   const filtered = useMemo(() => {
     if (!rows) return [];
     return rows.filter((r) => {
@@ -105,7 +136,7 @@ function HistoryPage() {
 
   async function toggleFav(id: string, current: boolean) {
     await supabase.from("scans").update({ is_favorite: !current }).eq("id", id);
-    setRows((rs) => rs?.map((r) => r.id === id ? { ...r, is_favorite: !current } : r) ?? null);
+    setRows((rs) => rs?.map((r) => (r.id === id ? { ...r, is_favorite: !current } : r)) ?? null);
   }
   async function confirmDelete() {
     if (!toDelete) return;
@@ -116,8 +147,16 @@ function HistoryPage() {
   }
   async function share(r: ScanRow) {
     const text = `${r.title} — Nova Vision AI`;
-    if (navigator.share) { try { await navigator.share({ title: r.title, text }); } catch { /* */ } }
-    else { await navigator.clipboard.writeText(text); toast.success("Copied"); }
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: r.title, text });
+      } catch {
+        /* */
+      }
+    } else {
+      await navigator.clipboard.writeText(text);
+      toast.success("Copied");
+    }
   }
 
   const filteredChats = useMemo(
@@ -150,11 +189,20 @@ function HistoryPage() {
 
   return (
     <PageShell>
-      <PageHeader title="History" icon={<History className="size-5 text-primary" />} subtitle="Scans, chats & activity" />
+      <PageHeader
+        title="History"
+        icon={<History className="size-5 text-primary" />}
+        subtitle="Scans, chats & activity"
+      />
       <div className="space-y-2 mb-4">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-          <Input placeholder="Search history…" value={query} onChange={(e) => setQuery(e.target.value)} className="pl-9" />
+          <Input
+            placeholder="Search history…"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="pl-9"
+          />
         </div>
       </div>
 
@@ -166,50 +214,91 @@ function HistoryPage() {
 
         <TabsContent value="scans" className="space-y-3">
           <Select value={category} onValueChange={setCategory}>
-            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All categories</SelectItem>
-              {categories.map((c) => <SelectItem key={c} value={c} className="capitalize">{c}</SelectItem>)}
+              {categories.map((c) => (
+                <SelectItem key={c} value={c} className="capitalize">
+                  {c}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
 
           {rows === null ? (
-            <div className="space-y-2">{[0, 1, 2].map((i) => <Skeleton key={i} className="h-20 rounded-2xl" />)}</div>
+            <div className="space-y-2">
+              {[0, 1, 2].map((i) => (
+                <Skeleton key={i} className="h-20 rounded-2xl" />
+              ))}
+            </div>
           ) : filtered.length === 0 ? (
             <div className="glass-card p-8 text-center">
               <Camera className="size-10 mx-auto text-muted-foreground mb-2" />
               <p className="text-sm font-medium">No scans yet</p>
-              <p className="text-xs text-muted-foreground mt-1">Your scan history will appear here.</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                Your scan history will appear here.
+              </p>
             </div>
           ) : (
             <ul className="space-y-2">
               {filtered.map((r) => (
                 <li key={r.id} className="glass-card p-3 flex gap-3">
                   <div className="size-16 rounded-xl overflow-hidden bg-muted shrink-0 grid place-items-center">
-                    {r.thumbnail_url ? <img src={r.thumbnail_url} alt={r.title} className="w-full h-full object-cover" /> : <Camera className="size-5 text-muted-foreground" />}
+                    {r.thumbnail_url ? (
+                      <img
+                        src={r.thumbnail_url}
+                        alt={r.title}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <Camera className="size-5 text-muted-foreground" />
+                    )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0">
                         <div className="text-sm font-semibold truncate">{r.title}</div>
-                        <Badge variant="secondary" className="mt-0.5 text-[10px] capitalize">{r.category}</Badge>
+                        <Badge variant="secondary" className="mt-0.5 text-[10px] capitalize">
+                          {r.category}
+                        </Badge>
                       </div>
                       <div className="text-[10px] text-muted-foreground text-right shrink-0">
                         {new Date(r.created_at).toLocaleDateString()}
-                        <div>{new Date(r.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</div>
+                        <div>
+                          {new Date(r.created_at).toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </div>
                       </div>
                     </div>
                     <div className="text-[10px] text-muted-foreground mt-1">
                       {Math.round((r.confidence ?? 0) * 100)}% confidence
                     </div>
                     <div className="flex gap-1 mt-2">
-                      <button onClick={() => toggleFav(r.id, r.is_favorite)} className="p-1.5 rounded-lg hover:bg-accent" aria-label="Favorite">
-                        <Heart className={`size-4 ${r.is_favorite ? "fill-destructive text-destructive" : ""}`} />
+                      <button
+                        onClick={() => toggleFav(r.id, r.is_favorite)}
+                        className="p-1.5 rounded-lg hover:bg-accent"
+                        aria-label="Favorite"
+                      >
+                        <Heart
+                          className={`size-4 ${r.is_favorite ? "fill-destructive text-destructive" : ""}`}
+                        />
                       </button>
-                      <button onClick={() => share(r)} className="p-1.5 rounded-lg hover:bg-accent" aria-label="Share">
+                      <button
+                        onClick={() => share(r)}
+                        className="p-1.5 rounded-lg hover:bg-accent"
+                        aria-label="Share"
+                      >
                         <Share2 className="size-4" />
                       </button>
-                      <button onClick={() => setToDelete(r.id)} className="p-1.5 rounded-lg hover:bg-destructive/10 text-destructive ml-auto" aria-label="Delete">
+                      <button
+                        onClick={() => setToDelete(r.id)}
+                        className="p-1.5 rounded-lg hover:bg-destructive/10 text-destructive ml-auto"
+                        aria-label="Delete"
+                      >
                         <Trash2 className="size-4" />
                       </button>
                     </div>
@@ -222,7 +311,10 @@ function HistoryPage() {
 
         <TabsContent value="chats" className="space-y-3">
           <div className="flex gap-2">
-            <Button onClick={newChat} className="flex-1 hero-gradient text-primary-foreground rounded-xl">
+            <Button
+              onClick={newChat}
+              className="flex-1 hero-gradient text-primary-foreground rounded-xl"
+            >
               <Plus className="size-4 mr-1" /> New chat
             </Button>
             {chats.length > 0 && (
@@ -271,17 +363,27 @@ function HistoryPage() {
                             </div>
                             <div className="flex-1 min-w-0">
                               <div className="text-sm font-semibold truncate">{c.title}</div>
-                              {preview && <div className="text-[11px] text-muted-foreground truncate mt-0.5">{preview}</div>}
+                              {preview && (
+                                <div className="text-[11px] text-muted-foreground truncate mt-0.5">
+                                  {preview}
+                                </div>
+                              )}
                             </div>
                             <div className="text-right shrink-0">
                               <div className="text-[10px] text-muted-foreground">
                                 {new Date(c.updatedAt).toLocaleDateString()}
                               </div>
                               <div className="text-[10px] text-muted-foreground">
-                                {new Date(c.updatedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                                {new Date(c.updatedAt).toLocaleTimeString([], {
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                })}
                               </div>
                               <button
-                                onClick={(e) => { e.stopPropagation(); setChatToDelete(c.id); }}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setChatToDelete(c.id);
+                                }}
                                 className="p-1.5 mt-1 rounded-lg hover:bg-destructive/10 text-destructive"
                                 aria-label="Delete conversation"
                               >
@@ -317,7 +419,9 @@ function HistoryPage() {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Delete this conversation?</AlertDialogTitle>
-            <AlertDialogDescription>All messages in this chat will be permanently removed.</AlertDialogDescription>
+            <AlertDialogDescription>
+              All messages in this chat will be permanently removed.
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
@@ -330,7 +434,9 @@ function HistoryPage() {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Clear all chat history?</AlertDialogTitle>
-            <AlertDialogDescription>Every saved AI conversation will be permanently removed from this device.</AlertDialogDescription>
+            <AlertDialogDescription>
+              Every saved AI conversation will be permanently removed from this device.
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>

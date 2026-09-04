@@ -19,11 +19,17 @@ function systemForScanType(scanType: "general" | "food" | "plant") {
 }
 Be accurate, educational, beginner-friendly. Never give medical diagnoses. Always include safety caveats when relevant. Use simple language.`;
   if (scanType === "food")
-    return base + `
-For food, include in "details" an estimated calorie range, key nutrients, health benefits, who should avoid it, best time to eat. If multiple items visible, list each. If freshness is visually judgeable, note it.`;
+    return (
+      base +
+      `
+For food, include in "details" an estimated calorie range, key nutrients, health benefits, who should avoid it, best time to eat. If multiple items visible, list each. If freshness is visually judgeable, note it.`
+    );
   if (scanType === "plant")
-    return base + `
-For plants, include in "details": common name, scientific name, edibility, toxicity level, traditional uses, basic care (water/sunlight), natural habitat. If toxic, include strong "Do not consume" warning in "warnings".`;
+    return (
+      base +
+      `
+For plants, include in "details": common name, scientific name, edibility, toxicity level, traditional uses, basic care (water/sunlight), natural habitat. If toxic, include strong "Do not consume" warning in "warnings".`
+    );
   return base;
 }
 
@@ -43,7 +49,8 @@ async function callGateway(body: object, attempt = 0): Promise<string> {
       return callGateway(body, attempt + 1);
     }
     if (res.status === 429) throw new Error("AI is busy right now. Please try again in a moment.");
-    if (res.status === 402) throw new Error("AI credits exhausted. Add credits in Lovable Cloud → Workspace billing.");
+    if (res.status === 402)
+      throw new Error("AI credits exhausted. Add credits in Lovable Cloud → Workspace billing.");
     const txt = await res.text().catch(() => "");
     throw new Error(`AI request failed (${res.status}). ${txt.slice(0, 200)}`);
   }
@@ -177,7 +184,10 @@ Respond ONLY with valid JSON:
     const text = await callGateway({
       model: MODEL,
       messages: [
-        { role: "system", content: "You are a friendly AI nutritionist. Be practical, never give medical advice." },
+        {
+          role: "system",
+          content: "You are a friendly AI nutritionist. Be practical, never give medical advice.",
+        },
         { role: "user", content: prompt },
       ],
       response_format: { type: "json_object" },

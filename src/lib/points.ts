@@ -1,12 +1,7 @@
 import { awardPointsFn } from "./points.functions";
 
 export type PointsAction =
-  | "signup"
-  | "scan"
-  | "chat"
-  | "image_generated"
-  | "lesson_completed"
-  | "daily_login";
+  "signup" | "scan" | "chat" | "image_generated" | "lesson_completed" | "daily_login";
 
 export const POINTS: Record<PointsAction, number> = {
   signup: 100,

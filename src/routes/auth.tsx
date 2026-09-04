@@ -1,7 +1,17 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Mail, Lock, Loader2, Eye, EyeOff, User, ArrowLeft, ScanLine } from "lucide-react";
+import {
+  Sparkles,
+  Mail,
+  Lock,
+  Loader2,
+  Eye,
+  EyeOff,
+  User,
+  ArrowLeft,
+  ScanLine,
+} from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/lib/auth-context";
@@ -14,9 +24,17 @@ export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
       { title: "Sign in — Nova Vision AI Smart Visual Assistant" },
-      { name: "description", content: "Sign in or create your Nova Vision AI account to start scanning food, plants, and everyday objects with AI." },
+      {
+        name: "description",
+        content:
+          "Sign in or create your Nova Vision AI account to start scanning food, plants, and everyday objects with AI.",
+      },
       { property: "og:title", content: "Sign in — Nova Vision AI" },
-      { property: "og:description", content: "Sign in or create your Nova Vision AI account to start scanning food, plants, and everyday objects with AI." },
+      {
+        property: "og:description",
+        content:
+          "Sign in or create your Nova Vision AI account to start scanning food, plants, and everyday objects with AI.",
+      },
       { property: "og:url", content: "https://novavisionai.lovable.app/auth" },
       { property: "og:type", content: "website" },
     ],
@@ -62,7 +80,9 @@ function AuthPage() {
     }
     setBusy(true);
     try {
-      const res = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
+      const res = await lovable.auth.signInWithOAuth("google", {
+        redirect_uri: window.location.origin,
+      });
       if (res.error) throw res.error instanceof Error ? res.error : new Error(String(res.error));
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Google sign-in failed");
@@ -71,15 +91,20 @@ function AuthPage() {
     }
   }
 
-  function validEmail(v: string) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
-  function strongPw(v: string) { return v.length >= 8 && /[A-Za-z]/.test(v) && /\d/.test(v); }
+  function validEmail(v: string) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  }
+  function strongPw(v: string) {
+    return v.length >= 8 && /[A-Za-z]/.test(v) && /\d/.test(v);
+  }
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!validEmail(email)) return toast.error("Please enter a valid email address");
     if (view === "signup") {
       if (!fullName.trim()) return toast.error("Please enter your full name");
-      if (!strongPw(password)) return toast.error("Password must be 8+ chars with letters and numbers");
+      if (!strongPw(password))
+        return toast.error("Password must be 8+ chars with letters and numbers");
       if (password !== confirm) return toast.error("Passwords do not match");
     }
     setBusy(true);
@@ -212,7 +237,9 @@ function AuthPage() {
                 {view === "signin" ? "Welcome back" : "Create your account"}
               </h2>
               <p className="text-xs text-muted-foreground mt-1">
-                {view === "signin" ? "Sign in to continue to Nova Vision AI" : "Join Nova Vision AI in seconds"}
+                {view === "signin"
+                  ? "Sign in to continue to Nova Vision AI"
+                  : "Join Nova Vision AI in seconds"}
               </p>
             </div>
 
@@ -247,7 +274,9 @@ function AuthPage() {
                 onChange={setPassword}
                 show={showPw}
                 onToggle={() => setShowPw((s) => !s)}
-                placeholder={view === "signup" ? "Password (8+ chars, letters & numbers)" : "Password"}
+                placeholder={
+                  view === "signup" ? "Password (8+ chars, letters & numbers)" : "Password"
+                }
                 autoComplete={view === "signin" ? "current-password" : "new-password"}
               />
               {view === "signup" && (
@@ -268,19 +297,40 @@ function AuthPage() {
                   </Link>
                 </div>
               )}
-              <Button type="submit" className="w-full hero-gradient text-primary-foreground font-semibold h-11" disabled={busy}>
-                {busy ? <Loader2 className="size-4 animate-spin" /> : view === "signin" ? "Sign in" : "Create account"}
+              <Button
+                type="submit"
+                className="w-full hero-gradient text-primary-foreground font-semibold h-11"
+                disabled={busy}
+              >
+                {busy ? (
+                  <Loader2 className="size-4 animate-spin" />
+                ) : view === "signin" ? (
+                  "Sign in"
+                ) : (
+                  "Create account"
+                )}
               </Button>
             </form>
 
             {!inWebView && (
               <>
                 <div className="relative my-4">
-                  <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-border" /></div>
-                  <div className="relative flex justify-center"><span className="bg-background/60 backdrop-blur px-2 text-[11px] text-muted-foreground">or</span></div>
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-border" />
+                  </div>
+                  <div className="relative flex justify-center">
+                    <span className="bg-background/60 backdrop-blur px-2 text-[11px] text-muted-foreground">
+                      or
+                    </span>
+                  </div>
                 </div>
 
-                <Button onClick={signInGoogle} disabled={busy} variant="outline" className="w-full h-11">
+                <Button
+                  onClick={signInGoogle}
+                  disabled={busy}
+                  variant="outline"
+                  className="w-full h-11"
+                >
                   <GoogleIcon className="size-4 mr-2" /> Continue with Google
                 </Button>
               </>
@@ -288,9 +338,25 @@ function AuthPage() {
 
             <p className="text-xs text-muted-foreground text-center mt-5">
               {view === "signin" ? (
-                <>Don't have an account? <button onClick={() => setView("signup")} className="text-primary font-medium hover:underline">Sign up</button></>
+                <>
+                  Don't have an account?{" "}
+                  <button
+                    onClick={() => setView("signup")}
+                    className="text-primary font-medium hover:underline"
+                  >
+                    Sign up
+                  </button>
+                </>
               ) : (
-                <>Already have an account? <button onClick={() => setView("signin")} className="text-primary font-medium hover:underline">Sign in</button></>
+                <>
+                  Already have an account?{" "}
+                  <button
+                    onClick={() => setView("signin")}
+                    className="text-primary font-medium hover:underline"
+                  >
+                    Sign in
+                  </button>
+                </>
               )}
             </p>
           </motion.div>
@@ -300,7 +366,21 @@ function AuthPage() {
   );
 }
 
-function PasswordField({ value, onChange, show, onToggle, placeholder, autoComplete }: { value: string; onChange: (v: string) => void; show: boolean; onToggle: () => void; placeholder: string; autoComplete: string }) {
+function PasswordField({
+  value,
+  onChange,
+  show,
+  onToggle,
+  placeholder,
+  autoComplete,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  show: boolean;
+  onToggle: () => void;
+  placeholder: string;
+  autoComplete: string;
+}) {
   return (
     <div className="relative">
       <Lock className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
@@ -328,10 +408,22 @@ function PasswordField({ value, onChange, show, onToggle, placeholder, autoCompl
 function GoogleIcon({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" aria-hidden>
-      <path fill="#4285F4" d="M22.5 12.27c0-.79-.07-1.55-.2-2.27H12v4.3h5.92a5.07 5.07 0 0 1-2.2 3.32v2.75h3.56c2.08-1.92 3.27-4.74 3.27-8.1z"/>
-      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.56-2.75c-.99.66-2.26 1.05-3.72 1.05-2.86 0-5.28-1.93-6.15-4.53H2.18v2.84A11 11 0 0 0 12 23z"/>
-      <path fill="#FBBC05" d="M5.85 14.11A6.6 6.6 0 0 1 5.5 12c0-.73.13-1.44.35-2.11V7.05H2.18A11 11 0 0 0 1 12c0 1.78.43 3.46 1.18 4.95l3.67-2.84z"/>
-      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.2 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.05l3.67 2.84C6.72 7.31 9.14 5.38 12 5.38z"/>
+      <path
+        fill="#4285F4"
+        d="M22.5 12.27c0-.79-.07-1.55-.2-2.27H12v4.3h5.92a5.07 5.07 0 0 1-2.2 3.32v2.75h3.56c2.08-1.92 3.27-4.74 3.27-8.1z"
+      />
+      <path
+        fill="#34A853"
+        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.56-2.75c-.99.66-2.26 1.05-3.72 1.05-2.86 0-5.28-1.93-6.15-4.53H2.18v2.84A11 11 0 0 0 12 23z"
+      />
+      <path
+        fill="#FBBC05"
+        d="M5.85 14.11A6.6 6.6 0 0 1 5.5 12c0-.73.13-1.44.35-2.11V7.05H2.18A11 11 0 0 0 1 12c0 1.78.43 3.46 1.18 4.95l3.67-2.84z"
+      />
+      <path
+        fill="#EA4335"
+        d="M12 5.38c1.62 0 3.06.56 4.2 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.05l3.67 2.84C6.72 7.31 9.14 5.38 12 5.38z"
+      />
     </svg>
   );
 }

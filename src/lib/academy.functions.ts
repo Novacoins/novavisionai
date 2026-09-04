@@ -75,8 +75,13 @@ Keep it accurate, clear, and friendly. Assume the learner is a beginner unless t
       ],
       response_format: { type: "json_object" },
     });
-    let quiz: { questions: Array<{ q: string; options: string[]; answer: number; why: string }> } = { questions: [] };
-    try { quiz = JSON.parse(quizText); } catch { /* keep empty */ }
+    let quiz: { questions: Array<{ q: string; options: string[]; answer: number; why: string }> } =
+      { questions: [] };
+    try {
+      quiz = JSON.parse(quizText);
+    } catch {
+      /* keep empty */
+    }
 
     return { lesson, quiz };
   });

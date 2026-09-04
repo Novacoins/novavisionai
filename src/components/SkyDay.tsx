@@ -44,8 +44,7 @@ export function SkyDay({ className = "" }: { className?: string }) {
       aria-hidden
       className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`}
       style={{
-        background:
-          "linear-gradient(180deg, #F8FDFF 0%, #EEF9FF 50%, #DFF5FF 100%)",
+        background: "linear-gradient(180deg, #F8FDFF 0%, #EEF9FF 50%, #DFF5FF 100%)",
       }}
     >
       {/* Ambient light rays */}

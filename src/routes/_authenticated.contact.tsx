@@ -10,16 +10,23 @@ import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import {
-  Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import { pageHead } from "@/lib/page-head";
 
 export const Route = createFileRoute("/_authenticated/contact")({
-  head: () => pageHead({
-    path: "/contact",
-    title: "Contact Support — Nova Vision AI",
-    description: "Get help with Nova Vision AI. Send a message to the support team about scans, accounts, billing, or feedback.",
-  }),
+  head: () =>
+    pageHead({
+      path: "/contact",
+      title: "Contact Support — Nova Vision AI",
+      description:
+        "Get help with Nova Vision AI. Send a message to the support team about scans, accounts, billing, or feedback.",
+    }),
   component: ContactPage,
 });
 
@@ -85,18 +92,65 @@ function ContactPage() {
 
   return (
     <PageShell>
-      <PageHeader title="Contact Support" icon={<Mail className="size-5 text-primary" />} subtitle="We typically reply within 24 hours" />
+      <PageHeader
+        title="Contact Support"
+        icon={<Mail className="size-5 text-primary" />}
+        subtitle="We typically reply within 24 hours"
+      />
       <form onSubmit={send} className="glass-card p-4 space-y-3">
-        <div><Label className="text-xs">Full name</Label><Input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
-        <div><Label className="text-xs">Email address</Label><Input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></div>
-        <div><Label className="text-xs">Phone (optional)</Label><Input type="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} /></div>
-        <div><Label className="text-xs">Subject</Label><Input required value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} /></div>
-        <div><Label className="text-xs">Message</Label><Textarea required rows={5} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} /></div>
+        <div>
+          <Label className="text-xs">Full name</Label>
+          <Input
+            required
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+          />
+        </div>
+        <div>
+          <Label className="text-xs">Email address</Label>
+          <Input
+            required
+            type="email"
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+          />
+        </div>
+        <div>
+          <Label className="text-xs">Phone (optional)</Label>
+          <Input
+            type="tel"
+            value={form.phone}
+            onChange={(e) => setForm({ ...form, phone: e.target.value })}
+          />
+        </div>
+        <div>
+          <Label className="text-xs">Subject</Label>
+          <Input
+            required
+            value={form.subject}
+            onChange={(e) => setForm({ ...form, subject: e.target.value })}
+          />
+        </div>
+        <div>
+          <Label className="text-xs">Message</Label>
+          <Textarea
+            required
+            rows={5}
+            value={form.message}
+            onChange={(e) => setForm({ ...form, message: e.target.value })}
+          />
+        </div>
         <div className="flex gap-2">
-          <Button type="submit" disabled={busy} className="flex-1 hero-gradient text-primary-foreground font-semibold">
+          <Button
+            type="submit"
+            disabled={busy}
+            className="flex-1 hero-gradient text-primary-foreground font-semibold"
+          >
             <Send className="size-4 mr-2" /> {busy ? "Sending…" : "Send message"}
           </Button>
-          <Button type="button" variant="outline" onClick={reset}><RotateCcw className="size-4" /></Button>
+          <Button type="button" variant="outline" onClick={reset}>
+            <RotateCcw className="size-4" />
+          </Button>
         </div>
       </form>
 
@@ -108,11 +162,17 @@ function ContactPage() {
             </div>
             <DialogTitle className="text-center">Message received</DialogTitle>
             <DialogDescription className="text-center">
-              Thank you for contacting Nova Vision AI. Your message has been received successfully. Our support team will review it and reply to your email as soon as possible.
+              Thank you for contacting Nova Vision AI. Your message has been received successfully.
+              Our support team will review it and reply to your email as soon as possible.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="sm:justify-center">
-            <Button onClick={() => setSuccess(false)} className="hero-gradient text-primary-foreground">Close</Button>
+            <Button
+              onClick={() => setSuccess(false)}
+              className="hero-gradient text-primary-foreground"
+            >
+              Close
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
